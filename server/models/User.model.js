@@ -3,16 +3,15 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    id: Number,
-    name: String,
-    phone: Number,
-    userName: String,
-    email: String,
-    role: String,
-    lastFlight: String,
+    name: { type: String, required: true },
+    phone: { type: Number, required: true },
+    userName: { type: String, required: true },
+    email: { type: String, required: true },
+    role: { type: String, required: true },
+    lastFlight: { type: String, required: true },
   },
-  { collection: "user" }
+  { collection: "users" }
 );
 
-const user = mongoose.model("user", userSchema);
-export default user;
+const User = mongoose.model("User", userSchema);
+export default User;

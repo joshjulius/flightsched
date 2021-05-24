@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import express from "express";
 const router = express.Router();
 import User from "../../models/User.model.js";
@@ -14,8 +13,9 @@ router.get("/", (req, res) => {
     });
 });
 
+//Sending Users JSON to the GET endpoint
 router.get("/:id", (req, res) => {
-  User.findById(req.params._id)
+  User.findById(req.params.id)
     .then((result) => {
       res.send(result);
       console.log("User GET id Method Success");
@@ -25,24 +25,48 @@ router.get("/:id", (req, res) => {
     });
 });
 
+//Creating a new User to the Users JSON
 router.post("/", (req, res) => {
-  const user = new User({
-    name: req.body.name,
-    phone: req.body.phone,
-    userName: req.body.userName,
-    email: req.body.email,
-    role: req.body.role,
-    lastFlight: req.body.lastFlight,
-  });
+  const data = req.body;
+  const newUser = new User(data);
 
-  user
+  //Saving the new User into the MongoDB database
+  newUser
     .save()
     .then((result) => {
-      console.log(result);
+      console.log("User POST method success");
+    })
+    .catch((err) => {
+      console.log("User POST method failed");
+      console.log(err);
+    });
+
+  User.find({})
+    .then((result) => {
+      res.send(result);
     })
     .catch((err) => {
       console.log(err);
     });
+});
+
+router.delete("/:id", (req, res) => {
+  console.log(req.params.id);
+  const id = req.params.id;
+
+  User.findByIdAndDelete(id)
+    .then((result) => {
+      console.log(result);
+      console.log("User has been deleted");
+    })
+    .catch((err) => {
+      console.log(err);
+      console.log("Delete method failed");
+    });
+
+  User.find({}).then((result) => {
+    res.send(result);
+  });
 });
 
 export default router;
