@@ -1,8 +1,9 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import slots from './routes/api/slots.route.js';
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import slots from "./routes/api/slots.route.js";
+import users from "./routes/api/users.route.js";
 
 dotenv.config();
 
@@ -13,11 +14,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 mongoose
-    .connect(process.env.FLIGHTSCHED_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err));
+  .connect(process.env.FLIGHTSCHED_DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
 
-app.use('/api/slots', slots);
+app.use("/api/slots", slots);
+app.use("/api/users", users);
 
 const port = process.env.PORT || 5000;
 
