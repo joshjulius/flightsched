@@ -65,31 +65,28 @@ router.delete("/:id", (req, res) => {
       console.log("Delete method failed");
     });
 
-  User.find({}).then((result) => {
-    res.send(result);
-  });
+  User.find({})
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.status(404).send({ success: false });
+      console.log(err);
+    });
 });
 
 //Editing/Updating an User
 router.put("/:id", (req, res) => {
   const id = req.params.id;
-  const updatedUser = {
-    name: req.body.name,
-    phone: req.body.phone,
-    userName: req.body.userName,
-    email: req.body.email,
-    role: req.body.role,
-    lastFlight: req.body.lastFlight,
-  };
+  const updatedUser = req.body;
 
   User.findByIdAndUpdate(id, updatedUser, { upsert: true })
-    .then((result) => {
+    .then((editUser) => {
       console.log("Edit User Success");
-      console.log(result);
     })
     .catch((err) => {
       console.log("Edit User failed");
-      console.log(console.error);
+      console.log(err);
     });
 
   User.find({})
@@ -97,6 +94,7 @@ router.put("/:id", (req, res) => {
       res.send(result);
     })
     .catch((err) => {
+      res.status(404).send({ success: false });
       console.log(err);
     });
 });
