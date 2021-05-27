@@ -12,20 +12,21 @@ router.get("/", (req, res) => {
     .then((slots) => res.json(slots));
 });
 
-// @route GET api/slots/:id
-// @desc Get a slot by id
+// @route GET api/slots/:customer
+// @desc Get a slot by customer
 // @access public
-router.get("/:id", (req, res) => {
-  Slot.findById(req.params.id)
+router.get("/:customer", (req, res) => {
+  Slot.find({ customer: req.params.customer })
+    .exec()
     .then((slot) => res.json(slot))
     .catch((err) => res.status(404).json({ success: false }));
 });
 
-// @route GET api/slots/:customer
-// @desc Get a slot by customer
+// @route GET api/slots/:id
+// @desc Get a slot by id
 // @access public
-// router.get('/:customer', (req, res) => {
-//     Slot.find({ customer: req.params.customer }).exec()
+// router.get('/:id', (req, res) => {
+//     Slot.findById(req.params.id)
 //         .then(slot => res.json(slot))
 //         .catch(err => res.status(404).json({ success: false }));;
 // });
