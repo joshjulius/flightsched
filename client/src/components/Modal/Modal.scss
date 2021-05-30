@@ -1,0 +1,75 @@
+div.modal {
+    background-color: rgba(0, 0, 0, 0.25);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: scroll;
+}
+
+form {
+    margin: auto;
+    max-width: 500px;
+    background-color: #fff;
+    margin-top: 5%;
+    border-radius: 5px;
+}
+
+div.form-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+div.form-header {
+    display: grid;
+    grid-template-columns: auto 50px;
+    border-bottom: 1px solid rgb(187, 187, 187);
+    margin-bottom: 20px;
+}
+
+div.form-header button.close {
+    border: none;
+    background-color: #fff;
+    color: black;
+    cursor: pointer;
+    width: 50px;
+    height: 20px;
+    align-self: center;
+    justify-self: right;
+}
+
+div.item {
+    margin-bottom: 15px;
+    display: grid;
+    grid-template-columns: 150px auto;
+    height: 30px;
+}
+
+div.flight-type {
+    display: inline;
+}
+
+div.flight-type label,
+div.flight-type input {
+    margin-right: 5px;
+}
+
+div.flight-type label {
+    margin-right: 25px;
+}
+
+div.form-container button.submit {
+    width: 100%;
+    height: 50px;
+    margin: 10px auto 30px auto;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(31, 69, 94);
+    color: #fff;
+    cursor: pointer;
+}
+
+div.form-container button.submit:hover {
+    background-color: rgb(17, 39, 54);
+}

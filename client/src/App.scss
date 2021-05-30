@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+div.app {
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+}
+
+button.main {
+    width: 300px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(31, 69, 94);
+    color: #fff;
+    cursor: pointer;
+}
+
+button.main:hover {
+    background-color: rgb(17, 39, 54);
+}
+
+// a {
+//     text-decoration: none;
+// }
+
+// a:hover {
+//     color:rgb(0, 153, 255);
+// }
+
+// a:visited {
+//     color: #000;
+// }
