@@ -28,10 +28,12 @@ div.form-header {
     margin-bottom: 20px;
 }
 
-button.close {
+div.form-header button.close {
     border: none;
     background-color: #fff;
+    color: black;
     cursor: pointer;
+    width: 50px;
     height: 20px;
     align-self: center;
     justify-self: right;
@@ -57,7 +59,7 @@ div.flight-type label {
     margin-right: 25px;
 }
 
-button.submit {
+div.form-container button.submit {
     width: 100%;
     height: 50px;
     margin: 10px auto 30px auto;
@@ -66,4 +68,8 @@ button.submit {
     background-color: rgb(31, 69, 94);
     color: #fff;
     cursor: pointer;
+}
+
+div.form-container button.submit:hover {
+    background-color: rgb(17, 39, 54);
 }

@@ -19,9 +19,9 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="app">
       <Navbar />
-      <button onClick={showModal}>Create a Reservation</button>
+      <button onClick={showModal} className="main">Create a Reservation</button>
       <Modal visibility={visibility} hideModal={hideModal} />
       {/* <Schedule /> */}
     </div>

@@ -29,7 +29,7 @@ const Modal = ({ visibility, hideModal }) => {
     const [startDate, setStartDate] = useState(new Date());
 
     let domNode = useClickOutside(() => {
-        {hideModal()}
+        hideModal()
     });
 
     if (!visibility) {
@@ -44,23 +44,23 @@ const Modal = ({ visibility, hideModal }) => {
                             <button onClick={hideModal} className="close">Close</button>
                         </div>
                         <div className="item">
-                            <label for="location">Location</label>
-                            <select id="location" name="location">
-                                <option value="" disabled selected>Select</option>
+                            <label htmlFor="location">Location</label>
+                            <select id="location" name="location" defaultValue={"DEFAULT"}>
+                                <option value="DEFAULT" disabled>Select</option>
                                 <option value="Kitchener">Kitchener</option>
                                 <option value="Waterloo">Waterloo</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label for="activity-type">Activity Type</label>
-                            <select id="activity-type" name="activity-type">
-                                <option value="" disabled selected>Select</option>
+                            <label htmlFor="activity-type">Activity Type</label>
+                            <select id="activity-type" name="activity-type" defaultValue={"DEFAULT"}>
+                                <option value="DEFAULT" disabled>Select</option>
                                 <option value="dual">Dual</option>
                                 <option value="solo">Solo</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label for="start-time">Start</label>
+                            <label htmlFor="start-time">Start</label>
                             <DatePicker
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
@@ -69,7 +69,7 @@ const Modal = ({ visibility, hideModal }) => {
                             />
                         </div>
                         <div className="item">
-                            <label for="end-time">End</label>
+                            <label htmlFor="end-time">End</label>
                             <DatePicker
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
@@ -78,7 +78,7 @@ const Modal = ({ visibility, hideModal }) => {
                             />
                         </div>
                         <div className="item">
-                            <label for="customer">Customer</label>
+                            <label htmlFor="customer">Customer</label>
                             <input
                                 type="text"
                                 id="customer"
@@ -87,7 +87,7 @@ const Modal = ({ visibility, hideModal }) => {
                             />
                         </div>
                         <div className="item">
-                            <label for="display-name">Display Name</label>
+                            <label htmlFor="display-name">Display Name</label>
                             <input
                                 type="text"
                                 id="display-name"
@@ -96,17 +96,17 @@ const Modal = ({ visibility, hideModal }) => {
                             />
                         </div>
                         <div className="item">
-                            <label for="aircraft">Aircraft</label>
-                            <select id="aircraft" name="aircraft">
-                                <option value="" disabled selected>Select</option>
+                            <label htmlFor="aircraft">Aircraft</label>
+                            <select id="aircraft" name="aircraft" defaultValue={"DEFAULT"}>
+                                <option value="DEFAULT" disabled>Select</option>
                                 <option value="GUBI">Cessna 172S C-GUBI</option>
                                 <option value="GUZZ">Cessna 172S C-GUZZ</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label for="instructor">Instructor</label>
-                            <select id="instructor" name="instructor">
-                                <option value="" disabled selected>Select</option>
+                            <label htmlFor="instructor">Instructor</label>
+                            <select id="instructor" name="instructor" defaultValue={"DEFAULT"}>
+                                <option value="DEFAULT" disabled>Select</option>
                                 <option value="Josh">Josh</option>
                                 <option value="Jensen">Jensen</option>
                             </select>
@@ -120,25 +120,25 @@ const Modal = ({ visibility, hideModal }) => {
                                     value="local"
                                     name="flight-type"
                                 />
-                                <label for="local">Local</label>
+                                <label htmlFor="local">Local</label>
                                 <input
                                     type="radio"
                                     id="cross-country"
                                     value="cross-country"
                                     name="flight-type"
                                 />
-                                <label for="cross-country">Cross Country</label>
+                                <label htmlFor="cross-country">Cross Country</label>
                             </div>
                         </div>
                         <div className="item">
-                            <label for="flight-route-legs">Flight Route/Legs</label>
+                            <label htmlFor="flight-route-legs">Flight Route/Legs</label>
                             <textarea id="flight-route-legs" name="flight-route-legs" />
                         </div>
                         <div className="item">
-                            <label for="comments">Comments</label>
+                            <label htmlFor="comments">Comments</label>
                             <textarea id="comments" name="comments" />
                         </div>
-                        <button type="submit" class="submit">Create Reservation</button>
+                        <button type="submit" className="submit">Create Reservation</button>
                     </div>
                 </form>
             </div>
