@@ -4,6 +4,7 @@ import "./normalize.css";
 import Modal from "./components/Modal/Modal";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
+import Optionbar from "./components/Optionbar/Optionbar";
 // import Schedule from "./components/Schedule/Schedule";
 
 function App() {
@@ -28,11 +29,18 @@ function App() {
       <div class={toggle ? "app__sidebar--open" : "app__sidebar--close"}>
         <Sidebar handleToggle={handleToggle} toggle={toggle} />
       </div>
-      <div class="app__content ">
+      <div
+        class={
+          toggle
+            ? "app__content app__content--open "
+            : "app__content app__content--close"
+        }
+      >
         <Navbar handleToggle={handleToggle} toggle={toggle} />
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
+        <Optionbar />
         <Modal visibility={visibility} hideModal={hideModal} />
         {/* <Schedule /> */}
       </div>
