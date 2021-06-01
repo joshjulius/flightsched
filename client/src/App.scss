@@ -1,29 +1,44 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
 }
 
 div.app {
-    position: relative;
-    width: 80%;
-    margin: 0 auto;
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
 }
 
 button.main {
-    width: 300px;
-    height: 50px;
-    border: none;
-    border-radius: 5px;
-    background-color: rgb(31, 69, 94);
-    color: #fff;
-    cursor: pointer;
+  width: 300px;
+  height: 50px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(31, 69, 94);
+  color: #fff;
+  cursor: pointer;
 }
 
 button.main:hover {
-    background-color: rgb(17, 39, 54);
+  background-color: rgb(17, 39, 54);
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+  &__content {
+    width: 90%;
+  }
+  &__sidebar--close {
+    display: none;
+    transition: 0.5s;
+  }
+  &__sidebar--open {
+    width: 20%;
+  }
 }
 
 // a {

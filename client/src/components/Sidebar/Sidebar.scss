@@ -1,0 +1,25 @@
+.sidebar {
+  height: 100%;
+  &__logo {
+    width: 150px;
+  }
+  &__list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: lightgrey;
+    height: 83.6%;
+    border-top: 1px solid rgba(158, 157, 157, 0.5);
+  }
+  &__item {
+    background-color: lightgrey;
+    color: rgb(46, 46, 46);
+    padding: 1.25rem 0;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(241, 239, 239);
+      color: black;
+    }
+  }
+}
