@@ -1,0 +1,22 @@
+.optionbar {
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__content-container {
+    display: flex;
+    align-items: center;
+  }
+  &__extra-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__clear-all {
+    cursor: pointer;
+  }
+}
