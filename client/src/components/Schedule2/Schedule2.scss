@@ -12,6 +12,7 @@
   }
   &__placeholder {
     border: 1px solid rgba(0, 0, 0, 0.5);
+    border-left: 0;
   }
   &__plane-time-slot {
     @extend .schedule__time-heading;

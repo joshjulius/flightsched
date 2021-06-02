@@ -2,19 +2,52 @@
   &__top {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin: 1.5rem 0;
+  }
+  &__date {
+    margin: 0 0.6rem;
+  }
+  &__top-date {
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  &__top-option {
+    margin-left: 1.5rem;
+    background-color: rgb(239, 239, 239);
+  }
+  &__direction-option {
+    border: 0;
+    padding: 4px 8px;
+    border-radius: 2px;
+    outline: 0;
+    cursor: pointer;
   }
   &__bottom {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 1.5rem;
   }
   &__content-container {
     display: flex;
     align-items: center;
   }
+  &__bottom-option {
+    background-color: rgb(218, 218, 218);
+    border: 0;
+    outline: 0;
+    padding: 4px 8px;
+    border-radius: 2px;
+    margin-right: 0.8rem;
+    cursor: pointer;
+  }
   &__btn {
     display: flex;
     align-items: center;
-    padding: 1px 3px;
+    padding: 5px 3px;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
   }
   &__arrow {
     width: 15px;
@@ -26,5 +59,8 @@
   }
   &__clear-all {
     cursor: pointer;
+  }
+  &__save-filter {
+    margin-right: 0.8rem;
   }
 }
