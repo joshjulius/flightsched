@@ -11,6 +11,14 @@
     display: flex;
     align-items: center;
   }
+  &__btn {
+    display: flex;
+    align-items: center;
+    padding: 1px 3px;
+  }
+  &__arrow {
+    width: 15px;
+  }
   &__extra-info {
     display: flex;
     justify-content: space-between;
