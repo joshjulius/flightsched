@@ -5,6 +5,7 @@ import Modal from "./components/Modal/Modal";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Optionbar from "./components/Optionbar/Optionbar";
+import Schedule2 from "./components/Schedule2/Schedule2";
 // import Schedule from "./components/Schedule/Schedule";
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         <Optionbar />
         <Modal visibility={visibility} hideModal={hideModal} />
         {/* <Schedule /> */}
+        <Schedule2 />
       </div>
     </div>
   );

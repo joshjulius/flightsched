@@ -1,0 +1,21 @@
+.schedule {
+  width: 100%;
+  display: grid;
+  &__time-heading {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+  &__time-slot {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+  &__placeholder {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+  &__plane-time-slot {
+    @extend .schedule__time-heading;
+  }
+  &__plane-slot {
+    @extend .schedule__time-slot;
+  }
+}
