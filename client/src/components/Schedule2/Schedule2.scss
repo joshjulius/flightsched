@@ -4,7 +4,8 @@
   &__time-heading {
     width: 100%;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    background-color: rgb(149, 248, 248);
   }
   &__time-slot {
     border: 1px solid rgba(0, 0, 0, 0.5);
@@ -14,8 +15,10 @@
   }
   &__plane-time-slot {
     @extend .schedule__time-heading;
+    background-color: white;
   }
   &__plane-slot {
     @extend .schedule__time-slot;
+    background-color: white;
   }
 }
