@@ -17,9 +17,15 @@ export default function Optionbar() {
   );
 
   const dateIncrement = () => {
-    date.setDate(date.getDate() + 1);
-    console.log(date);
-    setDateDisplay(date.toLocaleString("en-US", dateOption));
+    let dateConvert = new Date(dateDisplay);
+    dateConvert.setDate(dateConvert.getDate() + 1);
+    setDateDisplay(dateConvert.toLocaleString("en-US", dateOption));
+  };
+
+  const dateDecrement = () => {
+    let dateConvert = new Date(dateDisplay);
+    dateConvert.setDate(dateConvert.getDate() - 1);
+    setDateDisplay(dateConvert.toLocaleString("en-US", dateOption));
   };
 
   return (
@@ -31,6 +37,7 @@ export default function Optionbar() {
               src={arrowLeft}
               alt="arrow pointing left"
               className="optionbar__arrow"
+              onClick={dateDecrement}
             />
           </button>
           <div className="optionbar__date">{dateDisplay}</div>
