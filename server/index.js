@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import slots from "./routes/api/slots.route.js";
 import users from "./routes/api/users.route.js";
+import planes from "./routes/api/planes.route.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ mongoose
 
 app.use("/api/slots", slots);
 app.use("/api/users", users);
+app.use("/api/planes", planes);
 
 const port = process.env.PORT || 5000;
 
