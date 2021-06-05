@@ -50,7 +50,7 @@ router.post("/", (req, res) => {
     internalComments: req.body.internalComments,
   });
 
-  newSlot.save().then((slot) => res.json(slot));
+  newSlot.save().then(res.redirect('/')).catch(err => console.log(err));
 });
 
 // @route DELETE api/slots/:id

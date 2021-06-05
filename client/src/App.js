@@ -61,7 +61,7 @@ function App() {
           Create a Reservation
         </button>
         <Optionbar planes={planes} />
-        <Modal visibility={visibility} hideModal={hideModal} />
+        <Modal visibility={visibility} hideModal={hideModal} planes={planes} />
         {/* <Schedule /> */}
         <Schedule planes={planes} />
       </div>
