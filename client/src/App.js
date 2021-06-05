@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./App.scss";
 import "./normalize.css";
 import Modal from "./components/Modal/Modal";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Optionbar from "./components/Optionbar/Optionbar";
-import Schedule2 from "./components/Schedule2/Schedule2";
+import Schedule from "./components/Schedule/Schedule";
 // import Schedule from "./components/Schedule/Schedule";
 
 function App() {
   const [visibility, setVisibility] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [planes, setPlanes] = useState();
+
+  const planeURL = "http://localhost:5000/api/planes";
 
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
@@ -24,6 +28,21 @@ function App() {
   const hideModal = () => {
     setVisibility(false);
   };
+
+  const axiosPlaneCall = () => {
+    axios
+      .get(planeURL)
+      .then((res) => {
+        setPlanes(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    axiosPlaneCall();
+  }, [planeURL]);
 
   return (
     <div className="app">
@@ -41,10 +60,10 @@ function App() {
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
-        <Optionbar />
+        <Optionbar planes={planes} />
         <Modal visibility={visibility} hideModal={hideModal} />
         {/* <Schedule /> */}
-        <Schedule2 />
+        <Schedule planes={planes} />
       </div>
     </div>
   );

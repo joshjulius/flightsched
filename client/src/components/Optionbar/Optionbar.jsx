@@ -3,7 +3,7 @@ import "./Optionbar.scss";
 import arrowLeft from "../../assets/icons/left-arrow.svg";
 import arrowRight from "../../assets/icons/right-arrow.svg";
 
-export default function Optionbar() {
+export default function Optionbar({ planes }) {
   let dateOption = {
     weekday: "short",
     year: "numeric",
@@ -67,9 +67,17 @@ export default function Optionbar() {
             <option value="Wwfc">Wwfc</option>
           </select>
           <select className="optionbar__bottom-option">
-            <option value="allAircraft">Aircraft(16)</option>
-            <option value="FAKH">C-FAKH</option>
-            <option value="GUZZ">C-GUZZ</option>
+            <option value="allAircraft">{`Aircraft(${
+              planes && planes.length
+            })`}</option>
+            {planes &&
+              planes.map((info) => {
+                return (
+                  <option key={info._id} value={info.reg}>
+                    {info.reg}
+                  </option>
+                );
+              })}
           </select>
           <select className="optionbar__bottom-option">
             <option value="allInstructor">All instructors</option>
