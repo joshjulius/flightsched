@@ -62,8 +62,7 @@ function App() {
         </button>
         <Optionbar planes={planes} />
         <Modal visibility={visibility} hideModal={hideModal} planes={planes} />
-        {/* <Schedule /> */}
-        <Schedule planes={planes} />
+        {/* <Schedule planes={planes} /> */}
       </div>
     </div>
   );

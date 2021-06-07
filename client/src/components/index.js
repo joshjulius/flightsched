@@ -1,3 +1,5 @@
 export { default as Modal } from "./Modal";
 export { default as Navbar } from "./Navbar";
 export { default as Schedule } from "./Schedule";
+export { default as Optionbar } from "./Optionbar";
+export { default as Sidebar } from "./Sidebar";
