@@ -1,7 +1,8 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import "./Optionbar.scss";
 import arrowLeft from "../../assets/icons/left-arrow.svg";
 import arrowRight from "../../assets/icons/right-arrow.svg";
+import Schedule from "../Schedule/Schedule";
 
 export default function Optionbar({ planes }) {
   let dateOption = {
@@ -108,6 +109,7 @@ export default function Optionbar({ planes }) {
           </select>
         </div>
       </div>
+      <Schedule planes={planes} date={dateDisplay}/>
     </div>
   );
 }
