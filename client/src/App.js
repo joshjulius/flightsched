@@ -92,7 +92,6 @@ function App() {
           visibility={createAccVisibility}
           hideModal={hideCreateAccModal}
         />
-        <Schedule planes={planes} />
       </div>
     </div>
   );
