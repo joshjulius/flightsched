@@ -7,10 +7,14 @@ import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Optionbar from "./components/Optionbar/Optionbar";
 import Schedule from "./components/Schedule/Schedule";
+import LoginModal from "./components/LoginModal/LoginModal";
+import CreateAccModal from "./components/CreateAccModal/CreateAccModal";
 // import Schedule from "./components/Schedule/Schedule";
 
 function App() {
   const [visibility, setVisibility] = useState(false);
+  const [loginVisibility, setLoginVisibility] = useState(false);
+  const [createAccVisibility, setCreateAccVisibility] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [planes, setPlanes] = useState();
 
@@ -27,6 +31,22 @@ function App() {
 
   const hideModal = () => {
     setVisibility(false);
+  };
+
+  const showLoginModal = () => {
+    setLoginVisibility(true);
+  };
+
+  const hideLoginModal = () => {
+    setLoginVisibility(false);
+  };
+
+  const showCreateAccModal = () => {
+    setCreateAccVisibility(true);
+  };
+
+  const hideCreateAccModal = () => {
+    setCreateAccVisibility(false);
   };
 
   const axiosPlaneCall = () => {
@@ -56,13 +76,22 @@ function App() {
             : "app__content app__content--close"
         }
       >
-        <Navbar handleToggle={handleToggle} toggle={toggle} />
+        <Navbar
+          handleToggle={handleToggle}
+          toggle={toggle}
+          showLoginModal={showLoginModal}
+          showCreateAccModal={showCreateAccModal}
+        />
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
         <Optionbar planes={planes} />
         <Modal visibility={visibility} hideModal={hideModal} />
-        {/* <Schedule /> */}
+        <LoginModal visibility={loginVisibility} hideModal={hideLoginModal} />
+        <CreateAccModal
+          visibility={createAccVisibility}
+          hideModal={hideCreateAccModal}
+        />
         <Schedule planes={planes} />
       </div>
     </div>

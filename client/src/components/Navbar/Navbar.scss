@@ -1,53 +1,56 @@
 div.navbar ul.main-ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 60px minmax(50%, 70%) 60px auto;
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 60px minmax(50%, 70%) 60px auto;
 }
 
 li:nth-child(3) {
-    place-self: center;
+  place-self: center;
 }
 
 li:nth-child(4) {
-    align-self: center;
-    justify-self: right;
-    position: relative;
+  align-self: center;
+  justify-self: right;
+  position: relative;
 }
 
 a {
-    text-decoration: none;
-    color: #000;
-    cursor: pointer;
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
 }
 
 a:hover,
 button.user:hover {
-    color:rgb(69, 110, 136);
-
+  color: rgb(69, 110, 136);
 }
 
 div.navbar ul.secondary-ul {
-    list-style: none;
-    padding: 0;
-    position: absolute;
-    top: 35px;
-    right: 0;
-    width: 130px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px 2px #ccc;
+  list-style: none;
+  padding: 0;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  width: 130px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 2px #ccc;
 }
 
 div.navbar ul.secondary-ul li {
-    margin: 10px;
+  margin: 10px;
 }
 
 button.user {
-    border: none;
-    background-color: white;
-    cursor: pointer;
+  border: none;
+  background-color: white;
+  cursor: pointer;
 }
 
 .hide {
-    display: none;
+  display: none;
+}
+
+.login-btn {
+  cursor: pointer;
 }
