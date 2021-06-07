@@ -43,10 +43,10 @@ router.post("/", (req, res) => {
 
   User.find({})
     .then((result) => {
-      res.send(result);
+      res.send("user has been created");
     })
     .catch((err) => {
-      console.log(err);
+      console.log("User created error");
     });
 });
 
