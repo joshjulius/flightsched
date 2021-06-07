@@ -1,7 +1,8 @@
 import React from "react";
 import "./Schedule.scss";
+import Slot from "../Slot/Slot";
 
-export default function Schedule({ planes }) {
+export default function Schedule({ planes, date }) {
   const timeHead = [];
   const planeSlot = [];
 
@@ -24,27 +25,31 @@ export default function Schedule({ planes }) {
     }
   };
   planeTimeSlot(8, "");
-
+  
   return (
     <table className="schedule">
       <thead className="schedule__time-heading">
         <th className="schedule__placeholder"></th>
         {timeHead}
       </thead>
-      {planes &&
-        planes.map((info) => {
-          return (
-            <tbody className="schedule__plane-time-slot">
-              <td
-                key={info._id}
-                className="scheudle__plane-name schedule__placeholder "
-              >
-                {`${info.reg} Cessna 172S`}
-              </td>
-              {planeSlot}
-            </tbody>
-          );
-        })}
+      <tbody className="schedule__plane-time-slot">
+        {
+          planes && planes.map((info) => {
+            return (
+              <>
+                <td
+                  key={info._id}
+                  className={`schedule__plane-name schedule__placeholder ${info.reg}`}
+                >
+                  {`${info.reg} ${info.type}`}
+                  {(info.reg === "C-GUBI") ? <Slot date={date} /> : null}
+                </td>
+                {planeSlot}
+              </>
+            );
+          })
+        }
+      </tbody>
     </table>
   );
 }

@@ -24,9 +24,10 @@ let useClickOutside = (handler) => {
     return domNode;
 };
 
-const Modal = ({ visibility, hideModal }) => {
+const Modal = ({ visibility, hideModal, planes }) => {
 
     const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
 
     let domNode = useClickOutside(() => {
         hideModal()
@@ -37,7 +38,7 @@ const Modal = ({ visibility, hideModal }) => {
     } else if (visibility) {
         return (
             <div className="modal">
-                <form action="" method="POST"  ref={domNode}>
+                <form action="/api/slots" method="POST"  ref={domNode}>
                     <div className="form-container">
                         <div className="form-header">
                             <h2>New Reservation</h2>
@@ -53,7 +54,7 @@ const Modal = ({ visibility, hideModal }) => {
                         </div>
                         <div className="item">
                             <label htmlFor="activity-type">Activity Type</label>
-                            <select id="activity-type" name="activity-type" defaultValue={"DEFAULT"}>
+                            <select id="activity-type" name="activityType" defaultValue={"DEFAULT"}>
                                 <option value="DEFAULT" disabled>Select</option>
                                 <option value="dual">Dual</option>
                                 <option value="solo">Solo</option>
@@ -66,15 +67,17 @@ const Modal = ({ visibility, hideModal }) => {
                                 onChange={(date) => setStartDate(date)}
                                 showTimeSelect
                                 dateFormat="MMMM d, yyyy h:mm aa"
+                                name="startTime"
                             />
                         </div>
                         <div className="item">
                             <label htmlFor="end-time">End</label>
                             <DatePicker
-                                selected={startDate}
-                                onChange={(date) => setStartDate(date)}
+                                selected={endDate}
+                                onChange={(date) => setEndDate(date)}
                                 showTimeSelect
                                 dateFormat="MMMM d, yyyy h:mm aa"
+                                name="endTime"
                             />
                         </div>
                         <div className="item">
@@ -91,7 +94,7 @@ const Modal = ({ visibility, hideModal }) => {
                             <input
                                 type="text"
                                 id="display-name"
-                                name="display-name"
+                                name="displayName"
                                 placeholder="None"
                             />
                         </div>
@@ -99,8 +102,13 @@ const Modal = ({ visibility, hideModal }) => {
                             <label htmlFor="aircraft">Aircraft</label>
                             <select id="aircraft" name="aircraft" defaultValue={"DEFAULT"}>
                                 <option value="DEFAULT" disabled>Select</option>
-                                <option value="GUBI">Cessna 172S C-GUBI</option>
-                                <option value="GUZZ">Cessna 172S C-GUZZ</option>
+                                {planes.map((info) => {
+                                    return (
+                                    <option key={info._id} value={info.reg}>
+                                        {info.reg}
+                                    </option>
+                                    );
+                                })}
                             </select>
                         </div>
                         <div className="item">
@@ -118,21 +126,21 @@ const Modal = ({ visibility, hideModal }) => {
                                     type="radio"
                                     id="local"
                                     value="local"
-                                    name="flight-type"
+                                    name="flightType"
                                 />
                                 <label htmlFor="local">Local</label>
                                 <input
                                     type="radio"
                                     id="cross-country"
                                     value="cross-country"
-                                    name="flight-type"
+                                    name="flightType"
                                 />
                                 <label htmlFor="cross-country">Cross Country</label>
                             </div>
                         </div>
                         <div className="item">
                             <label htmlFor="flight-route-legs">Flight Route/Legs</label>
-                            <textarea id="flight-route-legs" name="flight-route-legs" />
+                            <textarea id="flight-route-legs" name="flightRoute" />
                         </div>
                         <div className="item">
                             <label htmlFor="comments">Comments</label>
