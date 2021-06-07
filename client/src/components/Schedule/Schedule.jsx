@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Schedule.scss";
 import Slot from "../Slot/Slot";
+import axios from "axios";
 
 export default function Schedule({ planes, date }) {
   const timeHead = [];
@@ -26,6 +27,30 @@ export default function Schedule({ planes, date }) {
   };
   planeTimeSlot(8, "");
   
+  const [slots, setSlots] = useState([]);
+  const slotsURL = "http://localhost:5000/api/slots";
+
+  const axiosSlotsCall = () => {
+    axios
+      .get(slotsURL)
+      .then((res) => {
+        setSlots(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    axiosSlotsCall();
+  }, [slotsURL]);
+
+  const regs = [];
+  for (let i = 0; i < slots.length; i++) {
+    regs.push(slots[i].aircraft);
+  }
+  console.log(regs);
+
   return (
     <table className="schedule">
       <thead className="schedule__time-heading">
@@ -42,7 +67,7 @@ export default function Schedule({ planes, date }) {
                   className={`schedule__plane-name schedule__placeholder ${info.reg}`}
                 >
                   {`${info.reg} ${info.type}`}
-                  {(info.reg === "C-GUBI") ? <Slot date={date} /> : null}
+                  {(info.reg === regs[0] || info.reg === regs[1]) ? <Slot date={date} /> : null}
                 </td>
                 {planeSlot}
               </>
