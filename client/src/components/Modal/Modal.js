@@ -102,7 +102,7 @@ const Modal = ({ visibility, hideModal, planes }) => {
                             <label htmlFor="aircraft">Aircraft</label>
                             <select id="aircraft" name="aircraft" defaultValue={"DEFAULT"}>
                                 <option value="DEFAULT" disabled>Select</option>
-                                {planes && planes.map((info) => {
+                                {planes.map((info) => {
                                     return (
                                     <option key={info._id} value={info.reg}>
                                         {info.reg}
