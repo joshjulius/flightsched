@@ -30,10 +30,19 @@ router.get("/:id", (req, res) => {
 router.post("/register", async (req, res) => {
   const data = req.body;
 
+  //Check if it is a duplicated email or not
+
+  const emailExist = await User.findOne({ email: data.email });
+  console.log(emailExist);
+  if (emailExist) {
+    return res.status(400).send("Email already exists");
+    console.log("email already exists")
+  }
+
   //Hasing the passwords
 
-  const salt =  await bcrypt.genSalt(10);
-  const hashedPassword =  await bcrypt.hash(data.password, salt);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(data.password, salt);
 
   const newUser = new User({
     name: data.name,
@@ -47,19 +56,20 @@ router.post("/register", async (req, res) => {
     .save()
     .then((result) => {
       console.log("User POST method success");
+      res.send("User has been Created");
     })
     .catch((err) => {
       console.log("User POST method failed");
       console.log(err);
     });
 
-  User.find({})
-    .then((result) => {
-      res.send("user has been created");
-    })
-    .catch((err) => {
-      console.log("User created error");
-    });
+  // User.find({})
+  //   .then((result) => {
+  //     res.send("user has been created");
+  //   })
+  //   .catch((err) => {
+  //     console.log("User created error");
+  //   });
 });
 
 //Deleting an User by matching the id
