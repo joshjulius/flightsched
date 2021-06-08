@@ -26,7 +26,7 @@ router.get("/:id", (req, res) => {
 });
 
 //Creating a new User to the Users JSON
-router.post("/", (req, res) => {
+router.post("/register", (req, res) => {
   const data = req.body;
   const newUser = new User(data);
 

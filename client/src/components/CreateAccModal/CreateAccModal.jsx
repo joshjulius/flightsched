@@ -58,7 +58,7 @@ const CreateAccModal = ({ visibility, hideModal }) => {
       nameError = "Name cannot be blank";
     }
 
-    if (!Number.isInteger(state.phone)) {
+    if (Number.isNaN(parseInt(state.phone))) {
       phoneError = "Phone Number cannot be blank and has to be numbers";
     }
 
@@ -83,7 +83,7 @@ const CreateAccModal = ({ visibility, hideModal }) => {
     const valid = validate();
     if (valid) {
       axios
-        .post("http://localhost:5000/api/users", {
+        .post("http://localhost:5000/api/users/register", {
           name: state.name,
           phone: state.phone,
           email: state.email,
