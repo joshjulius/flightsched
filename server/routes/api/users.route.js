@@ -1,4 +1,5 @@
 import express from "express";
+import bcrypt from "bcryptjs";
 const router = express.Router();
 import User from "../../models/User.model.js";
 
@@ -26,9 +27,20 @@ router.get("/:id", (req, res) => {
 });
 
 //Creating a new User to the Users JSON
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const data = req.body;
-  const newUser = new User(data);
+
+  //Hasing the passwords
+
+  const salt =  await bcrypt.genSalt(10);
+  const hashedPassword =  await bcrypt.hash(data.password, salt);
+
+  const newUser = new User({
+    name: data.name,
+    phone: data.phone,
+    email: data.email,
+    password: hashedPassword,
+  });
 
   //Saving the new User into the MongoDB database
   newUser
