@@ -42,8 +42,8 @@ const LoginModal = ({ visibility, hideModal }) => {
     let emailError = "";
     let passwordError = "";
 
-    if (!state.email) {
-      emailError = "Email cannot be empty";
+    if (!state.email.includes("@")) {
+      emailError = "Invalid email";
     }
 
     if (!state.password) {
@@ -80,23 +80,23 @@ const LoginModal = ({ visibility, hideModal }) => {
   //Submit button function
   const submitHandler = (e) => {
     e.preventDefault();
-    //if validate() return true, runs the axios call
-    // const valid = validate();
-    // if (valid) {
-    axios
-      .post("http://localhost:5000/api/users/login", {
-        email: state.email,
-        password: state.password,
-      })
-      .then((res) => {
-        console.log(res);
-        resetModal();
-        hideModal();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // }
+    // if validate() return true, runs the axios call
+    const valid = validate();
+    if (valid) {
+      axios
+        .post("http://localhost:5000/api/users/login", {
+          email: state.email,
+          password: state.password,
+        })
+        .then((res) => {
+          console.log(res);
+          resetModal();
+          hideModal();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   if (!visibility) {
@@ -121,7 +121,7 @@ const LoginModal = ({ visibility, hideModal }) => {
                 value={state.email}
                 onChange={changeHandler}
               />
-              <div>{validation.email}</div>
+              <div>{validation.emailError}</div>
             </div>
             <div className="item">
               <label htmlFor="password">Password</label>
@@ -132,7 +132,7 @@ const LoginModal = ({ visibility, hideModal }) => {
                 value={state.password}
                 onChange={changeHandler}
               />
-              <div>{validation.password}</div>
+              <div>{validation.passwordError}</div>
             </div>
             <button type="submit" className="submit">
               Login
