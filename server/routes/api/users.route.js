@@ -2,6 +2,10 @@ import express from "express";
 import bcrypt from "bcryptjs";
 const router = express.Router();
 import User from "../../models/User.model.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 router.get("/", (req, res) => {
   User.find({})
@@ -36,9 +40,9 @@ router.post("/login", async (req, res) => {
   const validPassword = await bcrypt.compare(data.password, user.password);
   if (!validPassword) return res.status(400).send("Invalid Password");
 
-
-    res.send("logged in");
-
+  //Create and assign a JWT Token
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+  res.header("auth-token", token).send(token);
 });
 
 //Creating a new User to the Users JSON
