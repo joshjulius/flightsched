@@ -26,23 +26,37 @@ router.get("/:id", (req, res) => {
     });
 });
 
+//User Login Authentication
+router.post("/login", async (req, res) => {
+  const data = req.body;
+
+  //Check if it is a duplicated email or not
+  const user = await User.findOne({ email: data.email });
+  if (!user) return res.status(400).send("Invalid Email");
+  const validPassword = await bcrypt.compare(data.password, user.password);
+  if (!validPassword) return res.status(400).send("Invalid Password");
+
+
+    res.send("logged in");
+
+});
+
 //Creating a new User to the Users JSON
 router.post("/register", async (req, res) => {
   const data = req.body;
 
   //Check if it is a duplicated email or not
-
   const emailExist = await User.findOne({ email: data.email });
-  console.log(emailExist);
-  if (emailExist) {
-    return res.status(400).send("Email already exists");
-    console.log("email already exists")
+  if (!emailExist) {
+    return res.status(400).send("Email already existed");
   }
 
   //Hasing the passwords
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(data.password, salt);
+
+  //Saving the new User into the MongoDB database
 
   const newUser = new User({
     name: data.name,
@@ -51,7 +65,6 @@ router.post("/register", async (req, res) => {
     password: hashedPassword,
   });
 
-  //Saving the new User into the MongoDB database
   newUser
     .save()
     .then((result) => {
@@ -61,15 +74,8 @@ router.post("/register", async (req, res) => {
     .catch((err) => {
       console.log("User POST method failed");
       console.log(err);
+      res.status(400).send("User is not created");
     });
-
-  // User.find({})
-  //   .then((result) => {
-  //     res.send("user has been created");
-  //   })
-  //   .catch((err) => {
-  //     console.log("User created error");
-  //   });
 });
 
 //Deleting an User by matching the id

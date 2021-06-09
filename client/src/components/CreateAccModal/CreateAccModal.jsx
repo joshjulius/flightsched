@@ -78,39 +78,6 @@ const CreateAccModal = ({ visibility, hideModal }) => {
     return true;
   };
 
-  let submitHandler = (e) => {
-    e.preventDefault();
-    const valid = validate();
-    if (valid) {
-      axios
-        .post("http://localhost:5000/api/users/register", {
-          name: state.name,
-          phone: state.phone,
-          email: state.email,
-          password: state.password,
-        })
-        .then((res) => {
-          console.log(res);
-          setState({
-            name: "",
-            email: "",
-            phone: "",
-            password: "",
-          });
-          setValidation({
-            nameError: "",
-            emailError: "",
-            phoneError: "",
-            passwordError: "",
-          });
-          hideModal();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
   let resetModal = () => {
     setState({
       name: "",
@@ -124,6 +91,28 @@ const CreateAccModal = ({ visibility, hideModal }) => {
       phoneError: "",
       passwordError: "",
     });
+  };
+
+  let submitHandler = (e) => {
+    e.preventDefault();
+    const valid = validate();
+    if (valid) {
+      axios
+        .post("http://localhost:5000/api/users/register", {
+          name: state.name,
+          phone: state.phone,
+          email: state.email,
+          password: state.password,
+        })
+        .then((res) => {
+          console.log(res);
+          resetModal();
+          hideModal();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   if (!visibility) {

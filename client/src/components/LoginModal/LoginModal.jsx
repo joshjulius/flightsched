@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../Modal/Modal.scss";
+import axios from "axios";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -31,6 +32,44 @@ const LoginModal = ({ visibility, hideModal }) => {
     password: "",
   });
 
+  let [validation, setValidation] = useState({
+    emailError: "",
+    passwordError: "",
+  });
+
+  //Check if the input value is correct or not, if it is, return true, return false when it is not
+  let validate = () => {
+    let emailError = "";
+    let passwordError = "";
+
+    if (!state.email) {
+      emailError = "Email cannot be empty";
+    }
+
+    if (!state.password) {
+      passwordError = "Password cannot be empty";
+    }
+
+    if (emailError || passwordError) {
+      setValidation({ emailError, passwordError });
+      return false;
+    }
+    return true;
+  };
+
+  //resetting the state back to empty string
+  let resetModal = () => {
+    setState({
+      email: "",
+      password: "",
+    });
+    setValidation({
+      emailError: "",
+      passwordError: "",
+    });
+  };
+
+  //Changing the value in the input box
   const changeHandler = (e) => {
     setState({
       ...state,
@@ -38,12 +77,34 @@ const LoginModal = ({ visibility, hideModal }) => {
     });
   };
 
+  //Submit button function
+  const submitHandler = (e) => {
+    e.preventDefault();
+    //if validate() return true, runs the axios call
+    // const valid = validate();
+    // if (valid) {
+    axios
+      .post("http://localhost:5000/api/users/login", {
+        email: state.email,
+        password: state.password,
+      })
+      .then((res) => {
+        console.log(res);
+        resetModal();
+        hideModal();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // }
+  };
+
   if (!visibility) {
     return null;
   } else if (visibility) {
     return (
       <div className="modal">
-        <form action="" method="POST" ref={domNode}>
+        <form onSubmit={submitHandler} ref={domNode}>
           <div className="form-container">
             <div className="form-header">
               <h2>Login</h2>
@@ -60,6 +121,7 @@ const LoginModal = ({ visibility, hideModal }) => {
                 value={state.email}
                 onChange={changeHandler}
               />
+              <div>{validation.email}</div>
             </div>
             <div className="item">
               <label htmlFor="password">Password</label>
@@ -70,6 +132,7 @@ const LoginModal = ({ visibility, hideModal }) => {
                 value={state.password}
                 onChange={changeHandler}
               />
+              <div>{validation.password}</div>
             </div>
             <button type="submit" className="submit">
               Login
