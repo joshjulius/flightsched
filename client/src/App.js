@@ -6,7 +6,6 @@ import Modal from "./components/Modal/Modal";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Optionbar from "./components/Optionbar/Optionbar";
-import Schedule from "./components/Schedule/Schedule";
 import LoginModal from "./components/LoginModal/LoginModal";
 import CreateAccModal from "./components/CreateAccModal/CreateAccModal";
 // import Schedule from "./components/Schedule/Schedule";
@@ -86,7 +85,7 @@ function App() {
           Create a Reservation
         </button>
         <Optionbar planes={planes} />
-        <Modal visibility={visibility} hideModal={hideModal} />
+        <Modal visibility={visibility} hideModal={hideModal} planes={planes}/>
         <LoginModal visibility={loginVisibility} hideModal={hideLoginModal} />
         <CreateAccModal
           visibility={createAccVisibility}
