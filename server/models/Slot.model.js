@@ -18,8 +18,16 @@ const SlotSchema = new Schema({
         type: Date,
         required: true
     },
+    startDate: {
+        type: String,
+        required: true
+    },
     endTime: {
         type: Date,
+        required: true
+    },
+    endDate: {
+        type: String,
         required: true
     },
     customer: {

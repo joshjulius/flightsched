@@ -27,8 +27,25 @@ export default function Schedule({ planes, date }) {
   };
   planeTimeSlot(8, "");
   
+ 
+  // check if displayDate date is less than 10, if true, add 0
+  let dateDigit = date.slice(5,date.length).split(" ")[1].replace(',','');
+  if (dateDigit.length === 1) {
+    dateDigit = `0${dateDigit}`;
+  }
+
+  //Replace with refactored date digit
+  let dateArray = date.slice(5,date.length).split(" ");
+  dateArray[1] = dateDigit;
+
+  //Shorten month to 3 letters
+  dateArray[0] = dateArray[0].slice(0,3);
+
+  //Convert to string
+  const currentDate = dateArray.join('_');
+
   const [slots, setSlots] = useState([]);
-  const slotsURL = "http://localhost:5000/api/slots";
+  const slotsURL = `http://localhost:5000/api/slots/${currentDate}`;
 
   const axiosSlotsCall = () => {
     axios
@@ -45,21 +62,26 @@ export default function Schedule({ planes, date }) {
     axiosSlotsCall();
   }, [slotsURL]);
 
-  const regs = [];
-  for (let i = 0; i < slots.length; i++) {
-    regs.push(slots[i].aircraft);
-  }
-  console.log(regs);
-
   return (
+    <>
     <table className="schedule">
       <thead className="schedule__time-heading">
         <th className="schedule__placeholder"></th>
         {timeHead}
       </thead>
       <tbody className="schedule__plane-time-slot">
+        
         {
           planes && planes.map((info) => {
+
+            const checkReg = (slot) => {
+              return slot.aircraft === info.reg;
+            }
+
+            const timeBlock = (slot) => {
+              return(<Slot id={slot._id} startTime={slot.startTime} endTime={slot.endTime} />);
+            }
+
             return (
               <>
                 <td
@@ -67,14 +89,17 @@ export default function Schedule({ planes, date }) {
                   className={`schedule__plane-name schedule__placeholder ${info.reg}`}
                 >
                   {`${info.reg} ${info.type}`}
-                  {(info.reg === regs[0] || info.reg === regs[1]) ? <Slot date={date} /> : null}
+                  {slots.filter(checkReg).map(timeBlock)}
                 </td>
                 {planeSlot}
               </>
             );
           })
+
         }
+
       </tbody>
     </table>
+    </>
   );
 }
