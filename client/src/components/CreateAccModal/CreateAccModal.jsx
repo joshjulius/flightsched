@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../Modal/Modal.scss";
+import axios from "axios";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -27,11 +28,17 @@ const CreateAccModal = ({ visibility, hideModal }) => {
   });
 
   let [state, setState] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     phone: "",
     password: "",
+  });
+
+  let [validation, setValidation] = useState({
+    nameError: "",
+    emailError: "",
+    phoneError: "",
+    passwordError: "",
   });
 
   let changeHandler = (e) => {
@@ -41,38 +48,102 @@ const CreateAccModal = ({ visibility, hideModal }) => {
     });
   };
 
+  let validate = () => {
+    let nameError = "";
+    let emailError = "";
+    let phoneError = "";
+    let passwordError = "";
+
+    if (!state.name) {
+      nameError = "Name cannot be blank";
+    }
+
+    if (Number.isNaN(parseInt(state.phone))) {
+      phoneError = "Phone Number cannot be blank and has to be numbers";
+    }
+
+    if (!state.password) {
+      passwordError = "Password cannot be blank";
+    }
+
+    if (!state.email.includes("@")) {
+      emailError = "invalid email";
+    }
+
+    if (emailError || nameError || passwordError || phoneError) {
+      setValidation({ emailError, nameError, phoneError, passwordError });
+      return false;
+    }
+
+    return true;
+  };
+
+  let resetModal = () => {
+    setState({
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+    });
+    setValidation({
+      nameError: "",
+      emailError: "",
+      phoneError: "",
+      passwordError: "",
+    });
+  };
+
+  let submitHandler = (e) => {
+    e.preventDefault();
+    const valid = validate();
+    if (valid) {
+      axios
+        .post("http://localhost:5000/api/users/register", {
+          name: state.name,
+          phone: state.phone,
+          email: state.email,
+          password: state.password,
+        })
+        .then((res) => {
+          console.log(res);
+          resetModal();
+          hideModal();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   if (!visibility) {
     return null;
   } else if (visibility) {
     return (
       <div className="modal">
-        <form action="" method="POST" ref={domNode}>
+        <form onSubmit={submitHandler} ref={domNode}>
           <div className="form-container">
             <div className="form-header">
               <h2>Create Account</h2>
-              <button onClick={hideModal} className="close">
+              <button
+                onClick={() => {
+                  hideModal();
+                  resetModal();
+                }}
+                className="close"
+              >
                 Close
               </button>
             </div>
             <div className="item">
-              <label htmlFor="firstName">First Name</label>
+              <label htmlFor="name">Name</label>
               <input
                 onChange={changeHandler}
                 type="text"
-                id="firstName"
-                name="firstName"
-                value={state.firstName}
+                id="name"
+                name="name"
+                value={state.name}
               />
-            </div>
-            <div className="item">
-              <label htmlFor="lastName">Last Name</label>
-              <input
-                onChange={changeHandler}
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={state.lastName}
-              />
+              <div>{validation.nameError}</div>
             </div>
             <div className="item">
               <label htmlFor="email">Email</label>
@@ -83,6 +154,7 @@ const CreateAccModal = ({ visibility, hideModal }) => {
                 name="email"
                 value={state.email}
               />
+              <div>{validation.emailError}</div>
             </div>
             <div className="item">
               <label htmlFor="phone">Phone Number</label>
@@ -93,6 +165,7 @@ const CreateAccModal = ({ visibility, hideModal }) => {
                 name="phone"
                 value={state.phone}
               />
+              <div>{validation.phoneError}</div>
             </div>
             <div className="item">
               <label htmlFor="password">Password</label>
@@ -103,6 +176,7 @@ const CreateAccModal = ({ visibility, hideModal }) => {
                 name="password"
                 value={state.password}
               />
+              <div>{validation.passwordError}</div>
             </div>
             <button type="submit" className="submit">
               Create Account
