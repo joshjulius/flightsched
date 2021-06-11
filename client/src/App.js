@@ -69,8 +69,8 @@ function App() {
 
   return (
     <div className="app">
-      <Route exact path="/" component={Loginpage} />
-      <Route path="/user/:id" render={(props) => <Userpage {...props} />} />
+      <Route path="/" render={(...props) => <Loginpage {...props} />} />
+      <Route path="/user/:id" render={(...props) => <Userpage {...props} />} />
       {/* <div class={toggle ? "app__sidebar--open" : "app__sidebar--close"}>
         <Sidebar handleToggle={handleToggle} toggle={toggle} />
       </div>

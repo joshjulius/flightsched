@@ -74,6 +74,7 @@ export default function Loginpage() {
           setIsLoggedIn(true);
         })
         .catch((err) => {
+          alert("Invalid Email or Password ");
           console.log(err);
         });
     }
