@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 import "./Loginpage.scss";
 
 export default function Loginpage() {
@@ -14,6 +15,7 @@ export default function Loginpage() {
   });
 
   let [userId, setUserId] = useState();
+  let [isLoggedIn, setIsLoggedIn] = useState(false);
 
   //Check if the input value is correct or not, if it is, return true, return false when it is not
   let validate = () => {
@@ -67,8 +69,9 @@ export default function Loginpage() {
           password: state.password,
         })
         .then((res) => {
-          console.log(res);
-          resetModal();
+          console.log(res.data.id);
+          setUserId(res.data.id);
+          setIsLoggedIn(true);
         })
         .catch((err) => {
           console.log(err);
@@ -76,6 +79,9 @@ export default function Loginpage() {
     }
   };
 
+  if (isLoggedIn) {
+    return <Redirect to={`/user/${userId}`} />;
+  }
   return (
     <div className="modal">
       <form onSubmit={submitHandler}>

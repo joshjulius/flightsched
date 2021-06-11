@@ -111,7 +111,6 @@ const CreateAccModal = ({ visibility, hideModal }) => {
         })
         .catch((err) => {
           console.log(err);
-          console.log("error");
         });
     }
   };

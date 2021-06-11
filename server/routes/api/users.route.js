@@ -42,25 +42,14 @@ router.post("/login", async (req, res) => {
 
   //Create and assign a JWT Token
   const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-  res.header("auth-token", token).send(token);
-
-  User.find({})
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.status(404).send({ success: false });
-      console.log(err);
-    });
+  res.header("auth-token", token).send({ token: token, id: user._id });
 });
 
 //Creating a new User to the Users JSON
 router.post("/register", async (req, res) => {
-  const data = req.body;
-
   //Check if it is a duplicated email or not
   const emailExist = await User.findOne({ email: data.email });
-  if (!emailExist) {
+  if (emailExist) {
     return res.status(400).send("Email already existed");
   }
 
