@@ -43,6 +43,15 @@ router.post("/login", async (req, res) => {
   //Create and assign a JWT Token
   const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
   res.header("auth-token", token).send(token);
+
+  User.find({})
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.status(404).send({ success: false });
+      console.log(err);
+    });
 });
 
 //Creating a new User to the Users JSON
