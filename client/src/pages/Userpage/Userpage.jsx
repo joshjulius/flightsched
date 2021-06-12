@@ -5,13 +5,13 @@ import Modal from "../../components/Modal/Modal";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Optionbar from "../../components/Optionbar/Optionbar";
-import LoginModal from "../../components/LoginModal/LoginModal";
-import CreateAccModal from "../../components/CreateAccModal/CreateAccModal";
+// import LoginModal from "../../components/LoginModal/LoginModal";
+// import CreateAccModal from "../../components/CreateAccModal/CreateAccModal";
 
 export default function Userpage() {
   const [visibility, setVisibility] = useState(false);
-  const [loginVisibility, setLoginVisibility] = useState(false);
-  const [createAccVisibility, setCreateAccVisibility] = useState(false);
+  // const [loginVisibility, setLoginVisibility] = useState(false);
+  // const [createAccVisibility, setCreateAccVisibility] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [planes, setPlanes] = useState();
 
@@ -30,21 +30,21 @@ export default function Userpage() {
     setVisibility(false);
   };
 
-  const showLoginModal = () => {
-    setLoginVisibility(true);
-  };
+  // const showLoginModal = () => {
+  //   setLoginVisibility(true);
+  // };
 
-  const hideLoginModal = () => {
-    setLoginVisibility(false);
-  };
+  // const hideLoginModal = () => {
+  //   setLoginVisibility(false);
+  // };
 
-  const showCreateAccModal = () => {
-    setCreateAccVisibility(true);
-  };
+  // const showCreateAccModal = () => {
+  //   setCreateAccVisibility(true);
+  // };
 
-  const hideCreateAccModal = () => {
-    setCreateAccVisibility(false);
-  };
+  // const hideCreateAccModal = () => {
+  //   setCreateAccVisibility(false);
+  // };
 
   const axiosPlaneCall = () => {
     axios
@@ -75,19 +75,19 @@ export default function Userpage() {
         <Navbar
           handleToggle={handleToggle}
           toggle={toggle}
-          showLoginModal={showLoginModal}
-          showCreateAccModal={showCreateAccModal}
+          // showLoginModal={showLoginModal}
+          // showCreateAccModal={showCreateAccModal}
         />
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
         <Optionbar planes={planes} />
         <Modal visibility={visibility} hideModal={hideModal} />
-        <LoginModal visibility={loginVisibility} hideModal={hideLoginModal} />
+        {/* <LoginModal visibility={loginVisibility} hideModal={hideLoginModal} />
         <CreateAccModal
           visibility={createAccVisibility}
           hideModal={hideCreateAccModal}
-        />
+        /> */}
       </div>
     </div>
   );

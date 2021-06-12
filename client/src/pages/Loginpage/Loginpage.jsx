@@ -18,7 +18,7 @@ export default function Loginpage() {
     passwordError: "",
   });
 
-  let [userId, setUserId] = useState();
+  let [user, setUser] = useState();
   let [isLoggedIn, setIsLoggedIn] = useState(false);
   let [createToggle, setCreateToggle] = useState(false);
 
@@ -107,7 +107,7 @@ export default function Loginpage() {
         })
         .then((res) => {
           console.log(res.data);
-          setUserId(res.data.id);
+          setUser(res.data.user);
           setIsLoggedIn(true);
         })
         .catch((err) => {
@@ -142,7 +142,7 @@ export default function Loginpage() {
 
   //Create Account button
   if (isLoggedIn) {
-    return <Redirect to={`/user/${userId}`} />;
+    return <Redirect to={`/user/${user._id}`} />;
   }
   return (
     <div className="modal">
