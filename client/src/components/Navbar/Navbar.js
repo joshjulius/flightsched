@@ -15,8 +15,6 @@ const Navbar = ({
   //     // console.log(toggle);
   //   };
 
-  const [login, setLogin] = useState(false);
-
   const handleUserMenu = () => {
     document.querySelector(".secondary-ul").classList.toggle("hide");
   };
@@ -40,36 +38,25 @@ const Navbar = ({
               Help
             </a>
           </li>
-          {login ? (
-            <li>
-              <button className="user" onClick={handleUserMenu}>
-                Bob
-              </button>
-              <ul className="secondary-ul hide">
-                <li>
-                  <a href="#">My Account</a>
-                </li>
-                <li>
-                  <a href="#">My Companies</a>
-                </li>
-                <li>
-                  <a href="#">My Apps</a>
-                </li>
-                <li>
-                  <a href="#">Logout</a>
-                </li>
-              </ul>
-            </li>
-          ) : (
-            <>
-              <li className="login-btn" onClick={showLoginModal}>
-                Login
+          <li>
+            <button className="user" onClick={handleUserMenu}>
+              Bob
+            </button>
+            <ul className="secondary-ul hide">
+              <li>
+                <a href="#">My Account</a>
               </li>
-              <li className="login-btn" onClick={showCreateAccModal}>
-                Create Account
+              <li>
+                <a href="#">My Companies</a>
               </li>
-            </>
-          )}
+              <li>
+                <a href="#">My Apps</a>
+              </li>
+              <li>
+                <a href="#">Logout</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
     </div>

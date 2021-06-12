@@ -34,7 +34,7 @@ router.get("/:id", (req, res) => {
 router.post("/login", async (req, res) => {
   const data = req.body;
 
-  //Check if it is a duplicated email or not
+  //Check
   const user = await User.findOne({ email: data.email });
   if (!user) return res.status(400).send("Invalid Email");
   const validPassword = await bcrypt.compare(data.password, user.password);
@@ -47,6 +47,7 @@ router.post("/login", async (req, res) => {
 
 //Creating a new User to the Users JSON
 router.post("/register", async (req, res) => {
+  const data = req.body;
   //Check if it is a duplicated email or not
   const emailExist = await User.findOne({ email: data.email });
   if (emailExist) {
@@ -54,11 +55,12 @@ router.post("/register", async (req, res) => {
   }
 
   //Hasing the passwords
-
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(data.password, salt);
 
-  //Saving the new User into the MongoDB database
+  console.log("register");
+
+  // Saving the new User into the MongoDB database
 
   const newUser = new User({
     name: data.name,
