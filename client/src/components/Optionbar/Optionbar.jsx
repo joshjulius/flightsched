@@ -4,7 +4,7 @@ import arrowLeft from "../../assets/icons/left-arrow.svg";
 import arrowRight from "../../assets/icons/right-arrow.svg";
 import Schedule from "../Schedule/Schedule";
 
-export default function Optionbar({ planes }) {
+export default function Optionbar({ planes, showBookingModal }) {
   let dateOption = {
     weekday: "short",
     year: "numeric",
@@ -68,17 +68,16 @@ export default function Optionbar({ planes }) {
             <option value="Wwfc">Wwfc</option>
           </select>
           <select className="optionbar__bottom-option">
-            <option value="allAircraft">{`Aircraft(${
-              planes && planes.length
-            })`}</option>
-            {planes &&
-              planes.map((info) => {
-                return (
-                  <option key={info._id} value={info.reg}>
-                    {info.reg}
-                  </option>
-                );
-              })}
+            <option value="allAircraft">
+              {`Aircraft (${planes && planes.length})`}
+            </option>
+            {planes && planes.map((info) => {
+              return (
+                <option key={info._id} value={info.reg}>
+                  {info.reg}
+                </option>
+              );
+            })}
           </select>
           <select className="optionbar__bottom-option">
             <option value="allInstructor">All instructors</option>
@@ -109,7 +108,7 @@ export default function Optionbar({ planes }) {
           </select>
         </div>
       </div>
-      <Schedule planes={planes} date={dateDisplay}/>
+      <Schedule planes={planes} date={dateDisplay} showBookingModal={showBookingModal} />
     </div>
   );
 }

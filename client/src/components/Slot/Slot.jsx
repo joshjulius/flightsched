@@ -1,7 +1,7 @@
 import React from "react";
 import "./Slot.scss";
 
-const Slot = ({ id, startTime, endTime }) => {
+const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, customer, type, loading }) => {
 
     const startHour = startTime.slice(11,13);
     const startMinute = startTime.slice(14,16);
@@ -32,8 +32,31 @@ const Slot = ({ id, startTime, endTime }) => {
         width: width
     }
 
+    const tooltipDiv = document.querySelectorAll('.tooltip-div');
+    window.onmousemove = function (e) {
+        const x = e.clientX,
+              y = e.clientY;
+        for (let i = 0; i < tooltipDiv.length; i++) {
+            tooltipDiv[i].style.top = (y + 20) + 'px';
+            tooltipDiv[i].style.left = (x + 20) + 'px';
+        }
+    };
+
     return(
-        <div className={`${id} slot`} style={style}></div>
+        <div className={`${id} slot tooltip`} style={style}>
+            <div className="customer-name">
+                <p>{startHour}:{startMinute} {customer}</p>
+            </div>
+            <div className="tooltip-div">
+                <p>{aircraft} {type}</p>
+                <p>Activity Type: {activityType}</p>
+                <p>Customer: {customer}</p>
+                <p>Instructor: {instructor}</p>
+                <p>Start Time: {startHour}:{startMinute}</p>
+                <p>End Time: {endHour}:{endMinute}</p>
+                <p>Duration: {Math.floor((endTimeZeroed - startTimeZeroed) / 60)} hours {(endTimeZeroed - startTimeZeroed) % 60} minutes</p>
+            </div>
+        </div>
     );
 
 }
