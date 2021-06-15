@@ -18,8 +18,16 @@ const SlotSchema = new Schema({
         type: Date,
         required: true
     },
+    startDate: {
+        type: String,
+        required: true
+    },
     endTime: {
         type: Date,
+        required: true
+    },
+    endDate: {
+        type: String,
         required: true
     },
     customer: {
@@ -32,6 +40,10 @@ const SlotSchema = new Schema({
         // default: customer name
     },
     aircraft: {
+        type: String,
+        required: true
+    },
+    type: {
         type: String,
         required: true
     },

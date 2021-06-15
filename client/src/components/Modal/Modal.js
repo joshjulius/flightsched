@@ -56,8 +56,8 @@ const Modal = ({ visibility, hideModal, planes }) => {
                             <label htmlFor="activity-type">Activity Type</label>
                             <select id="activity-type" name="activityType" defaultValue={"DEFAULT"}>
                                 <option value="DEFAULT" disabled>Select</option>
-                                <option value="dual">Dual</option>
-                                <option value="solo">Solo</option>
+                                <option value="Dual">Dual</option>
+                                <option value="Solo">Solo</option>
                             </select>
                         </div>
                         <div className="item">
@@ -104,8 +104,8 @@ const Modal = ({ visibility, hideModal, planes }) => {
                                 <option value="DEFAULT" disabled>Select</option>
                                 {planes && planes.map((info) => {
                                     return (
-                                    <option key={info._id} value={info.reg}>
-                                        {info.reg}
+                                    <option key={info._id} value={`${info.reg} ${info.type}`}>
+                                        {info.reg} {info.type}
                                     </option>
                                     );
                                 })}
@@ -125,14 +125,14 @@ const Modal = ({ visibility, hideModal, planes }) => {
                                 <input
                                     type="radio"
                                     id="local"
-                                    value="local"
+                                    value="Local"
                                     name="flightType"
                                 />
                                 <label htmlFor="local">Local</label>
                                 <input
                                     type="radio"
                                     id="cross-country"
-                                    value="cross-country"
+                                    value="Csross-country"
                                     name="flightType"
                                 />
                                 <label htmlFor="cross-country">Cross Country</label>

@@ -12,11 +12,11 @@ router.get("/", (req, res) => {
     .then((slots) => res.json(slots));
 });
 
-// @route GET api/slots/:customer
-// @desc Get a slot by customer
+// @route GET api/slots/:startDate
+// @desc Get a slot by start date
 // @access public
-router.get("/:customer", (req, res) => {
-  Slot.find({ customer: req.params.customer })
+router.get("/:startDate", (req, res) => {
+  Slot.find({ startDate: req.params.startDate })
     .exec()
     .then((slot) => res.json(slot))
     .catch((err) => res.status(404).json({ success: false }));
@@ -35,14 +35,18 @@ router.get("/:customer", (req, res) => {
 // @desc Post a slot
 // @access public
 router.post("/", (req, res) => {
+  // console.log(new Date(`${req.body.startTime} UTC`).toString().slice(4,15).replace(' ','_'));
   const newSlot = new Slot({
     location: req.body.location,
     activityType: req.body.activityType,
-    startTime: new Date(req.body.startTime),
-    endTime: new Date(req.body.endTime),
+    startTime: new Date(`${req.body.startTime} UTC`),
+    startDate: new Date(`${req.body.startTime} UTC`).toString().slice(4,15).replace(/ /g,'_'),
+    endTime: new Date(`${req.body.endTime} UTC`),
+    endDate: new Date(`${req.body.endTime} UTC`).toString().slice(4,15).replace(/ /g,'_'),
     customer: req.body.customer,
     displayName: req.body.displayName,
-    aircraft: req.body.aircraft,
+    aircraft: req.body.aircraft.slice(0, 6),
+    type: req.body.aircraft.slice(7, req.body.aircraft.length),
     instructor: req.body.instructor,
     flightType: req.body.flightType,
     flightRoute: req.body.flightRoute,
