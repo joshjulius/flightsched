@@ -1,26 +1,24 @@
 .schedule {
-  width: 100%;
-  display: grid;
-  &__time-heading {
-    width: 100%;
+  width: 900px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  // border-spacing: 0;
+  border-collapse: collapse;
+  &__row {
     display: grid;
-    grid-template-columns: 150px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
-    background-color: rgb(151, 212, 212);
+    grid-template-columns: 150px repeat(15, 50px);
   }
-  &__time-slot {
+  &__time-heading {
     border: 1px solid rgba(0, 0, 0, 0.5);
+    background-color: rgb(151, 212, 212);
+    text-align: left;
   }
   &__placeholder {
     border: 1px solid rgba(0, 0, 0, 0.5);
-    border-left: 0;
     position: relative;
   }
-  &__plane-time-slot {
-    @extend .schedule__time-heading;
-    background-color: white;
-  }
   &__plane-slot {
-    @extend .schedule__time-slot;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     background-color: white;
+    cursor: pointer;
   }
 }
