@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Hamburger from "hamburger-react";
 import "./Navbar.scss";
 
@@ -7,6 +8,7 @@ const Navbar = ({
   handleToggle,
   showLoginModal,
   showCreateAccModal,
+  props,
 }) => {
   //   const [toggle, setToggle] = useState(true);
 
@@ -15,9 +17,29 @@ const Navbar = ({
   //     // console.log(toggle);
   //   };
 
+  const userInfo__URL = "http://localhost:5000/api/users";
+  const userId = props[0].match.params.id;
+
   const handleUserMenu = () => {
     document.querySelector(".secondary-ul").classList.toggle("hide");
   };
+
+  const [user, setUser] = useState();
+
+  const axiosCall = () => {
+    axios
+      .get(`${userInfo__URL}/${userId}`)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log("Fetch User ID info error");
+      });
+  };
+
+  useEffect(() => {
+    axiosCall();
+  }, [`${userInfo__URL}/${userId}`]);
 
   return (
     <div className="navbar">
@@ -40,7 +62,7 @@ const Navbar = ({
           </li>
           <li>
             <button className="user" onClick={handleUserMenu}>
-              Bob
+              {user && user.name}
             </button>
             <ul className="secondary-ul hide">
               <li>

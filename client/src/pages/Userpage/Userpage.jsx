@@ -8,7 +8,7 @@ import Optionbar from "../../components/Optionbar/Optionbar";
 // import LoginModal from "../../components/LoginModal/LoginModal";
 // import CreateAccModal from "../../components/CreateAccModal/CreateAccModal";
 
-export default function Userpage() {
+export default function Userpage(props) {
   const [visibility, setVisibility] = useState(false);
   // const [loginVisibility, setLoginVisibility] = useState(false);
   // const [createAccVisibility, setCreateAccVisibility] = useState(false);
@@ -60,6 +60,8 @@ export default function Userpage() {
   useEffect(() => {
     axiosPlaneCall();
   }, [planeURL]);
+
+  
   return (
     <div className="userpage">
       <div class={toggle ? "app__sidebar--open" : "app__sidebar--close"}>
@@ -75,6 +77,7 @@ export default function Userpage() {
         <Navbar
           handleToggle={handleToggle}
           toggle={toggle}
+          props={props}
           // showLoginModal={showLoginModal}
           // showCreateAccModal={showCreateAccModal}
         />
