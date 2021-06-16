@@ -4,6 +4,7 @@ const router = express.Router();
 import User from "../../models/User.model.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import verify from "../../verifyToken/verifyToken.js";
 
 dotenv.config();
 
@@ -41,8 +42,21 @@ router.post("/login", async (req, res) => {
   if (!validPassword) return res.status(400).send("Invalid Password");
 
   //Create and assign a JWT Token
-  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-  res.header("auth-token", token).send({ token: token, user: user });
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
+    expiresIn: 300,
+  });
+  try {
+    res
+      .header("auth-token", token)
+      .json({ auth: true, token: token, user: user });
+  } catch {
+    res.json({ auth: false, message: "Wrong Email/Password" });
+  }
+});
+
+//Check JWT is valid or not
+router.get("/jwtValid", verify, (req, res) => {
+  res.json("JWT is valid");
 });
 
 //Creating a new User to the Users JSON

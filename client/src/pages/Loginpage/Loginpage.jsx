@@ -93,6 +93,20 @@ export default function Loginpage() {
     });
   };
 
+  //Function to check if the JWT is valid or not from the localStorage
+  const checkAuthenticated = () => {
+    axios
+      .get("http://localhost:5000/api/test/jwtValid", {
+        headers: { "auth-token": localStorage.getItem("token") },
+      })
+      .then((res) => {
+        console.log("Ur JWT is valid");
+      })
+      .catch((err) => {
+        console.log("ur JWT is invalid");
+      });
+  };
+
   //Submit button function
   const loginHandler = (e) => {
     e.preventDefault();
@@ -108,7 +122,11 @@ export default function Loginpage() {
         .then((res) => {
           console.log(res.data);
           setUser(res.data.user);
-          setIsLoggedIn(true);
+          localStorage.setItem("token", res.data.token);
+          if (res.data.auth) {
+            setIsLoggedIn(true);
+            checkAuthenticated();
+          }
         })
         .catch((err) => {
           alert("Invalid Email or Password ");
@@ -141,9 +159,10 @@ export default function Loginpage() {
   };
 
   //Create Account button
-  if (isLoggedIn) {
-    return <Redirect to={`/user/${user._id}`} />;
-  }
+  // if (isLoggedIn) {
+  //   return <Redirect to={`/user/${user._id}`} />;
+  // }
+
   return (
     <div className="modal">
       {createToggle ? (
