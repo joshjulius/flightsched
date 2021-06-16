@@ -96,11 +96,12 @@ export default function Loginpage() {
   //Function to check if the JWT is valid or not from the localStorage
   const checkAuthenticated = () => {
     axios
-      .get("http://localhost:5000/api/test/jwtValid", {
+      .get("http://localhost:5000/api/jwtValid", {
         headers: { "auth-token": localStorage.getItem("token") },
       })
       .then((res) => {
         console.log("Ur JWT is valid");
+        setIsLoggedIn(true);
       })
       .catch((err) => {
         console.log("ur JWT is invalid");
@@ -124,7 +125,6 @@ export default function Loginpage() {
           setUser(res.data.user);
           localStorage.setItem("token", res.data.token);
           if (res.data.auth) {
-            setIsLoggedIn(true);
             checkAuthenticated();
           }
         })
@@ -158,10 +158,10 @@ export default function Loginpage() {
     }
   };
 
-  //Create Account button
-  // if (isLoggedIn) {
-  //   return <Redirect to={`/user/${user._id}`} />;
-  // }
+  // Navigate to Userpage when isLoggedIn is true
+  if (isLoggedIn) {
+    return <Redirect to={`/user/${user._id}`} />;
+  }
 
   return (
     <div className="modal">

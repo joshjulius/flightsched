@@ -54,11 +54,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//Check JWT is valid or not
-router.get("/jwtValid", verify, (req, res) => {
-  res.json("JWT is valid");
-});
-
 //Creating a new User to the Users JSON
 router.post("/register", async (req, res) => {
   const data = req.body;

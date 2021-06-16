@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 import "./Userpage.scss";
 import Modal from "../../components/Modal/Modal";
 import Navbar from "../../components/Navbar/Navbar";
@@ -61,7 +62,10 @@ export default function Userpage(props) {
     axiosPlaneCall();
   }, [planeURL]);
 
-  
+  if (!localStorage.getItem("token")) {
+    alert("Your token has expired");
+    return <Redirect to={`/`} />;
+  }
   return (
     <div className="userpage">
       <div class={toggle ? "app__sidebar--open" : "app__sidebar--close"}>

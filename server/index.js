@@ -6,7 +6,7 @@ import slots from "./routes/api/slots.route.js";
 import users from "./routes/api/users.route.js";
 import planes from "./routes/api/planes.route.js";
 import authRoute from "./routes/api/auth.route.js";
-import test from "./routes/api/test.route.js";
+import jwtCheck from "./routes/api/jwtCheck.route.js";
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ app.use("/api/slots", slots);
 app.use("/api/users", users);
 app.use("/api/users", authRoute);
 app.use("/api/planes", planes);
-app.use("/api/test", test);
+app.use("/api/", jwtCheck);
 
 const port = process.env.PORT || 5000;
 

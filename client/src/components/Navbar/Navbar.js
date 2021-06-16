@@ -37,6 +37,10 @@ const Navbar = ({
       });
   };
 
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+  };
+
   useEffect(() => {
     axiosCall();
   }, [`${userInfo__URL}/${userId}`]);
@@ -75,7 +79,9 @@ const Navbar = ({
                 <a href="#">My Apps</a>
               </li>
               <li>
-                <a href="#">Logout</a>
+                <a href="#" onClick={logoutHandler}>
+                  Logout
+                </a>
               </li>
             </ul>
           </li>
