@@ -4,6 +4,7 @@ const router = express.Router();
 import User from "../../models/User.model.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import verify from "../../verifyToken/verifyToken.js";
 
 dotenv.config();
 
@@ -34,33 +35,41 @@ router.get("/:id", (req, res) => {
 router.post("/login", async (req, res) => {
   const data = req.body;
 
-  //Check if it is a duplicated email or not
+  //Check
   const user = await User.findOne({ email: data.email });
   if (!user) return res.status(400).send("Invalid Email");
   const validPassword = await bcrypt.compare(data.password, user.password);
   if (!validPassword) return res.status(400).send("Invalid Password");
 
   //Create and assign a JWT Token
-  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-  res.header("auth-token", token).send(token);
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
+    expiresIn: 300,
+  });
+  try {
+    res
+      .header("auth-token", token)
+      .json({ auth: true, token: token, user: user });
+  } catch {
+    res.json({ auth: false, message: "Wrong Email/Password" });
+  }
 });
 
 //Creating a new User to the Users JSON
 router.post("/register", async (req, res) => {
   const data = req.body;
-
   //Check if it is a duplicated email or not
   const emailExist = await User.findOne({ email: data.email });
-  if (!emailExist) {
+  if (emailExist) {
     return res.status(400).send("Email already existed");
   }
 
   //Hasing the passwords
-
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(data.password, salt);
 
-  //Saving the new User into the MongoDB database
+  console.log("register");
+
+  // Saving the new User into the MongoDB database
 
   const newUser = new User({
     name: data.name,

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Hamburger from "hamburger-react";
 import "./Navbar.scss";
 
@@ -7,6 +8,7 @@ const Navbar = ({
   handleToggle,
   showLoginModal,
   showCreateAccModal,
+  props,
 }) => {
   //   const [toggle, setToggle] = useState(true);
 
@@ -15,11 +17,33 @@ const Navbar = ({
   //     // console.log(toggle);
   //   };
 
-  const [login, setLogin] = useState(false);
+  const userInfo__URL = "http://localhost:5000/api/users";
+  const userId = props[0].match.params.id;
 
   const handleUserMenu = () => {
     document.querySelector(".secondary-ul").classList.toggle("hide");
   };
+
+  const [user, setUser] = useState();
+
+  const axiosCall = () => {
+    axios
+      .get(`${userInfo__URL}/${userId}`)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log("Fetch User ID info error");
+      });
+  };
+
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+  };
+
+  useEffect(() => {
+    axiosCall();
+  }, [`${userInfo__URL}/${userId}`]);
 
   return (
     <div className="navbar">
@@ -40,36 +64,27 @@ const Navbar = ({
               Help
             </a>
           </li>
-          {login ? (
-            <li>
-              <button className="user" onClick={handleUserMenu}>
-                Bob
-              </button>
-              <ul className="secondary-ul hide">
-                <li>
-                  <a href="#">My Account</a>
-                </li>
-                <li>
-                  <a href="#">My Companies</a>
-                </li>
-                <li>
-                  <a href="#">My Apps</a>
-                </li>
-                <li>
-                  <a href="#">Logout</a>
-                </li>
-              </ul>
-            </li>
-          ) : (
-            <>
-              <li className="login-btn" onClick={showLoginModal}>
-                Login
+          <li>
+            <button className="user" onClick={handleUserMenu}>
+              {user && user.name}
+            </button>
+            <ul className="secondary-ul hide">
+              <li>
+                <a href="#">My Account</a>
               </li>
-              <li className="login-btn" onClick={showCreateAccModal}>
-                Create Account
+              <li>
+                <a href="#">My Companies</a>
               </li>
-            </>
-          )}
+              <li>
+                <a href="#">My Apps</a>
+              </li>
+              <li>
+                <a href="#" onClick={logoutHandler}>
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
     </div>
