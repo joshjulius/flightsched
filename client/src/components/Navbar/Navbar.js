@@ -3,13 +3,7 @@ import axios from "axios";
 import Hamburger from "hamburger-react";
 import "./Navbar.scss";
 
-const Navbar = ({
-  toggle,
-  handleToggle,
-  showLoginModal,
-  showCreateAccModal,
-  props,
-}) => {
+const Navbar = ({ toggle, handleToggle, showUserInfoModal, props }) => {
   //   const [toggle, setToggle] = useState(true);
 
   //   const handleToggle = () => {
@@ -70,7 +64,9 @@ const Navbar = ({
             </button>
             <ul className="secondary-ul hide">
               <li>
-                <a href="#">My Account</a>
+                <a href="#" onClick={showUserInfoModal}>
+                  My Account
+                </a>
               </li>
               <li>
                 <a href="#">My Companies</a>

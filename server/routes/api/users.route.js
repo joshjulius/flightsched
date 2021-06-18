@@ -130,14 +130,14 @@ router.put("/:id", (req, res) => {
       console.log(err);
     });
 
-  User.find({})
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.status(404).send({ success: false });
-      console.log(err);
-    });
+  // User.find({})
+  //   .then((result) => {
+  //     res.send(result);
+  //   })
+  //   .catch((err) => {
+  //     res.status(404).send({ success: false });
+  //     console.log(err);
+  //   });
 });
 
 export default router;

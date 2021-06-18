@@ -6,17 +6,20 @@ import Modal from "../../components/Modal/Modal";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Optionbar from "../../components/Optionbar/Optionbar";
+import UserInfoModal from "../../components/UserInfoModal/UserInfoModal";
 // import LoginModal from "../../components/LoginModal/LoginModal";
 // import CreateAccModal from "../../components/CreateAccModal/CreateAccModal";
 
 export default function Userpage(props) {
   const [visibility, setVisibility] = useState(false);
-  // const [loginVisibility, setLoginVisibility] = useState(false);
-  // const [createAccVisibility, setCreateAccVisibility] = useState(false);
+  const [userInfoModalVisibility, setUserInfoModalVisibility] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [planes, setPlanes] = useState();
+  const [user, setUser] = useState();
 
   const planeURL = "http://localhost:5000/api/planes";
+  const userInfo__URL = "http://localhost:5000/api/users";
+  const userId = props[0].match.params.id;
 
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
@@ -31,21 +34,13 @@ export default function Userpage(props) {
     setVisibility(false);
   };
 
-  // const showLoginModal = () => {
-  //   setLoginVisibility(true);
-  // };
+  const showUserInfoModal = () => {
+    setUserInfoModalVisibility(true);
+  };
 
-  // const hideLoginModal = () => {
-  //   setLoginVisibility(false);
-  // };
-
-  // const showCreateAccModal = () => {
-  //   setCreateAccVisibility(true);
-  // };
-
-  // const hideCreateAccModal = () => {
-  //   setCreateAccVisibility(false);
-  // };
+  const hideUserInfoModal = () => {
+    setUserInfoModalVisibility(false);
+  };
 
   const axiosPlaneCall = () => {
     axios
@@ -58,9 +53,21 @@ export default function Userpage(props) {
       });
   };
 
+  const axiosUserCall = () => {
+    axios
+      .get(`${userInfo__URL}/${userId}`)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log("Fetch User ID info error");
+      });
+  };
+
   useEffect(() => {
     axiosPlaneCall();
-  }, [planeURL]);
+    axiosUserCall();
+  }, [`${userInfo__URL}/${userId}`]);
 
   if (!localStorage.getItem("token")) {
     alert("Your token has expired");
@@ -83,18 +90,18 @@ export default function Userpage(props) {
           toggle={toggle}
           props={props}
           // showLoginModal={showLoginModal}
-          // showCreateAccModal={showCreateAccModal}
+          showUserInfoModal={showUserInfoModal}
         />
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
         <Optionbar planes={planes} />
         <Modal visibility={visibility} hideModal={hideModal} />
-        {/* <LoginModal visibility={loginVisibility} hideModal={hideLoginModal} />
-        <CreateAccModal
-          visibility={createAccVisibility}
-          hideModal={hideCreateAccModal}
-        /> */}
+        <UserInfoModal
+          visibility={userInfoModalVisibility}
+          hideModal={hideUserInfoModal}
+          user={user}
+        />
       </div>
     </div>
   );
