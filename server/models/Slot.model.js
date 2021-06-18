@@ -15,7 +15,7 @@ const SlotSchema = new Schema({
         required: true
     },
     startTime: {
-        type: Date,
+        type: String,
         required: true
     },
     startDate: {
@@ -27,7 +27,7 @@ const SlotSchema = new Schema({
         required: true
     },
     endTime: {
-        type: Date,
+        type: String,
         required: true
     },
     endDate: {

@@ -35,7 +35,7 @@ router.get("/:startDate", (req, res) => {
 // @desc Post a slot
 // @access public
 router.post("/", async (req, res) => {
-  
+
   // finds all bookings with the desired registration, customer or instructor
   const slot = await Slot.find(
     { $or : [
@@ -47,17 +47,21 @@ router.post("/", async (req, res) => {
 
   // check against slot whether if times conflict
   let isBookable = '';
-  for (let i = 0; i < slot.length ; i++) {
-    const existingStartMs = slot[i].startMilisecond;
-    const existingEndMs = slot[i].endMilisecond;
-    const newStartMs = new Date(`${req.body.startTime} UTC`).getTime();
-    const newEndMs = new Date(`${req.body.endTime} UTC`).getTime();
-
-    if ((newStartMs >= existingEndMs) || (newEndMs <= existingStartMs)) {
-      isBookable = true;
-    } else {
-      isBookable = false;
-      break;
+  if (slot.length === 0) {
+    isBookable = true;
+  } else {
+    for (let i = 0; i < slot.length ; i++) {
+      const existingStartMs = slot[i].startMilisecond;
+      const existingEndMs = slot[i].endMilisecond;
+      const newStartMs = new Date(`${req.body.startDate}`).getTime();
+      const newEndMs = new Date(`${req.body.endDate}`).getTime();
+  
+      if ((newStartMs >= existingEndMs) || (newEndMs <= existingStartMs)) {
+        isBookable = true;
+      } else {
+        isBookable = false;
+        break;
+      }
     }
   }
 
@@ -65,12 +69,12 @@ router.post("/", async (req, res) => {
     const newSlot = new Slot({
       location: req.body.location,
       activityType: req.body.activityType,
-      startTime: new Date(`${req.body.startTime} UTC`),
-      startDate: new Date(`${req.body.startTime} UTC`).toString().slice(4,15).replace(/ /g,'_'),
-      startMilisecond: new Date(`${req.body.startTime} UTC`).getTime(),
-      endTime: new Date(`${req.body.endTime} UTC`),
-      endDate: new Date(`${req.body.endTime} UTC`).toString().slice(4,15).replace(/ /g,'_'),
-      endMilisecond: new Date(`${req.body.endTime} UTC`).getTime(),
+      startTime: new Date(`${req.body.startDate}`).toString(),
+      startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_'),
+      startMilisecond: new Date(`${req.body.startDate}`).getTime(),
+      endTime: new Date(`${req.body.endDate}`).toString(),
+      endDate: new Date(`${req.body.endDate}`).toString().slice(4,15).replace(/ /g,'_'),
+      endMilisecond: new Date(`${req.body.endDate}`).getTime(),
       customer: req.body.customer,
       displayName: req.body.displayName,
       aircraft: req.body.aircraft.slice(0, 6),
@@ -82,9 +86,10 @@ router.post("/", async (req, res) => {
       internalComments: req.body.internalComments,
     });
   
-    newSlot.save().then(res.redirect('/')).catch(err => console.log(err));
+    newSlot.save().then().catch(err => console.log(err));
+    res.sendStatus(200);
   } else {
-    console.log('error');
+    res.sendStatus(400);
   }
 });
 

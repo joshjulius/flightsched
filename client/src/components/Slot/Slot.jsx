@@ -3,10 +3,10 @@ import "./Slot.scss";
 
 const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, customer, type, loading }) => {
 
-    const startHour = startTime.slice(11,13);
-    const startMinute = startTime.slice(14,16);
-    const endHour = endTime.slice(11,13);
-    const endMinute = endTime.slice(14,16);
+    const startHour = startTime.slice(16,18);
+    const startMinute = startTime.slice(19,21);
+    const endHour = endTime.slice(16,18);
+    const endMinute = endTime.slice(19,21);
             
     // 8am = 0
     // 1 hour = 50px

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
+import axios from "axios";
 
 import "./Modal.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -26,8 +27,58 @@ let useClickOutside = (handler) => {
 
 const Modal = ({ visibility, hideModal, planes }) => {
 
+    const [location, setLocation] = useState('');
+    const [activityType, setActivityType] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [customer, setCustomer] = useState('');
+    const [displayName, setDisplayName] = useState('');
+    const [aircraft, setAircraft] = useState('');
+    const [instructor, setInstructor] = useState('');
+    const [flightType, setFlightType] = useState('');
+    const [flightRoute, setFlightRoute] = useState('');
+    const [comments, setComments] = useState('');
+    
+    const makeBooking = (e) => {
+        e.preventDefault();
+        const postData = {
+            location,
+            activityType,
+            startDate,
+            endDate,
+            customer,
+            displayName,
+            aircraft,
+            instructor,
+            flightType,
+            flightRoute,
+            comments
+        };
+        axios.post("/api/slots", postData)
+            .then(() => {
+                window.location.href = "/";
+            })
+            .catch(
+                // handle error
+                console.log('booking cannot be made')
+            );
+    }
+
+    const handleSelectLocation = e => (
+        setLocation(e.target.value)
+    )
+
+    const handleSelectActivityType = e => {
+        setActivityType(e.target.value)
+    }
+
+    const handleSelectAircraft = e => {
+        setAircraft(e.target.value)
+    }
+
+    const handleSelectInstructor = e => {
+        setInstructor(e.target.value)
+    }
 
     let domNode = useClickOutside(() => {
         hideModal()
@@ -38,7 +89,7 @@ const Modal = ({ visibility, hideModal, planes }) => {
     } else if (visibility) {
         return (
             <div className="modal">
-                <form action="/api/slots" method="POST"  ref={domNode}>
+                <form onSubmit={makeBooking}  ref={domNode}>
                     <div className="form-container">
                         <div className="form-header">
                             <h2>New Reservation</h2>
@@ -46,7 +97,7 @@ const Modal = ({ visibility, hideModal, planes }) => {
                         </div>
                         <div className="item">
                             <label htmlFor="location">Location</label>
-                            <select id="location" name="location" defaultValue={"DEFAULT"}>
+                            <select onClick={handleSelectLocation} id="location" name="location" defaultValue={"DEFAULT"}>
                                 <option value="DEFAULT" disabled>Select</option>
                                 <option value="Kitchener">Kitchener</option>
                                 <option value="Waterloo">Waterloo</option>
@@ -54,7 +105,7 @@ const Modal = ({ visibility, hideModal, planes }) => {
                         </div>
                         <div className="item">
                             <label htmlFor="activity-type">Activity Type</label>
-                            <select id="activity-type" name="activityType" defaultValue={"DEFAULT"}>
+                            <select onClick={handleSelectActivityType} id="activity-type" name="activityType" defaultValue={"DEFAULT"}>
                                 <option value="DEFAULT" disabled>Select</option>
                                 <option value="Dual">Dual</option>
                                 <option value="Solo">Solo</option>
@@ -67,7 +118,7 @@ const Modal = ({ visibility, hideModal, planes }) => {
                                 onChange={(date) => setStartDate(date)}
                                 showTimeSelect
                                 dateFormat="MMMM d, yyyy h:mm aa"
-                                name="startTime"
+                                name="startDate"
                             />
                         </div>
                         <div className="item">
@@ -77,7 +128,7 @@ const Modal = ({ visibility, hideModal, planes }) => {
                                 onChange={(date) => setEndDate(date)}
                                 showTimeSelect
                                 dateFormat="MMMM d, yyyy h:mm aa"
-                                name="endTime"
+                                name="endDate"
                             />
                         </div>
                         <div className="item">
@@ -87,6 +138,8 @@ const Modal = ({ visibility, hideModal, planes }) => {
                                 id="customer"
                                 name="customer"
                                 placeholder="Search by name"
+                                value={customer}
+                                onChange={e => setCustomer(e.target.value)}
                             />
                         </div>
                         <div className="item">
@@ -96,15 +149,20 @@ const Modal = ({ visibility, hideModal, planes }) => {
                                 id="display-name"
                                 name="displayName"
                                 placeholder="None"
+                                value={displayName}
+                                onChange={e => setDisplayName(e.target.value)}
                             />
                         </div>
                         <div className="item">
                             <label htmlFor="aircraft">Aircraft</label>
-                            <select id="aircraft" name="aircraft" defaultValue={"DEFAULT"}>
+                            <select onClick={handleSelectAircraft} id="aircraft" name="aircraft" defaultValue={"DEFAULT"}>
                                 <option value="DEFAULT" disabled>Select</option>
                                 {planes && planes.map((info) => {
                                     return (
-                                    <option key={info._id} value={`${info.reg} ${info.type}`}>
+                                    <option
+                                        key={info._id}
+                                        value={`${info.reg} ${info.type}`}
+                                    >
                                         {info.reg} {info.type}
                                     </option>
                                     );
@@ -113,7 +171,7 @@ const Modal = ({ visibility, hideModal, planes }) => {
                         </div>
                         <div className="item">
                             <label htmlFor="instructor">Instructor</label>
-                            <select id="instructor" name="instructor" defaultValue={"DEFAULT"}>
+                            <select onClick={handleSelectInstructor} id="instructor" name="instructor" defaultValue={"DEFAULT"}>
                                 <option value="DEFAULT" disabled>Select</option>
                                 <option value="Josh">Josh</option>
                                 <option value="Jensen">Jensen</option>
@@ -125,14 +183,16 @@ const Modal = ({ visibility, hideModal, planes }) => {
                                 <input
                                     type="radio"
                                     id="local"
-                                    value="Local"
+                                    onClick={() => setFlightType("Local")}
+                                    value={flightType}
                                     name="flightType"
                                 />
                                 <label htmlFor="local">Local</label>
                                 <input
                                     type="radio"
                                     id="cross-country"
-                                    value="Csross-country"
+                                    onClick={() => setFlightType("Cross-country")}
+                                    value={flightType}
                                     name="flightType"
                                 />
                                 <label htmlFor="cross-country">Cross Country</label>
@@ -140,11 +200,21 @@ const Modal = ({ visibility, hideModal, planes }) => {
                         </div>
                         <div className="item">
                             <label htmlFor="flight-route-legs">Flight Route/Legs</label>
-                            <textarea id="flight-route-legs" name="flightRoute" />
+                            <textarea
+                                id="flight-route-legs"
+                                name="flightRoute"
+                                value={flightRoute}
+                                onChange={e => setFlightRoute(e.target.value)}
+                            />
                         </div>
                         <div className="item">
                             <label htmlFor="comments">Comments</label>
-                            <textarea id="comments" name="comments" />
+                            <textarea
+                                id="comments"
+                                name="comments" 
+                                value={comments}
+                                onChange={e => setComments(e.target.value)}
+                            />
                         </div>
                         <button type="submit" className="submit">Create Reservation</button>
                     </div>
