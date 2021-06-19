@@ -47,7 +47,7 @@ const Modal = ({ visibility, hideModal, planes }) => {
       console.log(errorBooking);
     }
 
-    const makeBooking = (e) => {
+    const makeBooking = async (e) => {
         e.preventDefault();
         const postData = {
             location,
@@ -62,13 +62,13 @@ const Modal = ({ visibility, hideModal, planes }) => {
             flightRoute,
             comments
         }
-        axios.post("/api/slots", postData)
-            .then(() => {
-                window.location.href = "/user/:id";
-            })
-            .catch(
-                setErrorBooking(true)
-            );
+        
+        try {
+            await axios.post("/api/slots", postData);
+            window.location.href = window.location.pathname;
+        } catch {
+            setErrorBooking(true)
+        }
     }
 
     const handleSelectLocation = e => (
