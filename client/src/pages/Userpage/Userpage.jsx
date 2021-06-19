@@ -88,8 +88,8 @@ export default function Userpage(props) {
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
-        <Optionbar planes={planes} />
-        <Modal visibility={visibility} hideModal={hideModal} />
+        <Optionbar planes={planes} showBookingModal={showModal} />
+        <Modal visibility={visibility} hideModal={hideModal} planes={planes} />
         {/* <LoginModal visibility={loginVisibility} hideModal={hideLoginModal} />
         <CreateAccModal
           visibility={createAccVisibility}
