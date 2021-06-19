@@ -25,16 +25,14 @@ export default function Schedule({ planes, date, showBookingModal }) {
   const [loading, setLoading] = useState(false);
   const slotsURL = `http://localhost:5000/api/slots/${currentDate}`;
 
-  const axiosSlotsCall = () => {
-    axios
-      .get(slotsURL)
-      .then((res) => {
-        setSlots(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const axiosSlotsCall = async () => {
+    try {
+      const res = await axios.get(slotsURL);
+      setSlots(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {

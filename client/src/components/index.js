@@ -4,3 +4,4 @@ export { default as Schedule } from "./Schedule";
 export { default as Optionbar } from "./Optionbar";
 export { default as Sidebar } from "./Sidebar";
 export { default as ErrorBooking } from "./ErrorBooking";
+export { default as DetailsModal } from "./DetailsModal";

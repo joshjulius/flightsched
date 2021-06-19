@@ -108,7 +108,11 @@ export default function Optionbar({ planes, showBookingModal }) {
           </select>
         </div>
       </div>
-      <Schedule planes={planes} date={dateDisplay} showBookingModal={showBookingModal} />
+      <Schedule
+        planes={planes}
+        date={dateDisplay}
+        showBookingModal={showBookingModal}
+      />
     </div>
   );
 }
