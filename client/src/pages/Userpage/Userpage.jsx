@@ -11,21 +11,19 @@ import UserInfoModal from "../../components/UserInfoModal/UserInfoModal";
 // import CreateAccModal from "../../components/CreateAccModal/CreateAccModal";
 
 export default function Userpage(props) {
+  //All the States
   const [visibility, setVisibility] = useState(false);
   const [userInfoModalVisibility, setUserInfoModalVisibility] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [planes, setPlanes] = useState();
   const [user, setUser] = useState();
-
-  const planeURL = "http://localhost:5000/api/planes";
-  const userInfo__URL = "http://localhost:5000/api/users";
-  const userId = props[0].match.params.id;
-
+  
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
     console.log(toggle);
   };
 
+  //Modal Show and Hidden Functions
   const showModal = () => {
     setVisibility(true);
   };
@@ -42,6 +40,12 @@ export default function Userpage(props) {
     setUserInfoModalVisibility(false);
   };
 
+  //Axios call URL
+  const planeURL = "http://localhost:5000/api/planes";
+  const userInfo__URL = "http://localhost:5000/api/users";
+  const userId = props[0].match.params.id;
+
+  //Axios Call Function
   const axiosPlaneCall = () => {
     axios
       .get(planeURL)
@@ -64,10 +68,31 @@ export default function Userpage(props) {
       });
   };
 
+  //User Edit Page Submit Function
+  const submitHandler = (state) => {
+    console.log("submit");
+    axios
+      .put(`${userInfo__URL}/${userId}`, {
+        name: state.name,
+        email: state.email,
+        phone: state.phone,
+        dateOfBirth: state.dateOfBirth,
+      })
+      .then((res) => {
+        hideUserInfoModal();
+        alert("User Info has been edited");
+        axiosUserCall();
+      })
+      .catch((err) => {
+        console.log("err");
+      });
+  };
+
   useEffect(() => {
-    axiosPlaneCall();
     axiosUserCall();
-  }, [`${userInfo__URL}/${userId}`]);
+    axiosPlaneCall();
+    console.log("User Page useEffect");
+  }, [setUser]);
 
   if (!localStorage.getItem("token")) {
     alert("Your token has expired");
@@ -101,6 +126,7 @@ export default function Userpage(props) {
           visibility={userInfoModalVisibility}
           hideModal={hideUserInfoModal}
           user={user}
+          submitHandler={submitHandler}
         />
       </div>
     </div>

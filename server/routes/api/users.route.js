@@ -122,8 +122,9 @@ router.put("/:id", (req, res) => {
   const updatedUser = req.body;
 
   User.findByIdAndUpdate(id, updatedUser, { upsert: true })
-    .then((editUser) => {
+    .then((response) => {
       console.log("Edit User Success");
+      res.status(200).send("Edit User Success")
     })
     .catch((err) => {
       console.log("Edit User failed");

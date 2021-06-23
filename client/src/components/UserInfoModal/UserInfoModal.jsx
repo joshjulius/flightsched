@@ -22,7 +22,7 @@ let useClickOutside = (handler) => {
   return domNode;
 };
 
-const UserInfoModal = ({ visibility, hideModal, user }) => {
+const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
   let domNode = useClickOutside(() => {
     hideModal();
   });
@@ -44,30 +44,23 @@ const UserInfoModal = ({ visibility, hideModal, user }) => {
     });
   };
 
-  //Submit button function
-  const submitHandler = (e) => {
-    e.preventDefault();
-    axios
-      .put(`http://localhost:5000/api/users/${user._id}`, {
-        name: state.name,
-        email: state.email,
-        phone: state.phone,
-        dateOfBirth: state.dateOfBirth,
-      })
-      .then((res) => {
-        console.log(res);
-        hideModal();
-        setEditToggle(!editToggle);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  //Reset the State value after submitting the Edit Form
+  const resetInputValues = () => {
+    setState({
+      name: "",
+      email: "",
+      phone: "",
+      dateOfBirth: "",
+    });
   };
 
-  console.log(editToggle);
+  useEffect(() => {
+    console.log("Use effect");
+  }, [state]);
 
   if (!visibility) {
     return null;
+    //If editToggle is false, displace the User Information
   } else if (visibility && !editToggle) {
     return (
       <div className="modal">
@@ -75,7 +68,13 @@ const UserInfoModal = ({ visibility, hideModal, user }) => {
           <div className="form-container">
             <div className="form-header">
               <h2>{user.name ? user.name : "User"}</h2>
-              <button onClick={hideModal} className="close">
+              <button
+                onClick={() => {
+                  hideModal();
+                  setEditToggle(false);
+                }}
+                className="close"
+              >
                 Close
               </button>
               <button onClick={() => setEditToggle(!editToggle)}>Edit</button>
@@ -102,16 +101,26 @@ const UserInfoModal = ({ visibility, hideModal, user }) => {
         </form>
       </div>
     );
+    //If editToggle is true, display the User Edit Form
   } else if (visibility && editToggle) {
     return (
       <div className="modal">
-        <form onSubmit={submitHandler} ref={domNode}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            submitHandler(state);
+            resetInputValues();
+            setEditToggle(!editToggle);
+          }}
+          ref={domNode}
+        >
           <div className="form-container">
             <div className="form-header">
               <h2>{user && user.name}</h2>
               <button onClick={hideModal} className="close">
                 Close
               </button>
+              <h5 onClick={() => setEditToggle(!editToggle)}>Edit</h5>
             </div>
             <div className="item">
               <label htmlFor="name">Name</label>
@@ -120,6 +129,7 @@ const UserInfoModal = ({ visibility, hideModal, user }) => {
                 id="name"
                 name="name"
                 value={user && state.name}
+                placeholder={user && user.name}
                 onChange={changeHandler}
               />
             </div>
@@ -130,6 +140,7 @@ const UserInfoModal = ({ visibility, hideModal, user }) => {
                 id="email"
                 name="email"
                 value={user && state.email}
+                placeholder={user && user.email}
                 onChange={changeHandler}
               />
             </div>
@@ -140,6 +151,7 @@ const UserInfoModal = ({ visibility, hideModal, user }) => {
                 id="phone"
                 name="phone"
                 value={user && state.phone}
+                placeholder={user && user.phone}
                 onChange={changeHandler}
               />
             </div>
@@ -150,6 +162,7 @@ const UserInfoModal = ({ visibility, hideModal, user }) => {
                 id="dateOfBirth"
                 name="dateOfBirth"
                 value={user && state.dateOfBirth}
+                placeholder={user && user.dateOfBirth}
                 onChange={changeHandler}
               />
             </div>
