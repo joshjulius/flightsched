@@ -27,6 +27,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
     hideModal();
   });
 
+  //state for the input values
   let [state, setState] = useState({
     name: "",
     email: "",
@@ -34,6 +35,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
     dateOfBirth: "",
   });
 
+  //Edit value for switching from User info to Edit User Form
   let [editToggle, setEditToggle] = useState(false);
 
   //Changing the value in the input box
@@ -117,10 +119,12 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
           <div className="form-container">
             <div className="form-header">
               <h2>{user && user.name}</h2>
-              <button onClick={hideModal} className="close">
+              <button onClick={hideModal} className="close" type="button">
                 Close
               </button>
-              <h5 onClick={() => setEditToggle(!editToggle)}>Edit</h5>
+              <button type="button" onClick={() => setEditToggle(!editToggle)}>
+                Information Page
+              </button>
             </div>
             <div className="item">
               <label htmlFor="name">Name</label>

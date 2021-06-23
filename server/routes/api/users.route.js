@@ -35,9 +35,10 @@ router.get("/:id", (req, res) => {
 router.post("/login", async (req, res) => {
   const data = req.body;
 
-  //Check
+  //Check if the user is entering the correct email or password value
   const user = await User.findOne({ email: data.email });
   if (!user) return res.status(400).send("Invalid Email");
+      //decrypting and comparing the req.body.password to the User passpword
   const validPassword = await bcrypt.compare(data.password, user.password);
   if (!validPassword) return res.status(400).send("Invalid Password");
 
@@ -70,7 +71,6 @@ router.post("/register", async (req, res) => {
   console.log("register");
 
   // Saving the new User into the MongoDB database
-
   const newUser = new User({
     name: data.name,
     phone: data.phone,
@@ -106,14 +106,14 @@ router.delete("/:id", (req, res) => {
       console.log("Delete method failed");
     });
 
-  User.find({})
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.status(404).send({ success: false });
-      console.log(err);
-    });
+  // User.find({})
+  //   .then((result) => {
+  //     res.send(result);
+  //   })
+  //   .catch((err) => {
+  //     res.status(404).send({ success: false });
+  //     console.log(err);
+  //   });
 });
 
 //Editing/Updating an User

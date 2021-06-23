@@ -14,6 +14,7 @@ const Navbar = ({ toggle, handleToggle, showUserInfoModal, name, props }) => {
     document.querySelector(".secondary-ul").classList.toggle("hide");
   };
 
+  //Logout Function for the logout button
   const logoutHandler = () => {
     localStorage.removeItem("token");
     alert("You have logged out");
