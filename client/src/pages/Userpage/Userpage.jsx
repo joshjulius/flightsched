@@ -14,7 +14,7 @@ export default function Userpage(props) {
   const [toggle, setToggle] = useState(false);
   const [planes, setPlanes] = useState();
   const [user, setUser] = useState();
-  
+
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
     console.log(toggle);
@@ -111,13 +111,19 @@ export default function Userpage(props) {
           handleToggle={handleToggle}
           toggle={toggle}
           name={user && user.name}
-          // showLoginModal={showLoginModal}
+          props={props[0]}
+          history={props[0].history}
           showUserInfoModal={showUserInfoModal}
         />
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
-        <Optionbar planes={planes} showBookingModal={showModal} visibility={visibility} hideModal={hideModal}/>
+        <Optionbar
+          planes={planes}
+          showBookingModal={showModal}
+          visibility={visibility}
+          hideModal={hideModal}
+        />
         {/* <Modal visibility={visibility} hideModal={hideModal} /> */}
         <UserInfoModal
           visibility={userInfoModalVisibility}

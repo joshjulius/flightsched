@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 import "./Loginpage.scss";
 
-export default function Loginpage() {
+function Loginpage() {
 
   const clearDateStorage = () => {
     let session = window.sessionStorage.getItem('ref');
@@ -281,3 +281,5 @@ export default function Loginpage() {
     </div>
   );
 }
+
+export default withRouter(Loginpage)

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Hamburger from "hamburger-react";
 import "./Navbar.scss";
 
-const Navbar = ({ toggle, handleToggle, showUserInfoModal, name }) => {
+const Navbar = ({ toggle, handleToggle, showUserInfoModal, name, props }) => {
   //   const [toggle, setToggle] = useState(true);
 
   //   const handleToggle = () => {
@@ -17,6 +16,8 @@ const Navbar = ({ toggle, handleToggle, showUserInfoModal, name }) => {
 
   const logoutHandler = () => {
     localStorage.removeItem("token");
+    alert("You have logged out");
+    props.history.push("/");
   };
 
   return (
