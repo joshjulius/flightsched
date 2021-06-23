@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useRef, useEffect } from "react";
 import "./DetailsModal.scss";
 
@@ -21,7 +22,7 @@ let useClickOutside = (handler) => {
     return domNode;
 };
 
-const DetailsModal = ({ setSlotID, id, slotID, startHour, startMinute, endHour, endMinute, activityType, aircraft, instructor, customer, type }) => {
+const DetailsModal = ({ slotCall, setSlotID, id, slotID, startHour, startMinute, endHour, endMinute, activityType, aircraft, instructor, customer, type }) => {
 
     let domNode = useClickOutside(() => {
         setSlotID(0);
@@ -29,6 +30,17 @@ const DetailsModal = ({ setSlotID, id, slotID, startHour, startMinute, endHour, 
 
     const hideDetails = () => {
         setSlotID(0);
+    }
+
+    const deleteBooking = async (id) => {
+        try {
+            const res = await axios.delete(`http://localhost:5000/api/slots/${id}`);
+            console.log(res.data);
+            hideDetails();
+            slotCall();
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     if (slotID === id) {
@@ -42,6 +54,8 @@ const DetailsModal = ({ setSlotID, id, slotID, startHour, startMinute, endHour, 
                     <p>Start Time: {startHour}:{startMinute}</p>
                     <p>End Time: {endHour}:{endMinute}</p>
                     <button onClick={hideDetails}>Close</button>
+                    <button onClick={() => deleteBooking(id)}>Delete Reservation</button>
+                    <button>Edit Reservation</button>
                 </div>
             </div>
         );

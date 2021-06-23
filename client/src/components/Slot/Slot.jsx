@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DetailsModal from "../DetailsModal/DetailsModal";
 import "./Slot.scss";
 
-const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, customer, type, loading }) => {
+const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, customer, type, loading, slotCall }) => {
 
     const startHour = startTime.slice(16,18);
     const startMinute = startTime.slice(19,21);
@@ -32,8 +32,6 @@ const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, cust
         left: leftPixels,
         width: width
     }
-
-    console.log(loading);
 
     if (!loading) {
         const tooltipDiv = document.querySelectorAll('.tooltip-div');
@@ -84,6 +82,7 @@ const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, cust
                 customer={customer}
                 type={type}
                 setSlotID={setSlotID}
+                slotCall={slotCall}
             />
         </>
     );

@@ -26,7 +26,7 @@ let useClickOutside = (handler) => {
     return domNode;
 };
 
-const Modal = ({ visibility, hideModal, planes }) => {
+const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
 
     const [location, setLocation] = useState('');
     const [activityType, setActivityType] = useState('');
@@ -65,7 +65,9 @@ const Modal = ({ visibility, hideModal, planes }) => {
         
         try {
             await axios.post("/api/slots", postData);
-            window.location.href = window.location.pathname;
+            hideModal();
+            const slotsURL = `http://localhost:5000/api/slots/${date}`;
+            slotCall();
         } catch {
             setErrorBooking(true)
         }

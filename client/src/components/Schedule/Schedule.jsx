@@ -1,29 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./Schedule.scss";
+import Modal from "../../components/Modal/Modal";
 import Slot from "../Slot/Slot";
 import axios from "axios";
 
-export default function Schedule({ planes, date, showBookingModal }) {
+export default function Schedule({ planes, date, showBookingModal, visibility, hideModal }) {
   
-  // check if displayDate date is less than 10, if true, add 0
-  let dateDigit = date.slice(5,date.length).split(" ")[1].replace(',','');
-  if (dateDigit.length === 1) {
-    dateDigit = `0${dateDigit}`;
-  }
-
-  //Replace with refactored date digit
-  let dateArray = date.slice(5,date.length).split(" ");
-  dateArray[1] = dateDigit;
-
-  //Shorten month to 3 letters
-  dateArray[0] = dateArray[0].slice(0,3);
-
-  //Convert to string
-  const currentDate = dateArray.join('_');
-
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(false);
-  const slotsURL = `http://localhost:5000/api/slots/${currentDate}`;
+  const slotsURL = `http://localhost:5000/api/slots/${date}`;
 
   const axiosSlotsCall = async () => {
     try {
@@ -75,53 +60,63 @@ export default function Schedule({ planes, date, showBookingModal }) {
         customer={slot.customer}
         type={slot.type}
         loading={loading}
+        slotCall={axiosSlotsCall}
       />
     );
   }
 
   return (
-    <table className="schedule">
-      <thead>
-        <tr className="schedule__row">
-          <th className="schedule__placeholder schedule__time-heading"></th>
-          {timeHead}
-        </tr>
-      </thead>
-      <tbody>
-        {
-          planes && planes.map((info) => {
-            const checkReg = (slot) => {
-              return slot.aircraft === info.reg;
-            }
-            return (
-              <tr className="schedule__row">
-                <th
-                  key={info._id}
-                  className={`schedule__placeholder ${info.reg}`}
-                >
-                  {`${info.reg} ${info.type}`}
-                  {slots.filter(checkReg).map(timeBlock)}
-                </th>
-                {planeSlot}
-              </tr>
-            );
-          })
-        }
-        <tr className="schedule__row">
-          <th className="schedule__placeholder">
-            Jensen
-            {slots.filter(slot => slot.instructor === "Jensen").map(timeBlock)}
-          </th>
-          {planeSlot}
-        </tr>
-        <tr className="schedule__row">
-          <th className="schedule__placeholder">
-            Josh
-            {slots.filter(slot => slot.instructor === "Josh").map(timeBlock)}
-          </th>
-          {planeSlot}
-        </tr>
-      </tbody>
-    </table>
+    <>
+      <Modal
+        visibility={visibility}
+        hideModal={hideModal}
+        planes={planes}
+        date={date}
+        slotCall={axiosSlotsCall}
+      />
+      <table className="schedule">
+        <thead>
+          <tr className="schedule__row">
+            <th className="schedule__placeholder schedule__time-heading"></th>
+            {timeHead}
+          </tr>
+        </thead>
+        <tbody>
+          {
+            planes && planes.map((info) => {
+              const checkReg = (slot) => {
+                return slot.aircraft === info.reg;
+              }
+              return (
+                <tr className="schedule__row">
+                  <th
+                    key={info._id}
+                    className={`schedule__placeholder ${info.reg}`}
+                  >
+                    {`${info.reg} ${info.type}`}
+                    {slots.filter(checkReg).map(timeBlock)}
+                  </th>
+                  {planeSlot}
+                </tr>
+              );
+            })
+          }
+          <tr className="schedule__row">
+            <th className="schedule__placeholder">
+              Jensen
+              {slots.filter(slot => slot.instructor === "Jensen").map(timeBlock)}
+            </th>
+            {planeSlot}
+          </tr>
+          <tr className="schedule__row">
+            <th className="schedule__placeholder">
+              Josh
+              {slots.filter(slot => slot.instructor === "Josh").map(timeBlock)}
+            </th>
+            {planeSlot}
+          </tr>
+        </tbody>
+      </table>
+    </>
   );
 }

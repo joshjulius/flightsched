@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import "./Userpage.scss";
-import Modal from "../../components/Modal/Modal";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Optionbar from "../../components/Optionbar/Optionbar";
@@ -88,8 +87,8 @@ export default function Userpage(props) {
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
-        <Optionbar planes={planes} showBookingModal={showModal} />
-        <Modal visibility={visibility} hideModal={hideModal} planes={planes} />
+        <Optionbar planes={planes} showBookingModal={showModal} visibility={visibility} hideModal={hideModal}/>
+        
         {/* <LoginModal visibility={loginVisibility} hideModal={hideLoginModal} />
         <CreateAccModal
           visibility={createAccVisibility}

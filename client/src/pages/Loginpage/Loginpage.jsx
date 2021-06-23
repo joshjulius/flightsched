@@ -1,9 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import "./Loginpage.scss";
 
 export default function Loginpage() {
+
+  const clearDateStorage = () => {
+    let session = window.sessionStorage.getItem('ref');
+    if (session === null) {
+      window.localStorage.removeItem("currentDateShown");
+    }
+    window.sessionStorage.setItem('ref', 1);
+  }
+  window.addEventListener('load', () => {
+    clearDateStorage();
+  });
+
   let [state, setState] = useState({
     name: "",
     email: "",
