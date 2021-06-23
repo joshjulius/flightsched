@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import axios from "axios";
+import ErrorBooking from "../ErrorBooking/ErrorBooking";
 
 import "./Modal.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -25,7 +26,7 @@ let useClickOutside = (handler) => {
     return domNode;
 };
 
-const Modal = ({ visibility, hideModal, planes }) => {
+const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
 
     const [location, setLocation] = useState('');
     const [activityType, setActivityType] = useState('');
@@ -39,7 +40,14 @@ const Modal = ({ visibility, hideModal, planes }) => {
     const [flightRoute, setFlightRoute] = useState('');
     const [comments, setComments] = useState('');
     
-    const makeBooking = (e) => {
+    const [errorBooking, setErrorBooking] = useState(false);
+
+    const handleErrorBooking = (boolean) => {
+      setErrorBooking(boolean);
+      console.log(errorBooking);
+    }
+
+    const makeBooking = async (e) => {
         e.preventDefault();
         const postData = {
             location,
@@ -53,15 +61,16 @@ const Modal = ({ visibility, hideModal, planes }) => {
             flightType,
             flightRoute,
             comments
-        };
-        axios.post("/api/slots", postData)
-            .then(() => {
-                window.location.href = "/";
-            })
-            .catch(
-                // handle error
-                console.log('booking cannot be made')
-            );
+        }
+        
+        try {
+            await axios.post("/api/slots", postData);
+            hideModal();
+            const slotsURL = `http://localhost:5000/api/slots/${date}`;
+            slotCall();
+        } catch {
+            setErrorBooking(true)
+        }
     }
 
     const handleSelectLocation = e => (
@@ -81,7 +90,8 @@ const Modal = ({ visibility, hideModal, planes }) => {
     }
 
     let domNode = useClickOutside(() => {
-        hideModal()
+        hideModal();
+        setErrorBooking(false);
     });
 
     if (!visibility) {
@@ -93,8 +103,17 @@ const Modal = ({ visibility, hideModal, planes }) => {
                     <div className="form-container">
                         <div className="form-header">
                             <h2>New Reservation</h2>
-                            <button onClick={hideModal} className="close">Close</button>
+                            <button
+                                onClick={() => {
+                                    hideModal();
+                                    setErrorBooking(false);
+                                }}
+                                className="close"
+                            >
+                                Close
+                            </button>
                         </div>
+                        <ErrorBooking errorBooking={errorBooking} setErrorBooking={handleErrorBooking} />
                         <div className="item">
                             <label htmlFor="location">Location</label>
                             <select onClick={handleSelectLocation} id="location" name="location" defaultValue={"DEFAULT"}>
