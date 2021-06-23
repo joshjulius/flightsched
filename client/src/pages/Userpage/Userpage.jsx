@@ -68,6 +68,7 @@ export default function Userpage(props) {
   //User Edit Page Submit Function
   const submitHandler = (state) => {
     console.log("submit");
+    hideUserInfoModal();
     axios
       .put(`${userInfo__URL}/${userId}`, {
         name: state.name,
@@ -76,7 +77,6 @@ export default function Userpage(props) {
         dateOfBirth: state.dateOfBirth,
       })
       .then((res) => {
-        hideUserInfoModal();
         alert("User Info has been edited");
         axiosUserCall();
       })
@@ -110,7 +110,7 @@ export default function Userpage(props) {
         <Navbar
           handleToggle={handleToggle}
           toggle={toggle}
-          props={props}
+          name={user && user.name}
           // showLoginModal={showLoginModal}
           showUserInfoModal={showUserInfoModal}
         />
