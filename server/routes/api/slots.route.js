@@ -34,27 +34,63 @@ router.get("/:startDate", (req, res) => {
 // @route POST api/slots
 // @desc Post a slot
 // @access public
-router.post("/", (req, res) => {
-  // console.log(new Date(`${req.body.startTime} UTC`).toString().slice(4,15).replace(' ','_'));
-  const newSlot = new Slot({
-    location: req.body.location,
-    activityType: req.body.activityType,
-    startTime: new Date(`${req.body.startTime} UTC`),
-    startDate: new Date(`${req.body.startTime} UTC`).toString().slice(4,15).replace(/ /g,'_'),
-    endTime: new Date(`${req.body.endTime} UTC`),
-    endDate: new Date(`${req.body.endTime} UTC`).toString().slice(4,15).replace(/ /g,'_'),
-    customer: req.body.customer,
-    displayName: req.body.displayName,
-    aircraft: req.body.aircraft.slice(0, 6),
-    type: req.body.aircraft.slice(7, req.body.aircraft.length),
-    instructor: req.body.instructor,
-    flightType: req.body.flightType,
-    flightRoute: req.body.flightRoute,
-    comments: req.body.comments,
-    internalComments: req.body.internalComments,
-  });
+router.post("/", async (req, res) => {
 
-  newSlot.save().then(res.redirect('/')).catch(err => console.log(err));
+  // finds all bookings with the desired registration, customer or instructor
+  const slot = await Slot.find(
+    { $or : [
+      { aircraft: req.body.aircraft.slice(0, 6) },
+      { instructor: req.body.instructor },
+      { customer: req.body.customer }
+    ]}
+  );
+
+  // check against slot whether if times conflict
+  let isBookable = '';
+  if (slot.length === 0) {
+    isBookable = true;
+  } else {
+    for (let i = 0; i < slot.length ; i++) {
+      const existingStartMs = slot[i].startMilisecond;
+      const existingEndMs = slot[i].endMilisecond;
+      const newStartMs = new Date(`${req.body.startDate}`).getTime();
+      const newEndMs = new Date(`${req.body.endDate}`).getTime();
+  
+      if ((newStartMs >= existingEndMs) || (newEndMs <= existingStartMs)) {
+        isBookable = true;
+      } else {
+        isBookable = false;
+        break;
+      }
+    }
+  }
+
+  if (isBookable) {
+    const newSlot = new Slot({
+      location: req.body.location,
+      activityType: req.body.activityType,
+      startTime: new Date(`${req.body.startDate}`).toString(),
+      startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_'),
+      startMilisecond: new Date(`${req.body.startDate}`).getTime(),
+      endTime: new Date(`${req.body.endDate}`).toString(),
+      endDate: new Date(`${req.body.endDate}`).toString().slice(4,15).replace(/ /g,'_'),
+      endMilisecond: new Date(`${req.body.endDate}`).getTime(),
+      customer: req.body.customer,
+      displayName: req.body.displayName,
+      aircraft: req.body.aircraft.slice(0, 6),
+      type: req.body.aircraft.slice(7, req.body.aircraft.length),
+      instructor: req.body.instructor,
+      flightType: req.body.flightType,
+      flightRoute: req.body.flightRoute,
+      comments: req.body.comments,
+      internalComments: req.body.internalComments,
+    });
+  
+    newSlot.save().then().catch(err => console.log(err));
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 // @route DELETE api/slots/:id

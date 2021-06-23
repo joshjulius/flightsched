@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import "./Userpage.scss";
-import Modal from "../../components/Modal/Modal";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Optionbar from "../../components/Optionbar/Optionbar";
 import UserInfoModal from "../../components/UserInfoModal/UserInfoModal";
-// import LoginModal from "../../components/LoginModal/LoginModal";
-// import CreateAccModal from "../../components/CreateAccModal/CreateAccModal";
 
 export default function Userpage(props) {
   //All the States
@@ -120,8 +117,8 @@ export default function Userpage(props) {
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
-        <Optionbar planes={planes} />
-        <Modal visibility={visibility} hideModal={hideModal} />
+        <Optionbar planes={planes} showBookingModal={showModal} visibility={visibility} hideModal={hideModal}/>
+        {/* <Modal visibility={visibility} hideModal={hideModal} /> */}
         <UserInfoModal
           visibility={userInfoModalVisibility}
           hideModal={hideUserInfoModal}

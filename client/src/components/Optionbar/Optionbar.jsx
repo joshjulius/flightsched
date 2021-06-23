@@ -4,7 +4,7 @@ import arrowLeft from "../../assets/icons/left-arrow.svg";
 import arrowRight from "../../assets/icons/right-arrow.svg";
 import Schedule from "../Schedule/Schedule";
 
-export default function Optionbar({ planes, showBookingModal }) {
+export default function Optionbar({ planes, showBookingModal, visibility, hideModal }) {
   let dateOption = {
     weekday: "short",
     year: "numeric",
@@ -12,22 +12,44 @@ export default function Optionbar({ planes, showBookingModal }) {
     day: "numeric",
   };
 
-  const date = new Date();
-  const [dateDisplay, setDateDisplay] = useState(
-    date.toLocaleString("en-US", dateOption)
+  const dateToday = new Date();
+  const [chosenDate, setChosenDate] = useState(
+    (window.localStorage.getItem("currentDateShown")) ? (window.localStorage.getItem("currentDateShown")) : dateToday.toLocaleString("en-US", dateOption)
   );
-
+  
   const dateIncrement = () => {
-    let dateConvert = new Date(dateDisplay);
+    let dateConvert = new Date(chosenDate);
     dateConvert.setDate(dateConvert.getDate() + 1);
-    setDateDisplay(dateConvert.toLocaleString("en-US", dateOption));
+    setChosenDate(dateConvert.toLocaleString("en-US", dateOption));
   };
-
+  
   const dateDecrement = () => {
-    let dateConvert = new Date(dateDisplay);
+    let dateConvert = new Date(chosenDate);
     dateConvert.setDate(dateConvert.getDate() - 1);
-    setDateDisplay(dateConvert.toLocaleString("en-US", dateOption));
+    setChosenDate(dateConvert.toLocaleString("en-US", dateOption));
   };
+  
+  window.localStorage.setItem("currentDateShown", chosenDate);
+
+  const jumpToToday = () => {
+    setChosenDate(dateToday.toLocaleString("en-US", dateOption));
+  }
+
+// check if displayDate date is less than 10, if true, add 0
+let dateDigit = chosenDate.slice(5,chosenDate.length).split(" ")[1].replace(',','');
+if (dateDigit.length === 1) {
+  dateDigit = `0${dateDigit}`;
+}
+
+//Replace with refactored date digit
+let dateArray = chosenDate.slice(5,chosenDate.length).split(" ");
+dateArray[1] = dateDigit;
+
+//Shorten month to 3 letters
+dateArray[0] = dateArray[0].slice(0,3);
+
+//Convert to string
+const currentDate = dateArray.join('_');
 
   return (
     <div className="optionbar">
@@ -41,7 +63,7 @@ export default function Optionbar({ planes, showBookingModal }) {
               onClick={dateDecrement}
             />
           </button>
-          <div className="optionbar__date">{dateDisplay}</div>
+          <div className="optionbar__date">{chosenDate}</div>
           <button className="optionbar__btn">
             <img
               src={arrowRight}
@@ -50,7 +72,7 @@ export default function Optionbar({ planes, showBookingModal }) {
               onClick={dateIncrement}
             />
           </button>
-          <div className="optionbar__top-date optionbar__top-option">Today</div>
+          <button className="optionbar__top-date optionbar__top-option" onClick={jumpToToday}>Today</button>
           <select className="optionbar__direction-option optionbar__top-option">
             <option value="horizontal">Day Horizontal</option>
             <option value="vertical">Day Vertical</option>
@@ -108,7 +130,13 @@ export default function Optionbar({ planes, showBookingModal }) {
           </select>
         </div>
       </div>
-      <Schedule planes={planes} date={dateDisplay} showBookingModal={showBookingModal} />
+      <Schedule
+        planes={planes}
+        date={currentDate}
+        showBookingModal={showBookingModal}
+        visibility={visibility}
+        hideModal={hideModal} 
+      />
     </div>
   );
 }
