@@ -15,13 +15,14 @@ li:nth-child(4) {
   position: relative;
 }
 
-a {
+h5 {
   text-decoration: none;
   color: #000;
   cursor: pointer;
+  margin: 1rem 0;
 }
 
-a:hover,
+h5:hover,
 button.user:hover {
   color: rgb(69, 110, 136);
 }

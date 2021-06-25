@@ -8,6 +8,7 @@ import verify from "../../verifyToken/verifyToken.js";
 
 dotenv.config();
 
+//Get Method to access the User Database
 router.get("/", (req, res) => {
   User.find({})
     .then((result) => {
@@ -19,7 +20,7 @@ router.get("/", (req, res) => {
     });
 });
 
-//Sending Users JSON to the GET endpoint
+//Sending Users JSON to the GET endpoint with a specific ID
 router.get("/:id", (req, res) => {
   User.findById(req.params.id)
     .then((result) => {
@@ -35,9 +36,10 @@ router.get("/:id", (req, res) => {
 router.post("/login", async (req, res) => {
   const data = req.body;
 
-  //Check
+  //Check if the user is entering the correct email or password value
   const user = await User.findOne({ email: data.email });
   if (!user) return res.status(400).send("Invalid Email");
+  //decrypting and comparing the req.body.password to the User passpword
   const validPassword = await bcrypt.compare(data.password, user.password);
   if (!validPassword) return res.status(400).send("Invalid Password");
 
@@ -70,7 +72,6 @@ router.post("/register", async (req, res) => {
   console.log("register");
 
   // Saving the new User into the MongoDB database
-
   const newUser = new User({
     name: data.name,
     phone: data.phone,
@@ -100,20 +101,21 @@ router.delete("/:id", (req, res) => {
     .then((result) => {
       console.log(result);
       console.log("User has been deleted");
+      res.status(200).send("User has been deleted");
     })
     .catch((err) => {
       console.log(err);
       console.log("Delete method failed");
     });
 
-  User.find({})
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.status(404).send({ success: false });
-      console.log(err);
-    });
+  // User.find({})
+  //   .then((result) => {
+  //     res.send(result);
+  //   })
+  //   .catch((err) => {
+  //     res.status(404).send({ success: false });
+  //     console.log(err);
+  //   });
 });
 
 //Editing/Updating an User
@@ -122,22 +124,23 @@ router.put("/:id", (req, res) => {
   const updatedUser = req.body;
 
   User.findByIdAndUpdate(id, updatedUser, { upsert: true })
-    .then((editUser) => {
+    .then((response) => {
       console.log("Edit User Success");
+      res.status(200).send("Edit User Success");
     })
     .catch((err) => {
       console.log("Edit User failed");
       console.log(err);
     });
 
-  User.find({})
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.status(404).send({ success: false });
-      console.log(err);
-    });
+  // User.find({})
+  //   .then((result) => {
+  //     res.send(result);
+  //   })
+  //   .catch((err) => {
+  //     res.status(404).send({ success: false });
+  //     console.log(err);
+  //   });
 });
 
 export default router;

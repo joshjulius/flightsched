@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 import "./Loginpage.scss";
 
-export default function Loginpage() {
-
+function Loginpage() {
   const clearDateStorage = () => {
-    let session = window.sessionStorage.getItem('ref');
+    let session = window.sessionStorage.getItem("ref");
     if (session === null) {
       window.localStorage.removeItem("currentDateShown");
     }
-    window.sessionStorage.setItem('ref', 1);
-  }
-  window.addEventListener('load', () => {
+    window.sessionStorage.setItem("ref", 1);
+  };
+  window.addEventListener("load", () => {
     clearDateStorage();
   });
 
@@ -185,6 +184,7 @@ export default function Loginpage() {
               <button
                 className="form-login"
                 onClick={() => setCreateToggle(false)}
+                type="button"
               >
                 Login
               </button>
@@ -246,6 +246,7 @@ export default function Loginpage() {
               <button
                 className="form-create-btn"
                 onClick={() => setCreateToggle(true)}
+                type="button"
               >
                 Create Account
               </button>
@@ -281,3 +282,5 @@ export default function Loginpage() {
     </div>
   );
 }
+
+export default withRouter(Loginpage);

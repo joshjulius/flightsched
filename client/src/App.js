@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import "./App.scss";
 import "./normalize.css";
 
@@ -8,8 +8,13 @@ import Loginpage from "./pages/Loginpage/Loginpage";
 function App() {
   return (
     <div className="app">
-      <Route path="/" exact render={(...props) => <Loginpage {...props} />} />
-      <Route path="/user/:id" render={(...props) => <Userpage {...props} />} />
+      <Switch>
+        <Route path="/" exact render={(...props) => <Loginpage {...props} />} />
+        <Route
+          path="/user/:id"
+          render={(...props) => <Userpage {...props} />}
+        />
+      </Switch>
     </div>
   );
 }

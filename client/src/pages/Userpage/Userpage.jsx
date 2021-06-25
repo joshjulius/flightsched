@@ -5,23 +5,22 @@ import "./Userpage.scss";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Optionbar from "../../components/Optionbar/Optionbar";
-// import LoginModal from "../../components/LoginModal/LoginModal";
-// import CreateAccModal from "../../components/CreateAccModal/CreateAccModal";
+import UserInfoModal from "../../components/UserInfoModal/UserInfoModal";
 
 export default function Userpage(props) {
+  //All the States
   const [visibility, setVisibility] = useState(false);
-  // const [loginVisibility, setLoginVisibility] = useState(false);
-  // const [createAccVisibility, setCreateAccVisibility] = useState(false);
+  const [userInfoModalVisibility, setUserInfoModalVisibility] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [planes, setPlanes] = useState();
-
-  const planeURL = "http://localhost:5000/api/planes";
+  const [user, setUser] = useState();
 
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
     console.log(toggle);
   };
 
+  //Modal Show and Hidden Functions
   const showModal = () => {
     setVisibility(true);
   };
@@ -30,22 +29,20 @@ export default function Userpage(props) {
     setVisibility(false);
   };
 
-  // const showLoginModal = () => {
-  //   setLoginVisibility(true);
-  // };
+  const showUserInfoModal = () => {
+    setUserInfoModalVisibility(true);
+  };
 
-  // const hideLoginModal = () => {
-  //   setLoginVisibility(false);
-  // };
+  const hideUserInfoModal = () => {
+    setUserInfoModalVisibility(false);
+  };
 
-  // const showCreateAccModal = () => {
-  //   setCreateAccVisibility(true);
-  // };
+  //Axios call URL
+  const planeURL = "http://localhost:5000/api/planes";
+  const userInfo__URL = "http://localhost:5000/api/users";
+  const userId = props[0].match.params.id;
 
-  // const hideCreateAccModal = () => {
-  //   setCreateAccVisibility(false);
-  // };
-
+  //Axios Call Function
   const axiosPlaneCall = () => {
     axios
       .get(planeURL)
@@ -57,9 +54,42 @@ export default function Userpage(props) {
       });
   };
 
+  const axiosUserCall = () => {
+    axios
+      .get(`${userInfo__URL}/${userId}`)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log("Fetch User ID info error");
+      });
+  };
+
+  //User Edit Page Submit Function
+  const submitHandler = (state) => {
+    console.log("submit");
+    hideUserInfoModal();
+    axios
+      .put(`${userInfo__URL}/${userId}`, {
+        name: state.name,
+        email: state.email,
+        phone: state.phone,
+        dateOfBirth: state.dateOfBirth,
+      })
+      .then((res) => {
+        alert("User Info has been edited");
+        axiosUserCall();
+      })
+      .catch((err) => {
+        console.log("err");
+      });
+  };
+
   useEffect(() => {
+    axiosUserCall();
     axiosPlaneCall();
-  }, [planeURL]);
+    console.log("User Page useEffect");
+  }, [setUser]);
 
   if (!localStorage.getItem("token")) {
     alert("Your token has expired");
@@ -80,20 +110,27 @@ export default function Userpage(props) {
         <Navbar
           handleToggle={handleToggle}
           toggle={toggle}
-          props={props}
-          // showLoginModal={showLoginModal}
-          // showCreateAccModal={showCreateAccModal}
+          name={user && user.name}
+          props={props[0]}
+          history={props[0].history}
+          showUserInfoModal={showUserInfoModal}
         />
         <button onClick={showModal} className="main">
           Create a Reservation
         </button>
-        <Optionbar planes={planes} showBookingModal={showModal} visibility={visibility} hideModal={hideModal}/>
-        
-        {/* <LoginModal visibility={loginVisibility} hideModal={hideLoginModal} />
-        <CreateAccModal
-          visibility={createAccVisibility}
-          hideModal={hideCreateAccModal}
-        /> */}
+        <Optionbar
+          planes={planes}
+          showBookingModal={showModal}
+          visibility={visibility}
+          hideModal={hideModal}
+        />
+        {/* <Modal visibility={visibility} hideModal={hideModal} /> */}
+        <UserInfoModal
+          visibility={userInfoModalVisibility}
+          hideModal={hideUserInfoModal}
+          user={user}
+          submitHandler={submitHandler}
+        />
       </div>
     </div>
   );

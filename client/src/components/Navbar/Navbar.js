@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Hamburger from "hamburger-react";
 import "./Navbar.scss";
 
-const Navbar = ({
-  toggle,
-  handleToggle,
-  showLoginModal,
-  showCreateAccModal,
-  props,
-}) => {
+const Navbar = ({ toggle, handleToggle, showUserInfoModal, name, props }) => {
   //   const [toggle, setToggle] = useState(true);
 
   //   const handleToggle = () => {
@@ -17,33 +10,16 @@ const Navbar = ({
   //     // console.log(toggle);
   //   };
 
-  const userInfo__URL = "http://localhost:5000/api/users";
-  const userId = props[0].match.params.id;
-
   const handleUserMenu = () => {
     document.querySelector(".secondary-ul").classList.toggle("hide");
   };
 
-  const [user, setUser] = useState();
-
-  const axiosCall = () => {
-    axios
-      .get(`${userInfo__URL}/${userId}`)
-      .then((res) => {
-        setUser(res.data);
-      })
-      .catch((err) => {
-        console.log("Fetch User ID info error");
-      });
-  };
-
+  //Logout Function for the logout button
   const logoutHandler = () => {
     localStorage.removeItem("token");
+    alert("You have logged out");
+    props.history.push("/");
   };
-
-  useEffect(() => {
-    axiosCall();
-  }, [`${userInfo__URL}/${userId}`]);
 
   return (
     <div className="navbar">
@@ -60,28 +36,33 @@ const Navbar = ({
             <p>Waterloo Flight School</p>
           </li>
           <li>
-            <a href="#" target="_blank">
+            <a href="/" target="_blank">
               Help
             </a>
           </li>
           <li>
             <button className="user" onClick={handleUserMenu}>
-              {user && user.name}
+              {name && name}
             </button>
             <ul className="secondary-ul hide">
               <li>
-                <a href="#">My Account</a>
+                <h5
+                  onClick={() => {
+                    showUserInfoModal();
+                    handleUserMenu();
+                  }}
+                >
+                  My Account
+                </h5>
               </li>
               <li>
-                <a href="#">My Companies</a>
+                <h5 onClick={handleUserMenu}>My Companies</h5>
               </li>
               <li>
-                <a href="#">My Apps</a>
+                <h5 onClick={handleUserMenu}>My Apps</h5>
               </li>
               <li>
-                <a href="#" onClick={logoutHandler}>
-                  Logout
-                </a>
+                <h5 onClick={logoutHandler}>Logout</h5>
               </li>
             </ul>
           </li>
