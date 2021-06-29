@@ -122,9 +122,9 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               <button onClick={hideModal} className="close" type="button">
                 Close
               </button>
-              <button type="button" onClick={() => setEditToggle(!editToggle)}>
+              <h5 type="button" onClick={() => setEditToggle(!editToggle)}>
                 Information Page
-              </button>
+              </h5>
             </div>
             <div className="item">
               <label htmlFor="name">Name</label>

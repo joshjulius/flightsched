@@ -37,6 +37,10 @@ export default function Userpage(props) {
     setUserInfoModalVisibility(false);
   };
 
+  const headerToken = {
+    headers: { "auth-token": localStorage.getItem("token") },
+  };
+
   //Axios call URL
   const planeURL = "http://localhost:5000/api/planes";
   const userInfo__URL = "http://localhost:5000/api/users";
@@ -70,12 +74,16 @@ export default function Userpage(props) {
     console.log("submit");
     hideUserInfoModal();
     axios
-      .put(`${userInfo__URL}/${userId}`, {
-        name: state.name,
-        email: state.email,
-        phone: state.phone,
-        dateOfBirth: state.dateOfBirth,
-      })
+      .put(
+        `${userInfo__URL}/${userId}`,
+        {
+          name: state.name,
+          email: state.email,
+          phone: state.phone,
+          dateOfBirth: state.dateOfBirth,
+        },
+        headerToken
+      )
       .then((res) => {
         alert("User Info has been edited");
         axiosUserCall();

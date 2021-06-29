@@ -4,8 +4,14 @@ import Modal from "../../components/Modal/Modal";
 import Slot from "../Slot/Slot";
 import axios from "axios";
 
-export default function Schedule({ planes, date, showBookingModal, visibility, hideModal }) {
-  
+export default function Schedule({
+  planes,
+  date,
+  showBookingModal,
+  visibility,
+  hideModal,
+  filterValue,
+}) {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(false);
   const slotsURL = `http://localhost:5000/api/slots/${date}`;
@@ -13,7 +19,15 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
   const axiosSlotsCall = async () => {
     try {
       const res = await axios.get(slotsURL);
-      setSlots(res.data);
+      let slotsData = res.data;
+      if (filterValue) {
+        setSlots(
+          slotsData.filter((data) => data.instructor === filterValue.instructor)
+        );
+        console.log("Filtered Instructor");
+      } else {
+        setSlots(res.data);
+      }
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -23,8 +37,8 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
   useEffect(() => {
     axiosSlotsCall();
     setLoading(true);
-  }, [slotsURL]);
-  
+  }, [slotsURL, filterValue]);
+
   const timeHead = [];
   const planeSlot = [];
 
@@ -49,21 +63,21 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
   planeTimeSlot(8, "");
 
   const timeBlock = (slot) => {
-    return(
+    return (
       <Slot
         id={slot._id}
         startTime={slot.startTime}
         endTime={slot.endTime}
         activityType={slot.activityType}
         aircraft={slot.aircraft}
-        instructor={slot.instructor} 
+        instructor={slot.instructor}
         customer={slot.customer}
         type={slot.type}
         loading={loading}
         slotCall={axiosSlotsCall}
       />
     );
-  }
+  };
 
   return (
     <>
@@ -82,11 +96,11 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
           </tr>
         </thead>
         <tbody>
-          {
-            planes && planes.map((info) => {
+          {planes &&
+            planes.map((info) => {
               const checkReg = (slot) => {
                 return slot.aircraft === info.reg;
-              }
+              };
               return (
                 <tr className="schedule__row">
                   <th
@@ -99,19 +113,22 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
                   {planeSlot}
                 </tr>
               );
-            })
-          }
+            })}
           <tr className="schedule__row">
             <th className="schedule__placeholder">
               Jensen
-              {slots.filter(slot => slot.instructor === "Jensen").map(timeBlock)}
+              {slots
+                .filter((slot) => slot.instructor === "Jensen")
+                .map(timeBlock)}
             </th>
             {planeSlot}
           </tr>
           <tr className="schedule__row">
             <th className="schedule__placeholder">
               Josh
-              {slots.filter(slot => slot.instructor === "Josh").map(timeBlock)}
+              {slots
+                .filter((slot) => slot.instructor === "Josh")
+                .map(timeBlock)}
             </th>
             {planeSlot}
           </tr>
