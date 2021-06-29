@@ -27,16 +27,20 @@ export default function Schedule({
         !filterValue
       ) {
         setSlots(res.data);
-      } else if (filterValue.instructor) {
+      } else if (filterValue && filterValue.instructor) {
         setSlots(
           slotsData.filter((data) => data.instructor === filterValue.instructor)
         );
-      } else if (filterValue.aircraft) {
+      } else if (filterValue && filterValue.aircraft) {
         setSlots(
           slotsData.filter((data) => data.aircraft === filterValue.aircraft)
         );
       }
-      if (filterValue.instructor && filterValue.aircraft) {
+      if (
+        filterValue &&
+        filterValue.instructor !== "allInstructor" &&
+        filterValue.aircraft !== "allAircraft"
+      ) {
         setSlots(
           slotsData.filter(
             (data) =>
