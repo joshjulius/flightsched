@@ -20,13 +20,30 @@ export default function Schedule({
     try {
       const res = await axios.get(slotsURL);
       let slotsData = res.data;
-      if (filterValue) {
+      if (
+        (filterValue &&
+          filterValue.aircraft === "allAircraft" &&
+          filterValue.instructor === "allInstructor") ||
+        !filterValue
+      ) {
+        setSlots(res.data);
+      } else if (filterValue.instructor) {
         setSlots(
           slotsData.filter((data) => data.instructor === filterValue.instructor)
         );
-        console.log("Filtered Instructor");
-      } else {
-        setSlots(res.data);
+      } else if (filterValue.aircraft) {
+        setSlots(
+          slotsData.filter((data) => data.aircraft === filterValue.aircraft)
+        );
+      }
+      if (filterValue.instructor && filterValue.aircraft) {
+        setSlots(
+          slotsData.filter(
+            (data) =>
+              data.instructor === filterValue.instructor &&
+              data.aircraft === filterValue.aircraft
+          )
+        );
       }
       setLoading(false);
     } catch (err) {
