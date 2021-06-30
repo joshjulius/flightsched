@@ -20,12 +20,7 @@ export default function Schedule({
     try {
       const res = await axios.get(slotsURL);
       let slotsData = res.data;
-      if (
-        (filterValue &&
-          filterValue.aircraft === "allAircraft" &&
-          filterValue.instructor === "allInstructor") ||
-        !filterValue
-      ) {
+      if (!filterValue || filterValue.instructor === "allInstructor") {
         setSlots(res.data);
       } else if (filterValue && filterValue.instructor) {
         setSlots(
@@ -34,19 +29,6 @@ export default function Schedule({
       } else if (filterValue && filterValue.aircraft) {
         setSlots(
           slotsData.filter((data) => data.aircraft === filterValue.aircraft)
-        );
-      }
-      if (
-        filterValue &&
-        filterValue.instructor !== "allInstructor" &&
-        filterValue.aircraft !== "allAircraft"
-      ) {
-        setSlots(
-          slotsData.filter(
-            (data) =>
-              data.instructor === filterValue.instructor &&
-              data.aircraft === filterValue.aircraft
-          )
         );
       }
       setLoading(false);
@@ -100,6 +82,69 @@ export default function Schedule({
     );
   };
 
+  // const test = () => {
+  //   if (filterValue && filterValue.instructor === "Josh") {
+  //     return (
+  //       <>
+  //         <h2>Josh</h2>
+  //       </>
+  //     );
+  //   } else {
+  //     return (
+  //       <>
+  //         <h2>Jensen</h2>
+  //       </>
+  //     );
+  //   }
+  // };
+  const planesBlock = () => {
+    if (
+      !filterValue ||
+      (filterValue && filterValue.aircraft === "allAircraft") ||
+      !filterValue.aircraft
+    ) {
+      return (
+        <>
+          {planes.map((info) => {
+            return (
+              <tr className="schedule__row">
+                <th
+                  key={info._id}
+                  className={`schedule__placeholder ${info.reg}`}
+                >
+                  {`${info.reg} ${info.type}`}
+                  {slots
+                    .filter((slot) => slot.aircraft === info.reg)
+                    .map(timeBlock)}
+                </th>
+                {planeSlot}
+              </tr>
+            );
+          })}
+        </>
+      );
+    }
+    if (filterValue && filterValue !== "allAircraft") {
+      let plane = slots.filter(
+        (slot) => slot.aircraft === filterValue.aircraft
+      );
+      return (
+        <tr className="schedule__row">
+          <th
+            key={plane && plane[0]._id}
+            className={`schedule__placeholder ${plane && plane[0].aircraft}`}
+          >
+            {`${plane && plane[0].aircraft} ${plane && plane[0].type}`}
+            {slots
+              .filter((slot) => slot.aircraft === plane && plane[0].aircraft)
+              .map(timeBlock)}
+          </th>
+          {planeSlot}
+        </tr>
+      );
+    }
+  };
+
   return (
     <>
       <Modal
@@ -117,24 +162,57 @@ export default function Schedule({
           </tr>
         </thead>
         <tbody>
-          {planes &&
+          {planes && planesBlock()}
+          {/* {planes &&
             planes.map((info) => {
-              const checkReg = (slot) => {
-                return slot.aircraft === info.reg;
-              };
-              return (
-                <tr className="schedule__row">
-                  <th
-                    key={info._id}
-                    className={`schedule__placeholder ${info.reg}`}
-                  >
-                    {`${info.reg} ${info.type}`}
-                    {slots.filter(checkReg).map(timeBlock)}
-                  </th>
-                  {planeSlot}
-                </tr>
-              );
-            })}
+              // const checkReg = (slot) => {
+              //   if (
+              //     !filterValue ||
+              //     (filterValue && filterValue.aircraft === "allAircraft") ||
+              //     !filterValue.aircraft
+              //   ) {
+              //     return slot.aircraft === info.reg;
+              //   }
+              // };
+              if (
+                !filterValue ||
+                (filterValue && filterValue.aircraft === "allAircraft") ||
+                !filterValue.aircraft
+              ) {
+                return (
+                  <tr className="schedule__row">
+                    <th
+                      key={info._id}
+                      className={`schedule__placeholder ${info.reg}`}
+                    >
+                      {`${info.reg} ${info.type}`}
+                      {slots
+                        .filter((slot) => slot.aircraft === info.reg)
+                        .map(timeBlock)}
+                    </th>
+                    {planeSlot}
+                  </tr>
+                );
+              }
+              if (filterValue && filterValue.aircraft) {
+                return (
+                  <tr className="schedule__row">
+                    <th
+                      key={info._id}
+                      className={`schedule__placeholder ${info.reg}`}
+                    >
+                      {`${info.reg} ${info.type}`}
+                      {slots
+                        .filter(
+                          (slot) => slot.aircraft === filterValue.aircraft
+                        )
+                        .map(timeBlock)}
+                    </th>
+                    {planeSlot}
+                  </tr>
+                );
+              }
+            })} */}
           <tr className="schedule__row">
             <th className="schedule__placeholder">
               Jensen
