@@ -51,10 +51,10 @@ const SlotSchema = new Schema({
         type: String,
         required: true
     },
-    type: {
-        type: String,
-        required: true
-    },
+    // type: {
+    //     type: String,
+    //     required: true
+    // },
     instructor: {
         type: String,
         required: true // false if solo

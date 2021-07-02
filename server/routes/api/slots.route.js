@@ -38,10 +38,13 @@ router.post("/", async (req, res) => {
 
   // finds all bookings with the desired registration, customer or instructor
   const slot = await Slot.find(
-    { $or : [
-      { aircraft: req.body.aircraft.slice(0, 6) },
-      { instructor: req.body.instructor },
-      { customer: req.body.customer }
+    { $and: [
+      { startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_') },
+      {$or : [
+        { aircraft: req.body.aircraft },
+        { instructor: req.body.instructor },
+        { customer: req.body.customer }
+      ]}
     ]}
   );
 
@@ -77,8 +80,7 @@ router.post("/", async (req, res) => {
       endMilisecond: new Date(`${req.body.endDate}`).getTime(),
       customer: req.body.customer,
       displayName: req.body.displayName,
-      aircraft: req.body.aircraft.slice(0, 6),
-      type: req.body.aircraft.slice(7, req.body.aircraft.length),
+      aircraft: req.body.aircraft,
       instructor: req.body.instructor,
       flightType: req.body.flightType,
       flightRoute: req.body.flightRoute,
@@ -91,6 +93,68 @@ router.post("/", async (req, res) => {
   } else {
     res.sendStatus(400);
   }
+});
+
+// @route PUT api/slots/:id
+// @desc Update a slot
+// @access public
+router.put("/:id", async (req, res) => {
+
+  // finds all bookings with the desired registration, customer or instructor
+  const slot = await Slot.find(
+    { $and: [
+      { startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_') },
+      { _id: {$ne: req.params.id} },
+      {$or : [
+        { aircraft: req.body.aircraft },
+        { instructor: req.body.instructor },
+        { customer: req.body.customer }
+      ]}
+    ]}
+  );
+
+  // check against slot whether if times conflict
+  let isBookable = '';
+  if (slot.length === 0) {
+    isBookable = true;
+  } else {
+    for (let i = 0; i < slot.length ; i++) {
+      const existingStartMs = slot[i].startMilisecond;
+      const existingEndMs = slot[i].endMilisecond;
+      const newStartMs = new Date(`${req.body.startDate}`).getTime();
+      const newEndMs = new Date(`${req.body.endDate}`).getTime();
+  
+      if ((newStartMs >= existingEndMs) || (newEndMs <= existingStartMs)) {
+        isBookable = true;
+      } else {
+        isBookable = false;
+        break;
+      }
+    }
+  }
+
+  if (isBookable) {
+    Slot.findByIdAndUpdate(req.params.id,{
+      location: req.body.location,
+      activityType: req.body.activityType,
+      startTime: new Date(`${req.body.startDate}`).toString(),
+      startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_'),
+      startMilisecond: new Date(`${req.body.startDate}`).getTime(),
+      endTime: new Date(`${req.body.endDate}`).toString(),
+      endDate: new Date(`${req.body.endDate}`).toString().slice(4,15).replace(/ /g,'_'),
+      endMilisecond: new Date(`${req.body.endDate}`).getTime(),
+      customer: req.body.customer,
+      displayName: req.body.displayName,
+      aircraft: req.body.aircraft,
+      instructor: req.body.instructor,
+      flightType: req.body.flightType,
+      flightRoute: req.body.flightRoute,
+      comments: req.body.comments,
+    }, () => res.sendStatus(200));
+  } else {
+    res.sendStatus(400);
+  }
+
 });
 
 // @route DELETE api/slots/:id
