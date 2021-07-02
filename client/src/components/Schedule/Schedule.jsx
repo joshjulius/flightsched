@@ -52,15 +52,22 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
     return(
       <Slot
         id={slot._id}
+        location={slot.location}
         startTime={slot.startTime}
         endTime={slot.endTime}
         activityType={slot.activityType}
         aircraft={slot.aircraft}
         instructor={slot.instructor} 
         customer={slot.customer}
-        type={slot.type}
         loading={loading}
         slotCall={axiosSlotsCall}
+        hideModal={hideModal}
+        planes={planes}
+        date={date}
+        displayName={slot.displayName}
+        flightRoute={slot.flightRoute}
+        flightType={slot.flightType}
+        comments={slot.comments}
       />
     );
   }
@@ -85,7 +92,7 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
           {
             planes && planes.map((info) => {
               const checkReg = (slot) => {
-                return slot.aircraft === info.reg;
+                return slot.aircraft === `${info.reg} ${info.type}`;
               }
               return (
                 <tr className="schedule__row">
