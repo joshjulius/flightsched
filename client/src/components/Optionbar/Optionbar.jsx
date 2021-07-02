@@ -6,6 +6,7 @@ import Schedule from "../Schedule/Schedule";
 
 export default function Optionbar({
   planes,
+  user,
   showBookingModal,
   visibility,
   hideModal,
@@ -53,6 +54,17 @@ export default function Optionbar({
       [e.target.name]: e.target.value,
     });
     console.log(filterValue);
+  };
+
+  //Mapping Instructor Names into the Optionbox
+  const optionBoxInstructorName = () => {
+    user.map((user) => {
+      return (
+        <option key={user._id} value={user.name}>
+          {user.name}
+        </option>
+      );
+    });
   };
 
   // check if displayDate date is less than 10, if true, add 0
@@ -140,8 +152,14 @@ export default function Optionbar({
             onChange={optionBoxvalue}
           >
             <option value="allInstructor">All instructors</option>
-            <option value="Josh">Josh</option>
-            <option value="Jensen">Jensen</option>
+            {user &&
+              user.map((user) => {
+                return (
+                  <option key={user._id} value={user.name}>
+                    {user.name}
+                  </option>
+                );
+              })}
           </select>
           <select className="optionbar__bottom-option">
             <option value="noEquip">No Equipment</option>
@@ -169,6 +187,7 @@ export default function Optionbar({
       </div>
       <Schedule
         planes={planes}
+        user={user}
         date={currentDate}
         showBookingModal={showBookingModal}
         visibility={visibility}

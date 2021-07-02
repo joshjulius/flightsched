@@ -7,6 +7,7 @@ import axios from "axios";
 export default function Schedule({
   planes,
   date,
+  user,
   showBookingModal,
   visibility,
   hideModal,
@@ -145,6 +146,69 @@ export default function Schedule({
     }
   };
 
+  const insturctorBlock = () => {
+    if (
+      !filterValue ||
+      (filterValue && filterValue.instructor === "allInstructor") ||
+      !filterValue.instructor
+    ) {
+      return (
+        <>
+          {user.map((info) => {
+            return (
+              <tr className="schedule__row">
+                <th
+                  key={info._id}
+                  className={`schedule__placeholder ${info && info.name}`}
+                >
+                  {info && info.name}
+                  {slots
+                    .filter((slot) => slot.instructor === info.name)
+                    .map(timeBlock)}
+                </th>
+                {planeSlot}
+              </tr>
+            );
+          })}
+        </>
+      );
+    }
+    if (filterValue && filterValue !== "allInstructor") {
+      let user = slots.filter(
+        (slot) => slot.instructor === filterValue.instructor
+      );
+      console.log(user);
+      return (
+        <tr className="schedule__row">
+          <th
+            key={user && user[0]._id}
+            className={`schedule__placeholder ${user && user[0].instructor}`}
+          >
+            {user && user[0].instructor}
+            {slots
+              .filter((slot) => slot.instructor === user[0].instructor)
+              .map(timeBlock)}
+          </th>
+          {planeSlot}
+        </tr>
+      );
+    }
+    if (
+      filterValue &&
+      !slots.filter((slot) => slot.instructor === user[0].instructor)
+    ) {
+      <tr className="schedule__row">
+        <th
+          key={user && user[0]._id}
+          className={`schedule__placeholder ${user && user[0].instructor}`}
+        >
+          {user && user[0].instructor}
+        </th>
+        {planeSlot}
+      </tr>;
+    }
+  };
+
   return (
     <>
       <Modal
@@ -213,7 +277,8 @@ export default function Schedule({
                 );
               }
             })} */}
-          <tr className="schedule__row">
+          {user && insturctorBlock()}
+          {/* <tr className="schedule__row">
             <th className="schedule__placeholder">
               Jensen
               {slots
@@ -230,7 +295,7 @@ export default function Schedule({
                 .map(timeBlock)}
             </th>
             {planeSlot}
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </>
