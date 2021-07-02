@@ -14,6 +14,7 @@ export default function Userpage(props) {
   const [toggle, setToggle] = useState(false);
   const [planes, setPlanes] = useState();
   const [user, setUser] = useState();
+  const [userRole, setUserRole] = useState();
 
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
@@ -37,6 +38,10 @@ export default function Userpage(props) {
     setUserInfoModalVisibility(false);
   };
 
+  const headerToken = {
+    headers: { "auth-token": localStorage.getItem("token") },
+  };
+
   //Axios call URL
   const planeURL = "http://localhost:5000/api/planes";
   const userInfo__URL = "http://localhost:5000/api/users";
@@ -54,7 +59,25 @@ export default function Userpage(props) {
       });
   };
 
-  const axiosUserCall = () => {
+  const axiosUserRoleCall = () => {
+    axios.get(userInfo__URL).then((res) => {
+      let data = res.data;
+      console.log(data);
+      setUserRole(data);
+      // data.forEach((data) => {
+      //   console.log(data.name);
+      //   setUserRole([
+      //     ...userRole,
+      //     {
+      //       name: data.name,
+      //       role: data.role,
+      //     },
+      //   ]);
+      // });
+    });
+  };
+
+  const axiosUserIdCall = () => {
     axios
       .get(`${userInfo__URL}/${userId}`)
       .then((res) => {
@@ -70,15 +93,20 @@ export default function Userpage(props) {
     console.log("submit");
     hideUserInfoModal();
     axios
-      .put(`${userInfo__URL}/${userId}`, {
-        name: state.name,
-        email: state.email,
-        phone: state.phone,
-        dateOfBirth: state.dateOfBirth,
-      })
+      .put(
+        `${userInfo__URL}/${userId}`,
+        {
+          name: state.name,
+          email: state.email,
+          phone: state.phone,
+          dateOfBirth: state.dateOfBirth,
+          role: state.role,
+        },
+        headerToken
+      )
       .then((res) => {
         alert("User Info has been edited");
-        axiosUserCall();
+        axiosUserIdCall();
       })
       .catch((err) => {
         console.log("err");
@@ -86,8 +114,9 @@ export default function Userpage(props) {
   };
 
   useEffect(() => {
-    axiosUserCall();
+    axiosUserIdCall();
     axiosPlaneCall();
+    axiosUserRoleCall();
     console.log("User Page useEffect");
   }, [setUser]);
 
@@ -120,6 +149,7 @@ export default function Userpage(props) {
         </button>
         <Optionbar
           planes={planes}
+          user={userRole}
           showBookingModal={showModal}
           visibility={visibility}
           hideModal={hideModal}

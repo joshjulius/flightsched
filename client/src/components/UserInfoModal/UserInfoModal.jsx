@@ -33,6 +33,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
     email: "",
     phone: "",
     dateOfBirth: "",
+    role: "",
   });
 
   //Edit value for switching from User info to Edit User Form
@@ -53,6 +54,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
       email: "",
       phone: "",
       dateOfBirth: "",
+      role: "",
     });
   };
 
@@ -98,6 +100,10 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
                 <h4>Date of Birth</h4>
                 <h4>{user.dateOfBirth ? user.dateOfBirth : "Not Available"}</h4>
               </div>
+              <div className="item">
+                <h4>Role</h4>
+                <h4>{user.role ? user.role : "Not Available"}</h4>
+              </div>
             </div>
           </div>
         </form>
@@ -122,9 +128,9 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               <button onClick={hideModal} className="close" type="button">
                 Close
               </button>
-              <button type="button" onClick={() => setEditToggle(!editToggle)}>
+              <h5 type="button" onClick={() => setEditToggle(!editToggle)}>
                 Information Page
-              </button>
+              </h5>
             </div>
             <div className="item">
               <label htmlFor="name">Name</label>
@@ -167,6 +173,17 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
                 name="dateOfBirth"
                 value={user && state.dateOfBirth}
                 placeholder={user && user.dateOfBirth}
+                onChange={changeHandler}
+              />
+            </div>
+            <div className="item">
+              <label htmlFor="role">Role</label>
+              <input
+                type="role"
+                id="role"
+                name="role"
+                value={user && state.role}
+                placeholder={user && user.role}
                 onChange={changeHandler}
               />
             </div>
