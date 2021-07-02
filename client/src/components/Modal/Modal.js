@@ -44,6 +44,7 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
 
     const handleErrorBooking = (boolean) => {
       setErrorBooking(boolean);
+      console.log(errorBooking);
     }
 
     const makeBooking = async (e) => {
@@ -64,18 +65,11 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
         
         try {
             await axios.post("/api/slots", postData);
-            setCustomer('');
-            setDisplayName('');
-            setFlightRoute('');
-            setComments('');
-            setStartDate(new Date());
-            setEndDate(new Date());
-            setErrorBooking(false);
             hideModal();
             const slotsURL = `http://localhost:5000/api/slots/${date}`;
             slotCall();
         } catch {
-            setErrorBooking(true);
+            setErrorBooking(true)
         }
     }
 
