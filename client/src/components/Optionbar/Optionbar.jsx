@@ -17,7 +17,10 @@ export default function Optionbar({
     day: "numeric",
   };
 
-  const [filterValue, setFilterValue] = useState();
+  const [filterValue, setFilterValue] = useState({
+    aircraft: "allAircraft",
+    instructor: "allInstructor",
+  });
 
   const dateToday = new Date();
   const [chosenDate, setChosenDate] = useState(
