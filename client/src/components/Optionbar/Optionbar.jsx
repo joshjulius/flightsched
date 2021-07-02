@@ -67,6 +67,14 @@ export default function Optionbar({
     });
   };
 
+  //Clear All button Handler
+  const clearAllClickHandler = () => {
+    alert("Filter Has Been Successfully Reset");
+    setFilterValue({
+      aircraft: "allAircraft",
+      instructor: "allInstructor",
+    });
+  };
   // check if displayDate date is less than 10, if true, add 0
   let dateDigit = chosenDate
     .slice(5, chosenDate.length)
@@ -173,7 +181,9 @@ export default function Optionbar({
             <option value="allReservations">All Reservations</option>
             <option value="placeholder">Placeholder</option>
           </select>
-          <div className="optionbar__clear-all">Clear All</div>
+          <div onClick={clearAllClickHandler} className="optionbar__clear-all">
+            Clear All
+          </div>
         </div>
         <div className="optionbar__extra-info">
           <div className="optionbar__save-filter">+ save filter</div>
