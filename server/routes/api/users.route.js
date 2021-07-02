@@ -119,9 +119,10 @@ router.delete("/:id", (req, res) => {
 });
 
 //Editing/Updating an User
-router.put("/:id", (req, res) => {
+router.put("/:id", verify, (req, res) => {
   const id = req.params.id;
   const updatedUser = req.body;
+  console.log(req.body);
 
   User.findByIdAndUpdate(id, updatedUser, { upsert: true })
     .then((response) => {

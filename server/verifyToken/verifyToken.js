@@ -14,6 +14,7 @@ function verify(req, res, next) {
     next();
   } catch (err) {
     res.status(400).send({ auth: false, message: "Invalid Token" });
+    console.log("Invalid Token");
   }
 }
 

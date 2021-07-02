@@ -27,7 +27,7 @@ mongoose
 
 app.use("/api/slots", slots);
 app.use("/api/users", users);
-app.use("/api/users", authRoute);
+// app.use("/api/users", authRoute);
 app.use("/api/planes", planes);
 app.use("/api/", jwtCheck);
 
