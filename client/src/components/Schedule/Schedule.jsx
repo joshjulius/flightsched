@@ -4,8 +4,15 @@ import Modal from "../../components/Modal/Modal";
 import Slot from "../Slot/Slot";
 import axios from "axios";
 
-export default function Schedule({ planes, date, showBookingModal, visibility, hideModal }) {
-  
+export default function Schedule({
+  planes,
+  date,
+  filterValue,
+  user,
+  showBookingModal,
+  visibility,
+  hideModal,
+}) {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(false);
   const slotsURL = `http://localhost:5000/api/slots/${date}`;
@@ -24,7 +31,7 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
     axiosSlotsCall();
     setLoading(true);
   }, [slotsURL]);
-  
+
   const timeHead = [];
   const planeSlot = [];
 
@@ -49,21 +56,132 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
   planeTimeSlot(8, "");
 
   const timeBlock = (slot) => {
-    return(
+    return (
       <Slot
         id={slot._id}
         startTime={slot.startTime}
         endTime={slot.endTime}
         activityType={slot.activityType}
         aircraft={slot.aircraft}
-        instructor={slot.instructor} 
+        instructor={slot.instructor}
         customer={slot.customer}
         type={slot.type}
         loading={loading}
         slotCall={axiosSlotsCall}
       />
     );
-  }
+  };
+
+  const planesBlock = () => {
+    if (
+      !filterValue ||
+      (filterValue && filterValue.aircraft === "allAircraft") ||
+      !filterValue.aircraft
+    ) {
+      return (
+        <>
+          {planes.map((info) => {
+            return (
+              <tr className="schedule__row">
+                <th
+                  key={info._id}
+                  className={`schedule__placeholder ${info.reg}`}
+                >
+                  {`${info.reg} ${info.type}`}
+                  {slots
+                    .filter((slot) => slot.aircraft === info.reg)
+                    .map(timeBlock)}
+                </th>
+                {planeSlot}
+              </tr>
+            );
+          })}
+        </>
+      );
+    }
+    if (filterValue && filterValue !== "allAircraft") {
+      let plane = slots.filter(
+        (slot) => slot.aircraft === filterValue.aircraft
+      );
+      return (
+        <tr className="schedule__row">
+          <th
+            key={plane && plane[0]._id}
+            className={`schedule__placeholder ${plane && plane[0].aircraft}`}
+          >
+            {`${plane && plane[0].aircraft} ${plane && plane[0].type}`}
+            {slots
+              .filter((slot) => slot.aircraft === plane && plane[0].aircraft)
+              .map(timeBlock)}
+          </th>
+          {planeSlot}
+        </tr>
+      );
+    }
+  };
+
+  const insturctorBlock = () => {
+    if (
+      !filterValue ||
+      (filterValue && filterValue.instructor === "allInstructor") ||
+      !filterValue.instructor
+    ) {
+      return (
+        <>
+          {user.map((info) => {
+            return (
+              <tr className="schedule__row">
+                <th
+                  key={info._id}
+                  className={`schedule__placeholder ${info && info.name}`}
+                >
+                  {info && info.name}
+                  {slots
+                    .filter((slot) => slot.instructor === info.name)
+                    .map(timeBlock)}
+                </th>
+                {planeSlot}
+              </tr>
+            );
+          })}
+        </>
+      );
+    }
+    if (filterValue && filterValue !== "allInstructor") {
+      let user = slots.filter(
+        (slot) => slot.instructor === filterValue.instructor
+      );
+      console.log(user);
+      return (
+        <tr className="schedule__row">
+          <th
+            key={user && user[0]._id}
+            className={`schedule__placeholder ${user && user[0].instructor}`}
+          >
+            {user && user[0].instructor}
+            {slots
+              .filter((slot) => slot.instructor === user[0].instructor)
+              .map(timeBlock)}
+          </th>
+          {planeSlot}
+        </tr>
+      );
+    }
+    if (
+      filterValue &&
+      !slots.filter((slot) => slot.instructor === user[0].instructor)
+    ) {
+      <tr className="schedule__row">
+        <th
+          key={user && user[0]._id}
+          className={`schedule__placeholder ${user && user[0].instructor}`}
+        >
+          {user && user[0].instructor}
+        </th>
+        {planeSlot}
+      </tr>;
+    }
+  };
 
   return (
     <>
@@ -107,7 +225,9 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
                     >
                       {`${info.reg} ${info.type}`}
                       {slots
-                        .filter((slot) => slot.aircraft === `${info.reg} ${info.type})
+                        .filter(
+                          (slot) => slot.aircraft === `${info.reg} ${info.type}`
+                        )
                         .map(timeBlock)}
                     </th>
                     {planeSlot}
@@ -144,22 +264,26 @@ export default function Schedule({ planes, date, showBookingModal, visibility, h
                   {planeSlot}
                 </tr>
               );
-            })
-          }
-          <tr className="schedule__row">
+            })} */}
+          {/* <tr className="schedule__row">
             <th className="schedule__placeholder">
               Jensen
-              {slots.filter(slot => slot.instructor === "Jensen").map(timeBlock)}
+              {slots
+                .filter((slot) => slot.instructor === "Jensen")
+                .map(timeBlock)}
             </th>
             {planeSlot}
           </tr>
           <tr className="schedule__row">
             <th className="schedule__placeholder">
               Josh
-              {slots.filter(slot => slot.instructor === "Josh").map(timeBlock)}
+              {slots
+                .filter((slot) => slot.instructor === "Josh")
+                .map(timeBlock)}
             </th>
             {planeSlot}
-          </tr>
+          </tr> */}
+          {user && insturctorBlock()}
         </tbody>
       </table>
     </>
