@@ -8,21 +8,35 @@ import "./EditModal.scss";
 
 let useClickOutside = (handler) => {
     let domNode = useRef();
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> main
     useEffect(() => {
       let maybeHandler = (event) => {
         if (domNode.current && !domNode.current.contains(event.target)) {
           handler();
         }
       };
+<<<<<<< HEAD
   
       document.addEventListener("mousedown", maybeHandler);
   
+=======
+
+      document.addEventListener("mousedown", maybeHandler);
+
+>>>>>>> main
       return () => {
         document.removeEventListener("mousedown", maybeHandler);
       };
     });
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> main
     return domNode;
 };
 
@@ -47,7 +61,11 @@ const EditModal = ({id,
                     startMinute,
                     endHour,
                     endMinute }) => {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> main
     const [location, setLocation] = useState(currentLocation);
     const [activityType, setActivityType] = useState(currentActivityType);
     const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(currentStartTime), startMinute), startHour));
@@ -59,7 +77,11 @@ const EditModal = ({id,
     const [flightType, setFlightType] = useState(currentFlightType);
     const [flightRoute, setFlightRoute] = useState(currentFlightRoute);
     const [comments, setComments] = useState(currentComments);
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> main
     const [errorBooking, setErrorBooking] = useState(false);
 
     const handleErrorBooking = (boolean) => {
@@ -82,7 +104,11 @@ const EditModal = ({id,
             flightRoute,
             comments
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> main
         try {
             await axios.put(`http://localhost:5000/api/slots/${id}`, postData);
             setIsEditing(false);
@@ -283,4 +309,8 @@ const EditModal = ({id,
     }    
 }
 
+<<<<<<< HEAD
 export default EditModal;
+=======
+export default EditModal; 
+>>>>>>> main

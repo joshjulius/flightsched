@@ -4,22 +4,22 @@ import "./Slot.scss";
 import EditModal from "../EditModal/EditModal";
 
 const Slot = ({ hideModal,
-                planes,
-                date,
-                id,
-                startTime,
-                endTime,
-                activityType,
-                aircraft,
-                instructor,
-                customer,
-                loading,
-                slotCall,
-                location,
-                displayName,
-                flightRoute,
-                flightType,
-                comments }) => {
+    planes,
+    date,
+    id,
+    startTime,
+    endTime,
+    activityType,
+    aircraft,
+    instructor,
+    customer,
+    loading,
+    slotCall,
+    location,
+    displayName,
+    flightRoute,
+    flightType,
+    comments }) => {
 
     const startHour = startTime.slice(16,18);
     const startMinute = startTime.slice(19,21);

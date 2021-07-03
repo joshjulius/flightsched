@@ -23,8 +23,11 @@ let useClickOutside = (handler) => {
 };
 
 const DetailsModal = ({ setIsEditing, slotCall, setSlotID, id, slotID, startHour, startMinute, endHour, endMinute, activityType, aircraft, instructor, customer, startTime, endTime }) => {
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> main
 
     let domNode = useClickOutside(() => {
         setSlotID(0);
@@ -67,7 +70,10 @@ const DetailsModal = ({ setIsEditing, slotCall, setSlotID, id, slotID, startHour
                     }}>Edit Reservation</button>
                 </div>
             </div>
+<<<<<<< HEAD
             
+=======
+>>>>>>> main
             </>
         );
     } else {

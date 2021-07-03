@@ -58,6 +58,7 @@ export default function Schedule({
   const timeBlock = (slot) => {
     return (
       <Slot
+        location={slot.location}
         id={slot._id}
         location={slot.location}
         startTime={slot.startTime}

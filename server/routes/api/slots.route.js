@@ -123,7 +123,6 @@ router.put("/:id", async (req, res) => {
       const existingEndMs = slot[i].endMilisecond;
       const newStartMs = new Date(`${req.body.startDate}`).getTime();
       const newEndMs = new Date(`${req.body.endDate}`).getTime();
-  
       if ((newStartMs >= existingEndMs) || (newEndMs <= existingStartMs)) {
         isBookable = true;
       } else {
