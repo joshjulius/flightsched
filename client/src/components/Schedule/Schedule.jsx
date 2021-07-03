@@ -96,7 +96,7 @@ export default function Schedule({
                 >
                   {`${info.reg} ${info.type}`}
                   {slots
-                    .filter((slot) => slot.aircraft === info.reg)
+                    .filter((slot) => slot.aircraft === `${info.reg} ${info.type}`)
                     .map(timeBlock)}
                 </th>
                 {planeSlot}
