@@ -58,6 +58,7 @@ export default function Schedule({
   const timeBlock = (slot) => {
     return (
       <Slot
+        location={slot.location}
         id={slot._id}
         startTime={slot.startTime}
         endTime={slot.endTime}
@@ -65,9 +66,15 @@ export default function Schedule({
         aircraft={slot.aircraft}
         instructor={slot.instructor}
         customer={slot.customer}
-        type={slot.type}
         loading={loading}
         slotCall={axiosSlotsCall}
+        hideModal={hideModal}
+        planes={planes}
+        date={date}
+        displayName={slot.displayName}
+        flightRoute={slot.flightRoute}
+        flightType={slot.flightType}
+        comments={slot.comments}
       />
     );
   };
@@ -200,6 +207,10 @@ export default function Schedule({
           </tr>
         </thead>
         <tbody>
+        {/* {
+            planes && planes.map((info) => {
+              const checkReg = (slot) => {
+                return slot.aircraft === `${info.reg} ${info.type}`;} */}
           {planes && planesBlock()}
           {/* {planes &&
             planes.map((info) => {

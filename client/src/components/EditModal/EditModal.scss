@@ -1,0 +1,23 @@
+div.modal label {
+    font-weight: normal;
+    text-align: left;
+}
+
+
+div.edit-form-header {
+    display: grid;
+    grid-template-columns: 50px auto 50px;
+    border-bottom: 1px solid rgb(187, 187, 187);
+    margin-bottom: 20px;
+}
+
+div.edit-form-header button.close {
+border: none;
+background-color: #fff;
+color: black;
+cursor: pointer;
+width: 50px;
+height: 20px;
+align-self: center;
+justify-self: right;
+}
