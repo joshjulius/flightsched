@@ -59,15 +59,22 @@ export default function Schedule({
     return (
       <Slot
         id={slot._id}
+        location={slot.location}
         startTime={slot.startTime}
         endTime={slot.endTime}
         activityType={slot.activityType}
         aircraft={slot.aircraft}
         instructor={slot.instructor}
         customer={slot.customer}
-        type={slot.type}
         loading={loading}
         slotCall={axiosSlotsCall}
+        hideModal={hideModal}
+        planes={planes}
+        date={date}
+        displayName={slot.displayName}
+        flightRoute={slot.flightRoute}
+        flightType={slot.flightType}
+        comments={slot.comments}
       />
     );
   };
@@ -200,6 +207,11 @@ export default function Schedule({
           </tr>
         </thead>
         <tbody>
+          {/* {
+            planes && planes.map((info) => {
+              const checkReg = (slot) => {
+                return slot.aircraft === `${info.reg} ${info.type}`; */}
+
           {planes && planesBlock()}
           {/* {planes &&
             planes.map((info) => {
@@ -209,7 +221,7 @@ export default function Schedule({
               //     (filterValue && filterValue.aircraft === "allAircraft") ||
               //     !filterValue.aircraft
               //   ) {
-              //     return slot.aircraft === `${info.reg} ${info.type};
+              //     return slot.aircraft === `${info.reg} ${info.type}`;
               //   }
               // };
               if (
@@ -225,14 +237,13 @@ export default function Schedule({
                     >
                       {`${info.reg} ${info.type}`}
                       {slots
-                        .filter(
-                          (slot) => slot.aircraft === `${info.reg} ${info.type}`
-                        )
+                        .filter((slot) => slot.aircraft === `${info.reg} ${info.type}`)
                         .map(timeBlock)}
                     </th>
                     {planeSlot}
                   </tr>
                 );
+
               }
               if (filterValue && filterValue.aircraft) {
                 return (
