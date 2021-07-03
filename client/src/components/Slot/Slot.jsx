@@ -1,8 +1,25 @@
 import React, { useState } from "react";
 import DetailsModal from "../DetailsModal/DetailsModal";
 import "./Slot.scss";
+import EditModal from "../EditModal/EditModal";
 
-const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, customer, type, loading, slotCall }) => {
+const Slot = ({ hideModal,
+    planes,
+    date,
+    id,
+    startTime,
+    endTime,
+    activityType,
+    aircraft,
+    instructor,
+    customer,
+    loading,
+    slotCall,
+    location,
+    displayName,
+    flightRoute,
+    flightType,
+    comments }) => {
 
     const startHour = startTime.slice(16,18);
     const startMinute = startTime.slice(19,21);
@@ -53,6 +70,8 @@ const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, cust
         setSlotID(e.currentTarget.id);
     }
 
+    const [isEditing, setIsEditing] = useState(false);
+
     return(
         <>
             <div onClick={getId} id={`${id}`} className={`slot tooltip`} style={style}>
@@ -60,7 +79,7 @@ const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, cust
                     <p>{startHour}:{startMinute} {customer}</p>
                 </div>
                 <div className="tooltip-div">
-                    <p>{aircraft} {type}</p>
+                    <p>{aircraft}</p>
                     <p>Activity Type: {activityType}</p>
                     <p>Customer: {customer}</p>
                     <p>Instructor: {instructor}</p>
@@ -76,13 +95,40 @@ const Slot = ({ id, startTime, endTime, activityType, aircraft, instructor, cust
                 startMinute={startMinute}
                 endHour={endHour}
                 endMinute={endMinute}
+                startTime={startTime}
+                endTime={endTime}
                 activityType={activityType}
                 aircraft={aircraft}
                 instructor={instructor} 
                 customer={customer}
-                type={type}
                 setSlotID={setSlotID}
                 slotCall={slotCall}
+                setIsEditing={setIsEditing}
+            />
+            <EditModal
+                id={`${id}`}
+                setSlotID={setSlotID}
+                isEditing={isEditing}
+                setIsEditing={setIsEditing}
+                hideModal={hideModal}
+                planes={planes}
+                date={date}
+                slotCall={slotCall}
+                currentLocation={location}
+                currentActivityType={activityType}
+                currentStartTime={startTime}
+                currentEndTime={endTime}
+                currentCustomer={customer}
+                currentDisplayName={displayName}
+                currentAircraft={aircraft}
+                currentInstructor={instructor}
+                currentFlightRoute={flightRoute}
+                currentFlightType={flightType}
+                currentComments={comments}
+                startHour={startHour}
+                startMinute={startMinute}
+                endHour={endHour}
+                endMinute={endMinute}
             />
         </>
     );

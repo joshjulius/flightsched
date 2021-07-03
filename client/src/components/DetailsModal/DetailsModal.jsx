@@ -22,7 +22,7 @@ let useClickOutside = (handler) => {
     return domNode;
 };
 
-const DetailsModal = ({ slotCall, setSlotID, id, slotID, startHour, startMinute, endHour, endMinute, activityType, aircraft, instructor, customer, type }) => {
+const DetailsModal = ({ setIsEditing, slotCall, setSlotID, id, slotID, startHour, startMinute, endHour, endMinute, activityType, aircraft, instructor, customer, startTime, endTime }) => {
 
     let domNode = useClickOutside(() => {
         setSlotID(0);
@@ -45,19 +45,25 @@ const DetailsModal = ({ slotCall, setSlotID, id, slotID, startHour, startMinute,
 
     if (slotID === id) {
         return(
+            <>
             <div className="details-modal" id={id}>
                 <div className="details-container" ref={domNode}>
-                    <p>{aircraft} {type}</p>
+                    <h2>Reservation Details</h2>
+                    <p>{aircraft}</p>
                     <p>Activity Type: {activityType}</p>
                     <p>Customer: {customer}</p>
                     <p>Instructor: {instructor}</p>
-                    <p>Start Time: {startHour}:{startMinute}</p>
-                    <p>End Time: {endHour}:{endMinute}</p>
+                    <p>Start Time: {`${startTime.slice(0, 10)}, ${startHour}`}:{startMinute}</p>
+                    <p>End Time: {`${endTime.slice(0, 10)}, ${endHour}`}:{endMinute}</p>
                     <button onClick={hideDetails}>Close</button>
                     <button onClick={() => deleteBooking(id)}>Delete Reservation</button>
-                    <button>Edit Reservation</button>
+                    <button onClick={() => {
+                        hideDetails();
+                        setIsEditing(true);
+                    }}>Edit Reservation</button>
                 </div>
             </div>
+            </>
         );
     } else {
         return null;
