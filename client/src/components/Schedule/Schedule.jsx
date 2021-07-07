@@ -156,11 +156,15 @@ export default function Schedule({
         </>
       );
     }
-    if (filterValue && filterValue !== "allInstructor") {
+    if (
+      filterValue &&
+      filterValue !== "allInstructor" &&
+      slots.filter((slot) => slot.instructor === filterValue.instructor)
+        .length >= 1
+    ) {
       let user = slots.filter(
         (slot) => slot.instructor === filterValue.instructor
       );
-      console.log(user);
       return (
         <tr className="schedule__row">
           <th
@@ -168,7 +172,7 @@ export default function Schedule({
             className={`schedule__placeholder ${user && user[0].instructor}`}
           >
             {user && user[0].instructor}
-            {slots
+            {user
               .filter((slot) => slot.instructor === user[0].instructor)
               .map(timeBlock)}
           </th>
@@ -178,7 +182,8 @@ export default function Schedule({
     }
     if (
       filterValue &&
-      !slots.filter((slot) => slot.instructor === user[0].instructor)
+      slots.filter((slot) => slot.instructor === filterValue.instructor)
+        .length === 0
     ) {
       <tr className="schedule__row">
         <th
@@ -189,6 +194,7 @@ export default function Schedule({
         </th>
         {planeSlot}
       </tr>;
+      console.log("No booking");
     }
   };
 
