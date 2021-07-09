@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../Modal/Modal.scss";
 import axios from "axios";
+import ErrorBooking from "../ErrorBooking/ErrorBooking";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -22,7 +23,14 @@ let useClickOutside = (handler) => {
   return domNode;
 };
 
-const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
+const UserInfoModal = ({
+  visibility,
+  user,
+  submitHandler,
+  hideModal,
+  formValidation,
+  validation,
+}) => {
   let domNode = useClickOutside(() => {
     hideModal();
   });
@@ -38,6 +46,8 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
 
   //Edit value for switching from User info to Edit User Form
   let [editToggle, setEditToggle] = useState(false);
+
+  let [errorMessage, setErrorMessage] = useState(true);
 
   //Changing the value in the input box
   const changeHandler = (e) => {
@@ -58,9 +68,9 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
     });
   };
 
-  useEffect(() => {
-    console.log("Use effect");
-  }, [state]);
+  useEffect(() => {}, [state]);
+
+  console.log(validation);
 
   if (!visibility) {
     return null;
@@ -81,7 +91,15 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               >
                 Close
               </button>
-              <button onClick={() => setEditToggle(!editToggle)}>Edit</button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditToggle(!editToggle);
+                  return false;
+                }}
+              >
+                Edit
+              </button>
             </div>
             <div className="userInfoForm__container">
               <div className="item">
@@ -116,9 +134,19 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            submitHandler(state);
+            submitHandler(
+              state,
+              state.name,
+              state.phone,
+              state.dateOfBirth,
+              state.role
+            );
             resetInputValues();
-            setEditToggle(!editToggle);
+            if (validation) {
+              setEditToggle(!editToggle);
+            } else {
+              console.log("validation");
+            }
           }}
           ref={domNode}
         >
@@ -131,6 +159,14 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               <h5 type="button" onClick={() => setEditToggle(!editToggle)}>
                 Information Page
               </h5>
+              {errorMessage ? (
+                ""
+              ) : (
+                <ErrorBooking
+                  errorBooking={true}
+                  message={"Please Fill in all the boxes"}
+                />
+              )}
             </div>
             <div className="item">
               <label htmlFor="name">Name</label>

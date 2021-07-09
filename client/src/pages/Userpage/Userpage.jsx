@@ -15,6 +15,7 @@ export default function Userpage(props) {
   const [planes, setPlanes] = useState();
   const [user, setUser] = useState();
   const [userRole, setUserRole] = useState();
+  let [validation, setValidation] = useState(false);
 
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
@@ -42,6 +43,30 @@ export default function Userpage(props) {
     headers: { "auth-token": localStorage.getItem("token") },
   };
 
+  //function to check validation
+  let formValidation = (name, phone, dateOfBirth, role) => {
+    if (!name) {
+      setValidation(false);
+      return false;
+    }
+    if (!phone) {
+      setValidation(false);
+      return false;
+    }
+
+    if (!dateOfBirth) {
+      setValidation(false);
+      return false;
+    }
+
+    if (!role) {
+      setValidation(false);
+      return false;
+    }
+    setValidation(!validation);
+    return true;
+  };
+
   //Axios call URL
   const planeURL = "http://localhost:5000/api/planes";
   const userInfo__URL = "http://localhost:5000/api/users";
@@ -64,16 +89,6 @@ export default function Userpage(props) {
       let data = res.data;
       console.log(data);
       setUserRole(data);
-      // data.forEach((data) => {
-      //   console.log(data.name);
-      //   setUserRole([
-      //     ...userRole,
-      //     {
-      //       name: data.name,
-      //       role: data.role,
-      //     },
-      //   ]);
-      // });
     });
   };
 
@@ -122,28 +137,34 @@ export default function Userpage(props) {
   };
 
   //User Edit Page Submit Function
-  const submitHandler = (state) => {
-    console.log("submit");
-    hideUserInfoModal();
-    axios
-      .put(
-        `${userInfo__URL}/${userId}`,
-        {
-          name: state.name,
-          email: state.email,
-          phone: state.phone,
-          dateOfBirth: state.dateOfBirth,
-          role: state.role,
-        },
-        headerToken
-      )
-      .then((res) => {
-        alert("User Info has been edited");
-        axiosUserIdCall();
-      })
-      .catch((err) => {
-        console.log("err");
-      });
+  const submitHandler = (state, name, phone, dateOfBirth, role) => {
+    let valid = formValidation(name, phone, dateOfBirth, role);
+    if (valid) {
+      console.log("edit");
+      hideUserInfoModal();
+      axios
+        .put(
+          `${userInfo__URL}/${userId}`,
+          {
+            name: state.name,
+            email: state.email,
+            phone: state.phone,
+            dateOfBirth: state.dateOfBirth,
+            role: state.role,
+          },
+          headerToken
+        )
+        .then((res) => {
+          alert("User Info has been edited");
+          axiosUserIdCall();
+          setValidation(!validation);
+        })
+        .catch((err) => {
+          console.log("err");
+        });
+    } else {
+      console.log("failed to submit");
+    }
   };
 
   useEffect(() => {
@@ -195,6 +216,8 @@ export default function Userpage(props) {
           hideModal={hideUserInfoModal}
           user={user}
           submitHandler={submitHandler}
+          validation={validation}
+          formValidation={formValidation}
         />
       </div>
     </div>

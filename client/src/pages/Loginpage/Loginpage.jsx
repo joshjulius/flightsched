@@ -36,7 +36,6 @@ function Loginpage() {
       setloginValidation(false);
       return false;
     }
-
     return true;
   };
 
