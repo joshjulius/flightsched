@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Redirect, withRouter } from "react-router-dom";
 import "./Loginpage.scss";
+import ErrorBooking from "../../components/ErrorBooking/ErrorBooking";
 
 function Loginpage() {
   const clearDateStorage = () => {
@@ -22,12 +23,8 @@ function Loginpage() {
     password: "",
   });
 
-  let [validation, setValidation] = useState({
-    nameError: "",
-    emailError: "",
-    phoneError: "",
-    passwordError: "",
-  });
+  let [loginValidation, setloginValidation] = useState(false);
+  let [validation, setValidation] = useState(false);
 
   let [user, setUser] = useState();
   let [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,19 +32,8 @@ function Loginpage() {
 
   //Check if the input value is correct or not, if it is, return true, return false when it is not
   let loginValidate = () => {
-    let emailError = "";
-    let passwordError = "";
-
     if (!state.password) {
-      passwordError = "Password cannot be blank";
-    }
-
-    if (!state.email.includes("@")) {
-      emailError = "invalid email";
-    }
-
-    if (emailError || passwordError) {
-      setValidation({ emailError, passwordError });
+      setloginValidation(false);
       return false;
     }
 
@@ -55,32 +41,18 @@ function Loginpage() {
   };
 
   let createAccValidation = () => {
-    let nameError = "";
-    let emailError = "";
-    let phoneError = "";
-    let passwordError = "";
-
     if (!state.name) {
-      nameError = "Name cannot be blank";
-    }
-
-    if (Number.isNaN(parseInt(state.phone))) {
-      phoneError = "Phone Number cannot be blank and has to be numbers";
-    }
-
-    if (!state.password) {
-      passwordError = "Password cannot be blank";
-    }
-
-    if (!state.email.includes("@")) {
-      emailError = "invalid email";
-    }
-
-    if (emailError || nameError || passwordError || phoneError) {
-      setValidation({ emailError, nameError, phoneError, passwordError });
+      setValidation(false);
       return false;
     }
-
+    if (Number.isNaN(parseInt(state.phone))) {
+      setValidation(false);
+      return false;
+    }
+    if (!state.password) {
+      setValidation(false);
+      return false;
+    }
     return true;
   };
 
@@ -183,11 +155,22 @@ function Loginpage() {
               <h2>Create Account</h2>
               <button
                 className="form-login"
-                onClick={() => setCreateToggle(false)}
+                onClick={() => {
+                  setCreateToggle(false);
+                  setValidation(true);
+                }}
                 type="button"
               >
                 Login
               </button>
+              {validation ? (
+                ""
+              ) : (
+                <ErrorBooking
+                  errorBooking={true}
+                  message={"Please Fill in all the boxes"}
+                />
+              )}
             </div>
             <div className="item">
               <label htmlFor="name">Name</label>
@@ -245,11 +228,22 @@ function Loginpage() {
               <h2>Login</h2>
               <button
                 className="form-create-btn"
-                onClick={() => setCreateToggle(true)}
+                onClick={() => {
+                  setCreateToggle(true);
+                  setloginValidation(true);
+                }}
                 type="button"
               >
                 Create Account
               </button>
+              {loginValidation ? (
+                ""
+              ) : (
+                <ErrorBooking
+                  errorBooking={true}
+                  message={"Please Fill in all the boxes"}
+                />
+              )}
             </div>
             <div className="item">
               <label htmlFor="email">Email</label>

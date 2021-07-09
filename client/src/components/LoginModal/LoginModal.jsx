@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../Modal/Modal.scss";
 import axios from "axios";
+import ErrorBooking from "../ErrorBooking/ErrorBooking";
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
@@ -32,26 +33,12 @@ const LoginModal = ({ visibility, hideModal }) => {
     password: "",
   });
 
-  let [validation, setValidation] = useState({
-    emailError: "",
-    passwordError: "",
-  });
+  let [validation, setValidation] = useState(true);
 
   //Check if the input value is correct or not, if it is, return true, return false when it is not
   let validate = () => {
-    let emailError = "";
-    let passwordError = "";
-
-    if (!state.email.includes("@")) {
-      emailError = "Invalid email";
-    }
-
     if (!state.password) {
-      passwordError = "Password cannot be empty";
-    }
-
-    if (emailError || passwordError) {
-      setValidation({ emailError, passwordError });
+      setValidation(false);
       return false;
     }
     return true;
@@ -63,10 +50,10 @@ const LoginModal = ({ visibility, hideModal }) => {
       email: "",
       password: "",
     });
-    setValidation({
-      emailError: "",
-      passwordError: "",
-    });
+    // setValidation({
+    //   emailError: "",
+    //   passwordError: "",
+    // });
   };
 
   //Changing the value in the input box

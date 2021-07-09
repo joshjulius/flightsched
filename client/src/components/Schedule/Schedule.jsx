@@ -156,6 +156,7 @@ export default function Schedule({
         </>
       );
     }
+    //Selecting the specific instructor
     if (
       filterValue &&
       filterValue !== "allInstructor" &&
@@ -180,6 +181,7 @@ export default function Schedule({
         </tr>
       );
     }
+    //When an Instructor has no bookings
     if (
       filterValue &&
       slots.filter((slot) => slot.instructor === filterValue.instructor)

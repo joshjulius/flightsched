@@ -88,6 +88,39 @@ export default function Userpage(props) {
       });
   };
 
+  const axiosSaveFilterCall = (filterValue) => {
+    let loggedInUser = { ...user };
+    loggedInUser.filter.push({
+      name: "Filter",
+      aircraft: filterValue.aircraft,
+      instructor: filterValue.instructor,
+    });
+    console.log(loggedInUser);
+    axios
+      .put(
+        `${userInfo__URL}/${userId}`,
+        {
+          $set: {
+            filter: [
+              ...loggedInUser.filter,
+              {
+                name: "filter",
+                aircraft: loggedInUser.aircraft,
+                instructor: loggedInUser.instructor,
+              },
+            ],
+          },
+        },
+        headerToken
+      )
+      .then((res) => {
+        console.log("Save Filter Success");
+      })
+      .catch((err) => {
+        console.log("Save filter failed");
+      });
+  };
+
   //User Edit Page Submit Function
   const submitHandler = (state) => {
     console.log("submit");
@@ -150,9 +183,11 @@ export default function Userpage(props) {
         <Optionbar
           planes={planes}
           user={userRole}
+          userInfo={user}
           showBookingModal={showModal}
           visibility={visibility}
           hideModal={hideModal}
+          axiosSaveFilterCall={axiosSaveFilterCall}
         />
         {/* <Modal visibility={visibility} hideModal={hideModal} /> */}
         <UserInfoModal
