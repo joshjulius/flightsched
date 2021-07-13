@@ -95,9 +95,18 @@ const EditModal = ({id,
     const handleSelectLocation = e => (
         setLocation(e.target.value)
     )
-
+    
     const handleSelectActivityType = e => {
-        setActivityType(e.target.value)
+        setActivityType(e.target.value);
+        const activityType = document.getElementById("activity-type").value;
+        if (activityType === "Solo") {
+            setInstructor("None");
+            document.getElementById("instructor").value = "None";
+            document.getElementById("instructor").disabled = true;
+        } else {
+            document.getElementById("instructor").value = "DEFAULT";
+            document.getElementById("instructor").disabled = false;
+        }
     }
 
     const handleSelectAircraft = e => {
@@ -151,24 +160,25 @@ const EditModal = ({id,
                             </button>
                         </div>
                         <ErrorBooking errorBooking={errorBooking} setErrorBooking={handleErrorBooking} />
+                        <p class="edit-reservation">All fields marked with * are required</p>
                         <div className="item">
-                            <label htmlFor="location">Location</label>
+                            <label htmlFor="location">Location *</label>
                             <select onClick={handleSelectLocation} id="location" name="location" defaultValue={currentLocation}>
-                                <option value="DEFAULT" disabled>Select</option>
+                                <option value="DEFAULT" disabled hidden>Select</option>
                                 <option value="Kitchener">Kitchener</option>
                                 <option value="Waterloo">Waterloo</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label htmlFor="activity-type">Activity Type</label>
-                            <select onClick={handleSelectActivityType} id="activity-type" name="activityType" defaultValue={currentActivityType}>
-                                <option value="DEFAULT" disabled>Select</option>
+                            <label htmlFor="activity-type">Activity Type *</label>
+                            <select onChange={handleSelectActivityType} id="activity-type" name="activityType" defaultValue={currentActivityType}>
+                                <option value="DEFAULT" disabled hidden>Select</option>
                                 <option value="Dual">Dual</option>
                                 <option value="Solo">Solo</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label htmlFor="start-time">Start</label>
+                            <label htmlFor="start-time">Start *</label>
                             <DatePicker
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
@@ -178,7 +188,7 @@ const EditModal = ({id,
                             />
                         </div>
                         <div className="item">
-                            <label htmlFor="end-time">End</label>
+                            <label htmlFor="end-time">End *</label>
                             <DatePicker
                                 selected={endDate}
                                 onChange={(date) => setEndDate(date)}
@@ -189,7 +199,7 @@ const EditModal = ({id,
                             />
                         </div>
                         <div className="item">
-                            <label htmlFor="customer">Customer</label>
+                            <label htmlFor="customer">Customer *</label>
                             <input
                                 type="text"
                                 id="customer"
@@ -211,9 +221,9 @@ const EditModal = ({id,
                             />
                         </div>
                         <div className="item">
-                            <label htmlFor="aircraft">Aircraft</label>
+                            <label htmlFor="aircraft">Aircraft *</label>
                             <select onClick={handleSelectAircraft} id="aircraft" name="aircraft" defaultValue={`${currentAircraft}`}>
-                                <option value="DEFAULT" disabled>Select</option>
+                                <option value="DEFAULT" disabled hidden>Select</option>
                                 {planes && planes.map((info) => {
                                     return (
                                     <option
@@ -227,15 +237,16 @@ const EditModal = ({id,
                             </select>
                         </div>
                         <div className="item">
-                            <label htmlFor="instructor">Instructor</label>
-                            <select onClick={handleSelectInstructor} id="instructor" name="instructor" defaultValue={currentInstructor}>
-                                <option value="DEFAULT" disabled>Select</option>
+                            <label htmlFor="instructor">Instructor *</label>
+                            <select disabled={(activityType === "Solo") ? true : false} onClick={handleSelectInstructor} id="instructor" name="instructor" defaultValue={currentInstructor}>
+                                <option value="DEFAULT" disabled hidden>Select</option>
+                                <option value="None" disabled hidden>None</option>
                                 <option value="Josh">Josh</option>
                                 <option value="Jensen">Jensen</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label>Flight Type</label>
+                            <label>Flight Type *</label>
                             <div className="flight-type">
                                 <input
                                     type="radio"
@@ -258,7 +269,7 @@ const EditModal = ({id,
                             </div>
                         </div>
                         <div className="item">
-                            <label htmlFor="flight-route-legs">Flight Route/Legs</label>
+                            <label htmlFor="flight-route-legs">Flight Route/Legs *</label>
                             <textarea
                                 id="flight-route-legs"
                                 name="flightRoute"

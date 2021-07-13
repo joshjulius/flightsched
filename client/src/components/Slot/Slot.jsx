@@ -74,7 +74,7 @@ const Slot = ({ hideModal,
 
     return(
         <>
-            <div onClick={getId} id={`${id}`} className={`slot tooltip`} style={style}>
+            <div onClick={getId} id={`${id}`} className={`slot tooltip ${activityType}`} style={style}>
                 <div className="customer-name">
                     <p>{startHour}:{startMinute} {customer}</p>
                 </div>
