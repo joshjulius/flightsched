@@ -23,8 +23,8 @@ function Loginpage() {
     password: "",
   });
 
-  let [loginValidation, setloginValidation] = useState(false);
-  let [validation, setValidation] = useState(false);
+  let [loginValidation, setloginValidation] = useState(true);
+  let [validation, setValidation] = useState(true);
 
   let [user, setUser] = useState();
   let [isLoggedIn, setIsLoggedIn] = useState(false);
