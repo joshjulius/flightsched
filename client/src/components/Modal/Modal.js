@@ -37,8 +37,8 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
 
     const [location, setLocation] = useState('');
     const [activityType, setActivityType] = useState('');
-    const [startDate, setStartDate] = useState((next30min.getHours() < 21) ? next30min : setHours(setMinutes(tomorrow.setDate(tomorrow.getDate() + 1), 0), 8)); 
-    const [endDate, setEndDate] = useState((next30min.getHours() < 21) ? next90min : setHours(setMinutes(tomorrow, 30), 9));
+    const [startDate, setStartDate] = useState(((next30min.getHours() < 21) && (next30min.getHours() >= 8)) ? next30min : setHours(setMinutes(tomorrow.setDate(tomorrow.getDate() + 1), 0), 8)); 
+    const [endDate, setEndDate] = useState(((next30min.getHours() < 21) && (next30min.getHours() >= 8)) ? next90min : setHours(setMinutes(tomorrow, 30), 9));
     const [customer, setCustomer] = useState('');
     const [displayName, setDisplayName] = useState('');
     const [aircraft, setAircraft] = useState('');
@@ -56,8 +56,8 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
     const reset = () => {
         setLocation("");
         setActivityType("");
-        setStartDate((next30min.getHours() < 21) ? next30min : setHours(setMinutes(tomorrow, 0), 8));
-        setEndDate((next30min.getHours() < 21) ? next90min : setHours(setMinutes(tomorrow, 30), 9));
+        setStartDate(((next30min.getHours() < 21) && (next30min.getHours() >= 8)) ? next30min : setHours(setMinutes(tomorrow, 0), 8));
+        setEndDate(((next30min.getHours() < 21) && (next30min.getHours() >= 8)) ? next90min : setHours(setMinutes(tomorrow, 30), 9));
         setCustomer("");
         setDisplayName("");
         setAircraft("");
@@ -141,8 +141,8 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
                 setDisplayName('');
                 setFlightRoute('');
                 setComments('');
-                setStartDate((next30min.getHours() < 21) ? next30min : setHours(setMinutes(tomorrow, 0), 8));
-                setEndDate((next30min.getHours() < 21) ? next90min : setHours(setMinutes(tomorrow, 30), 9));
+                setStartDate(((next30min.getHours() < 21) && (next30min.getHours() >= 8)) ? next30min : setHours(setMinutes(tomorrow, 0), 8));
+                setEndDate(((next30min.getHours() < 21) && (next30min.getHours() >= 8)) ? next90min : setHours(setMinutes(tomorrow, 30), 9));
                 setErrorBooking(false);
                 hideModal();
                 const slotsURL = `http://localhost:5000/api/slots/${date}`;
