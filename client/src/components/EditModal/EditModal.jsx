@@ -90,27 +90,27 @@ const EditModal = ({
     };
 
 
-        if (customer === "" || flightRoute ==="") {
-            if (customer === "") {
-                document.querySelector(".label-customer").classList.add("errortext");
-                document.getElementById("customer").classList.add("errorbox");
-            }
-            if (flightRoute === "") {
-                document.querySelector(".label-flight-route-legs").classList.add("errortext");
-                document.getElementById("flight-route-legs").classList.add("errorbox");
-            }
-        } else {
-            try {
-                await axios.put(`http://localhost:5000/api/slots/${id}`, postData);
-                setIsEditing(false);
-                slotCall();
-            } catch {
-                setErrorBooking(true)
-            }
+    if (customer === "" || flightRoute ==="") {
+        if (customer === "") {
+            document.querySelector(".label-customer").classList.add("errortext");
+            document.getElementById("customer").classList.add("errorbox");
         }
+        if (flightRoute === "") {
+            document.querySelector(".label-flight-route-legs").classList.add("errortext");
+            document.getElementById("flight-route-legs").classList.add("errorbox");
+        }
+    } else {
+        try {
+            await axios.put(`http://localhost:5000/api/slots/${id}`, postData);
+            setIsEditing(false);
+            slotCall();
+        } catch {
+            setErrorBooking(true)
+        }
+    }
 
     }
-  };
+  
 
 
     const removeError = (e) => {
@@ -143,6 +143,8 @@ const EditModal = ({
   const handleSelectInstructor = (e) => {
     setInstructor(e.target.value);
   };
+
+  const currentDate = new Date();
 
   const reset = () => {
     setIsEditing(false);
