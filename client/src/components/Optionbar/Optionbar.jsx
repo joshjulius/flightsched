@@ -8,7 +8,9 @@ export default function Optionbar({
   planes,
   user,
   showBookingModal,
+  axiosSaveFilterCall,
   visibility,
+  userInfo,
   hideModal,
 }) {
   let dateOption = {
@@ -186,12 +188,18 @@ export default function Optionbar({
           </div>
         </div>
         <div className="optionbar__extra-info">
-          <div className="optionbar__save-filter">+ save filter</div>
+          <div
+            className="optionbar__save-filter"
+            onClick={() => axiosSaveFilterCall(filterValue)}
+          >
+            + save filter
+          </div>
           <select>
             <option value="" disabled selected>
               - saved filters -
             </option>
             <option value="placeholder">Placeholder</option>
+            {}
           </select>
         </div>
       </div>

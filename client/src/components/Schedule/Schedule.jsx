@@ -96,7 +96,9 @@ export default function Schedule({
                 >
                   {`${info.reg} ${info.type}`}
                   {slots
-                    .filter((slot) => slot.aircraft === `${info.reg} ${info.type}`)
+                    .filter(
+                      (slot) => slot.aircraft === `${info.reg} ${info.type}`
+                    )
                     .map(timeBlock)}
                 </th>
                 {planeSlot}
@@ -108,7 +110,7 @@ export default function Schedule({
     }
     if (filterValue && filterValue !== "allAircraft") {
       let plane = slots.filter(
-        (slot) => slot.aircraft === filterValue.aircraft
+        (slot) => slot.aircraft === `${filterValue.aircraft} C172S`
       );
       return (
         <tr className="schedule__row">
@@ -116,9 +118,9 @@ export default function Schedule({
             key={plane && plane[0]._id}
             className={`schedule__placeholder ${plane && plane[0].aircraft}`}
           >
-            {`${plane && plane[0].aircraft} ${plane && plane[0].type}`}
+            {`${plane && plane[0].aircraft}`}
             {slots
-              .filter((slot) => slot.aircraft === plane && plane[0].aircraft)
+              .filter((slot) => slot.aircraft === plane[0].aircraft)
               .map(timeBlock)}
           </th>
           {planeSlot}
@@ -154,11 +156,16 @@ export default function Schedule({
         </>
       );
     }
-    if (filterValue && filterValue !== "allInstructor") {
+    //Selecting the specific instructor
+    if (
+      filterValue &&
+      filterValue !== "allInstructor" &&
+      slots.filter((slot) => slot.instructor === filterValue.instructor)
+        .length >= 1
+    ) {
       let user = slots.filter(
         (slot) => slot.instructor === filterValue.instructor
       );
-      console.log(user);
       return (
         <tr className="schedule__row">
           <th
@@ -166,7 +173,7 @@ export default function Schedule({
             className={`schedule__placeholder ${user && user[0].instructor}`}
           >
             {user && user[0].instructor}
-            {slots
+            {user
               .filter((slot) => slot.instructor === user[0].instructor)
               .map(timeBlock)}
           </th>
@@ -174,9 +181,11 @@ export default function Schedule({
         </tr>
       );
     }
+    //When an Instructor has no bookings
     if (
       filterValue &&
-      !slots.filter((slot) => slot.instructor === user[0].instructor)
+      slots.filter((slot) => slot.instructor === filterValue.instructor)
+        .length === 0
     ) {
       <tr className="schedule__row">
         <th
@@ -187,6 +196,7 @@ export default function Schedule({
         </th>
         {planeSlot}
       </tr>;
+      console.log("No booking");
     }
   };
 
@@ -207,93 +217,7 @@ export default function Schedule({
           </tr>
         </thead>
         <tbody>
-        {/* {
-            planes && planes.map((info) => {
-              const checkReg = (slot) => {
-                return slot.aircraft === `${info.reg} ${info.type}`;} */}
           {planes && planesBlock()}
-          {/* {planes &&
-            planes.map((info) => {
-              // const checkReg = (slot) => {
-              //   if (
-              //     !filterValue ||
-              //     (filterValue && filterValue.aircraft === "allAircraft") ||
-              //     !filterValue.aircraft
-              //   ) {
-              //     return slot.aircraft === `${info.reg} ${info.type};
-              //   }
-              // };
-              if (
-                !filterValue ||
-                (filterValue && filterValue.aircraft === "allAircraft") ||
-                !filterValue.aircraft
-              ) {
-                return (
-                  <tr className="schedule__row">
-                    <th
-                      key={info._id}
-                      className={`schedule__placeholder ${info.reg}`}
-                    >
-                      {`${info.reg} ${info.type}`}
-                      {slots
-                        .filter(
-                          (slot) => slot.aircraft === `${info.reg} ${info.type}`
-                        )
-                        .map(timeBlock)}
-                    </th>
-                    {planeSlot}
-                  </tr>
-                );
-              }
-              if (filterValue && filterValue.aircraft) {
-                return (
-                  <tr className="schedule__row">
-                    <th
-                      key={info._id}
-                      className={`schedule__placeholder ${info.reg}`}
-                    >
-                      {`${info.reg} ${info.type}`}
-                      {slots
-                        .filter(
-                          (slot) => slot.aircraft === filterValue.aircraft
-                        )
-                        .map(timeBlock)}
-                    </th>
-                    {planeSlot}
-                  </tr>
-                );
-              }
-              return (
-                <tr className="schedule__row">
-                  <th
-                    key={info._id}
-                    className={`schedule__placeholder ${info.reg}`}
-                  >
-                    {`${info.reg} ${info.type}`}
-                    {slots.filter(checkReg).map(timeBlock)}
-                  </th>
-                  {planeSlot}
-                </tr>
-              );
-            })} */}
-          {/* <tr className="schedule__row">
-            <th className="schedule__placeholder">
-              Jensen
-              {slots
-                .filter((slot) => slot.instructor === "Jensen")
-                .map(timeBlock)}
-            </th>
-            {planeSlot}
-          </tr>
-          <tr className="schedule__row">
-            <th className="schedule__placeholder">
-              Josh
-              {slots
-                .filter((slot) => slot.instructor === "Josh")
-                .map(timeBlock)}
-            </th>
-            {planeSlot}
-          </tr> */}
           {user && insturctorBlock()}
         </tbody>
       </table>

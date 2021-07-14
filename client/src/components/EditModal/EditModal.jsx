@@ -7,83 +7,88 @@ import setMinutes from "date-fns/setMinutes";
 import "./EditModal.scss";
 
 let useClickOutside = (handler) => {
-    let domNode = useRef();
+  let domNode = useRef();
 
-    useEffect(() => {
-      let maybeHandler = (event) => {
-        if (domNode.current && !domNode.current.contains(event.target)) {
-          handler();
-        }
-      };
+  useEffect(() => {
+    let maybeHandler = (event) => {
+      if (domNode.current && !domNode.current.contains(event.target)) {
+        handler();
+      }
+    };
 
-      document.addEventListener("mousedown", maybeHandler);
+    document.addEventListener("mousedown", maybeHandler);
 
-      return () => {
-        document.removeEventListener("mousedown", maybeHandler);
-      };
-    });
+    return () => {
+      document.removeEventListener("mousedown", maybeHandler);
+    };
+  });
 
-    return domNode;
+  return domNode;
 };
 
-const EditModal = ({id,
-                    setSlotID,
-                    setIsEditing,
-                    slotCall,
-                    isEditing,
-                    planes,
-                    currentLocation,
-                    currentActivityType,
-                    currentStartTime,
-                    currentEndTime,
-                    currentCustomer,
-                    currentDisplayName,
-                    currentAircraft,
-                    currentInstructor,
-                    currentFlightRoute,
-                    currentFlightType,
-                    currentComments,
-                    startHour,
-                    startMinute,
-                    endHour,
-                    endMinute }) => {
+const EditModal = ({
+  id,
+  setSlotID,
+  setIsEditing,
+  slotCall,
+  isEditing,
+  planes,
+  currentLocation,
+  currentActivityType,
+  currentStartTime,
+  currentEndTime,
+  currentCustomer,
+  currentDisplayName,
+  currentAircraft,
+  currentInstructor,
+  currentFlightRoute,
+  currentFlightType,
+  currentComments,
+  startHour,
+  startMinute,
+  endHour,
+  endMinute,
+}) => {
+  const [location, setLocation] = useState(currentLocation);
+  const [activityType, setActivityType] = useState(currentActivityType);
+  const [startDate, setStartDate] = useState(
+    setHours(setMinutes(new Date(currentStartTime), startMinute), startHour)
+  );
+  const [endDate, setEndDate] = useState(
+    setHours(setMinutes(new Date(currentEndTime), endMinute), endHour)
+  );
+  const [customer, setCustomer] = useState(currentCustomer);
+  const [displayName, setDisplayName] = useState(currentDisplayName);
+  const [aircraft, setAircraft] = useState(currentAircraft);
+  const [instructor, setInstructor] = useState(currentInstructor);
+  const [flightType, setFlightType] = useState(currentFlightType);
+  const [flightRoute, setFlightRoute] = useState(currentFlightRoute);
+  const [comments, setComments] = useState(currentComments);
 
-    const currentDate = new Date();
 
-    const [location, setLocation] = useState(currentLocation);
-    const [activityType, setActivityType] = useState(currentActivityType);
-    const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(currentStartTime), startMinute), startHour));
-    const [endDate, setEndDate] = useState(setHours(setMinutes(new Date(currentEndTime), endMinute), endHour));
-    const [customer, setCustomer] = useState(currentCustomer);
-    const [displayName, setDisplayName] = useState(currentDisplayName);
-    const [aircraft, setAircraft] = useState(currentAircraft);
-    const [instructor, setInstructor] = useState(currentInstructor);
-    const [flightType, setFlightType] = useState(currentFlightType);
-    const [flightRoute, setFlightRoute] = useState(currentFlightRoute);
-    const [comments, setComments] = useState(currentComments);
+  const [errorBooking, setErrorBooking] = useState(false);
 
-    const [errorBooking, setErrorBooking] = useState(false);
+  const handleErrorBooking = (boolean) => {
+    setErrorBooking(boolean);
+    console.log(errorBooking);
+  };
 
-    const handleErrorBooking = (boolean) => {
-      setErrorBooking(boolean);
-      console.log(errorBooking);
-    }
+  const updateBooking = async (e) => {
+    e.preventDefault();
+    const postData = {
+      location,
+      activityType,
+      startDate,
+      endDate,
+      customer,
+      displayName,
+      aircraft,
+      instructor,
+      flightType,
+      flightRoute,
+      comments,
+    };
 
-    const updateBooking = async (e) => {
-        e.preventDefault();
-        const postData = {
-            location,
-            activityType,
-            startDate,
-            endDate,
-            customer,
-            displayName,
-            aircraft,
-            instructor,
-            flightType,
-            flightRoute,
-            comments
-        }
 
         if (customer === "" || flightRoute ==="") {
             if (customer === "") {
@@ -103,7 +108,10 @@ const EditModal = ({id,
                 setErrorBooking(true)
             }
         }
+
     }
+  };
+
 
     const removeError = (e) => {
         e.currentTarget.previousSibling.classList.remove("errortext");
@@ -127,28 +135,30 @@ const EditModal = ({id,
         }
     }
 
-    const handleSelectAircraft = e => {
-        setAircraft(e.target.value)
-    }
 
-    const handleSelectInstructor = e => {
-        setInstructor(e.target.value)
-    }
+  const handleSelectAircraft = (e) => {
+    setAircraft(e.target.value);
+  };
 
-    const reset = () => {
-        setIsEditing(false);
-        setErrorBooking(false);
-        setStartDate(new Date(currentStartTime));
-        setEndDate(new Date(currentEndTime));
-        setCustomer(currentCustomer);
-        setDisplayName(currentDisplayName);
-        setFlightRoute(currentFlightRoute);
-        setComments(currentComments);
-    }
+  const handleSelectInstructor = (e) => {
+    setInstructor(e.target.value);
+  };
 
-    let domNode = useClickOutside(() => {
-        reset();
-    });
+  const reset = () => {
+    setIsEditing(false);
+    setErrorBooking(false);
+    setStartDate(new Date(currentStartTime));
+    setEndDate(new Date(currentEndTime));
+    setCustomer(currentCustomer);
+    setDisplayName(currentDisplayName);
+    setFlightRoute(currentFlightRoute);
+    setComments(currentComments);
+  };
+
+  let domNode = useClickOutside(() => {
+    reset();
+  });
+
 
     if (!isEditing) {
         return null;
@@ -316,9 +326,9 @@ const EditModal = ({id,
                         <button type="submit" className="submit">Edit Reservation</button>
                     </div>
                 </form>
-            </div>
-        );
-    }    
-}
+      </div>
+    );
+  }
+};
 
-export default EditModal; 
+export default EditModal;

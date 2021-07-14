@@ -9,6 +9,11 @@ const userSchema = new Schema(
     dateOfBirth: { type: String },
     password: { type: String, required: true },
     role: { type: String },
+    filter: [
+      { name: { type: String } },
+      { aircraft: { type: String, required: true } },
+      { instructor: { type: String, required: true } },
+    ],
     lastFlight: { type: String },
   },
   { collection: "users" }
