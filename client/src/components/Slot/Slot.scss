@@ -1,10 +1,17 @@
 div.slot {
-    background-color: rgb(84, 123, 231);
     position: absolute;
     top: 0;
     height: 100%;
     border: 1px solid rgb(75, 75, 75);
     cursor: pointer;
+}
+
+div.slot.Dual {
+    background-color: rgb(84, 123, 231);
+}
+
+div.slot.Solo {
+    background-color: rgb(173, 226, 250);
 }
 
 .tooltip div.customer-name {

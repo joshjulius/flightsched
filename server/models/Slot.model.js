@@ -53,7 +53,7 @@ const SlotSchema = new Schema({
     },
     instructor: {
         type: String,
-        required: true // false if solo
+        required: true
     },
     flightType: {
         type: String,

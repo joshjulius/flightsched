@@ -37,16 +37,30 @@ router.get("/:startDate", (req, res) => {
 router.post("/", async (req, res) => {
 
   // finds all bookings with the desired registration, customer or instructor
-  const slot = await Slot.find(
-    { $and: [
-      { startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_') },
-      {$or : [
-        { aircraft: req.body.aircraft },
-        { instructor: req.body.instructor },
-        { customer: req.body.customer }
+  let slot;
+  if (req.body.activityType === "Dual") {
+    slot = await Slot.find(
+      { $and: [
+        { startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_') },
+        {$or : [
+          { aircraft: req.body.aircraft },
+          { instructor: req.body.instructor },
+          { customer: req.body.customer }
+        ]}
       ]}
-    ]}
-  );
+    );
+  } else if (req.body.activityType === "Solo") {
+    slot = await Slot.find(
+      { $and: [
+        { startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_') },
+        {$or : [
+          { aircraft: req.body.aircraft },
+          { customer: req.body.customer }
+        ]}
+      ]}
+    );
+  }
+  
 
   // check against slot whether if times conflict
   let isBookable = '';
@@ -101,17 +115,31 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
 
   // finds all bookings with the desired registration, customer or instructor
-  const slot = await Slot.find(
-    { $and: [
-      { startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_') },
-      { _id: {$ne: req.params.id} },
-      {$or : [
-        { aircraft: req.body.aircraft },
-        { instructor: req.body.instructor },
-        { customer: req.body.customer }
+  let slot;
+  if (req.body.activityType === "Dual") {
+    slot = await Slot.find(
+      { $and: [
+        { startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_') },
+        { _id: {$ne: req.params.id} },
+        {$or : [
+          { aircraft: req.body.aircraft },
+          { instructor: req.body.instructor },
+          { customer: req.body.customer }
+        ]}
       ]}
-    ]}
-  );
+    );
+  } else if (req.body.activityType === "Solo") {
+    slot = await Slot.find(
+      { $and: [
+        { startDate: new Date(`${req.body.startDate}`).toString().slice(4,15).replace(/ /g,'_') },
+        { _id: {$ne: req.params.id} },
+        {$or : [
+          { aircraft: req.body.aircraft },
+          { customer: req.body.customer }
+        ]}
+      ]}
+    );
+  }
 
   // check against slot whether if times conflict
   let isBookable = '';

@@ -61,22 +61,57 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
             flightRoute,
             comments
         }
+
+        console.log(location);
+        console.log(activityType);
         
-        try {
-            await axios.post("/api/slots", postData);
-            setCustomer('');
-            setDisplayName('');
-            setFlightRoute('');
-            setComments('');
-            setStartDate(new Date());
-            setEndDate(new Date());
-            setErrorBooking(false);
-            hideModal();
-            const slotsURL = `http://localhost:5000/api/slots/${date}`;
-            slotCall();
-        } catch {
-            setErrorBooking(true);
+        if (location === "" ||
+            location === "DEFAULT" ||
+            activityType === "" ||
+            activityType === "DEFAULT" ||
+            startDate === "" ||
+            endDate === "" ||
+            customer === "" ||
+            aircraft === "" ||
+            aircraft === "DEFAULT" ||
+            instructor === "" ||
+            instructor === "DEFAULT" ||
+            flightType === "" ||
+            flightRoute ==="" ) {
+                if (location === "" || location === "DEFAULT") {
+                    document.querySelector(".label-location").classList.add("errortext");
+                    document.getElementById("location").classList.add("errorbox");
+                }
+            // if (activityType === "") {
+            //     document.querySelector(".label-activity-type").classList.add("errortext");
+            //     document.getElementById("activity-type").classList.add("errorbox");
+            // }
+            // if (customer === "") {
+            //     document.querySelector(".label-customer").classList.add("errortext");
+            //     document.getElementById("customer").classList.add("errorbox");
+            // }
+        } else {
+            try {
+                await axios.post("/api/slots", postData);
+                setCustomer('');
+                setDisplayName('');
+                setFlightRoute('');
+                setComments('');
+                setStartDate(new Date());
+                setEndDate(new Date());
+                setErrorBooking(false);
+                hideModal();
+                const slotsURL = `http://localhost:5000/api/slots/${date}`;
+                slotCall();
+            } catch {
+                setErrorBooking(true);
+            }
         }
+    }
+
+    const removeError = (e) => {
+        e.currentTarget.previousSibling.classList.remove("errortext");
+        e.currentTarget.classList.remove("errorbox");
     }
 
     const handleSelectLocation = e => (
@@ -84,7 +119,16 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
     )
 
     const handleSelectActivityType = e => {
-        setActivityType(e.target.value)
+        setActivityType(e.target.value);
+        const activityType = document.getElementById("activity-type").value;
+        if (activityType === "Solo") {
+            setInstructor("None");
+            document.getElementById("instructor").value = "None";
+            document.getElementById("instructor").disabled = true;
+        } else {
+            document.getElementById("instructor").value = "DEFAULT";
+            document.getElementById("instructor").disabled = false;
+        }
     }
 
     const handleSelectAircraft = e => {
@@ -95,9 +139,17 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
         setInstructor(e.target.value)
     }
 
+    const reset = () => {
+        setLocation("");
+        setActivityType("");
+        setAircraft("");
+        setInstructor("");
+    }
+
     let domNode = useClickOutside(() => {
         hideModal();
         setErrorBooking(false);
+        reset();
     });
 
     if (!visibility) {
@@ -113,6 +165,7 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
                                 onClick={() => {
                                     hideModal();
                                     setErrorBooking(false);
+                                    reset();
                                 }}
                                 className="close"
                             >
@@ -120,24 +173,25 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
                             </button>
                         </div>
                         <ErrorBooking errorBooking={errorBooking} setErrorBooking={handleErrorBooking} />
+                        <p>All fields marked with * are required</p>
                         <div className="item">
-                            <label htmlFor="location">Location</label>
-                            <select onClick={handleSelectLocation} id="location" name="location" defaultValue={"DEFAULT"}>
-                                <option value="DEFAULT" disabled>Select</option>
+                            <label className="label-location" htmlFor="location">Location *</label>
+                            <select onClick={handleSelectLocation} onChange={removeError} id="location" name="location" defaultValue={"DEFAULT"}>
+                                <option value="DEFAULT" disabled hidden>Select</option>
                                 <option value="Kitchener">Kitchener</option>
                                 <option value="Waterloo">Waterloo</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label htmlFor="activity-type">Activity Type</label>
-                            <select onClick={handleSelectActivityType} id="activity-type" name="activityType" defaultValue={"DEFAULT"}>
-                                <option value="DEFAULT" disabled>Select</option>
+                            <label className="label-activity-type" htmlFor="activity-type">Activity Type *</label>
+                            <select onChange={handleSelectActivityType} id="activity-type" name="activityType" defaultValue={"DEFAULT"}>
+                                <option value="DEFAULT" disabled hidden>Select</option>
                                 <option value="Dual">Dual</option>
                                 <option value="Solo">Solo</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label htmlFor="start-time">Start</label>
+                            <label htmlFor="start-time">Start *</label>
                             <DatePicker
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
@@ -147,7 +201,7 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
                             />
                         </div>
                         <div className="item">
-                            <label htmlFor="end-time">End</label>
+                            <label htmlFor="end-time">End *</label>
                             <DatePicker
                                 selected={endDate}
                                 onChange={(date) => setEndDate(date)}
@@ -157,14 +211,14 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
                             />
                         </div>
                         <div className="item">
-                            <label htmlFor="customer">Customer</label>
+                            <label className="label-customer" htmlFor="customer">Customer *</label>
                             <input
                                 type="text"
                                 id="customer"
                                 name="customer"
                                 placeholder="Search by name"
                                 value={customer}
-                                onChange={e => setCustomer(e.target.value)}
+                                onChange={e => {setCustomer(e.target.value)}}
                             />
                         </div>
                         <div className="item">
@@ -179,9 +233,9 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
                             />
                         </div>
                         <div className="item">
-                            <label htmlFor="aircraft">Aircraft</label>
+                            <label htmlFor="aircraft">Aircraft *</label>
                             <select onClick={handleSelectAircraft} id="aircraft" name="aircraft" defaultValue={"DEFAULT"}>
-                                <option value="DEFAULT" disabled>Select</option>
+                                <option value="DEFAULT" disabled hidden>Select</option>
                                 {planes && planes.map((info) => {
                                     return (
                                     <option
@@ -194,16 +248,17 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
                                 })}
                             </select>
                         </div>
-                        <div className="item">
-                            <label htmlFor="instructor">Instructor</label>
+                        <div className="item" id="div-instructor">
+                            <label htmlFor="instructor">Instructor *</label>
                             <select onClick={handleSelectInstructor} id="instructor" name="instructor" defaultValue={"DEFAULT"}>
-                                <option value="DEFAULT" disabled>Select</option>
+                                <option value="DEFAULT" disabled hidden>Select</option>
+                                <option value="None" disabled hidden>None</option>
                                 <option value="Josh">Josh</option>
                                 <option value="Jensen">Jensen</option>
                             </select>
                         </div>
                         <div className="item">
-                            <label>Flight Type</label>
+                            <label>Flight Type *</label>
                             <div className="flight-type">
                                 <input
                                     type="radio"
@@ -224,7 +279,7 @@ const Modal = ({ visibility, hideModal, planes, date, slotCall }) => {
                             </div>
                         </div>
                         <div className="item">
-                            <label htmlFor="flight-route-legs">Flight Route/Legs</label>
+                            <label htmlFor="flight-route-legs">Flight Route/Legs *</label>
                             <textarea
                                 id="flight-route-legs"
                                 name="flightRoute"

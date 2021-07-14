@@ -97,11 +97,22 @@ const EditModal = ({
     }
   };
 
-  const handleSelectLocation = (e) => setLocation(e.target.value);
-
-  const handleSelectActivityType = (e) => {
-    setActivityType(e.target.value);
-  };
+    const handleSelectLocation = e => (
+        setLocation(e.target.value)
+    )
+    
+    const handleSelectActivityType = e => {
+        setActivityType(e.target.value);
+        const activityType = document.getElementById("activity-type").value;
+        if (activityType === "Solo") {
+            setInstructor("None");
+            document.getElementById("instructor").value = "None";
+            document.getElementById("instructor").disabled = true;
+        } else {
+            document.getElementById("instructor").value = "DEFAULT";
+            document.getElementById("instructor").disabled = false;
+        }
+    }
 
   const handleSelectAircraft = (e) => {
     setAircraft(e.target.value);
@@ -126,198 +137,283 @@ const EditModal = ({
     reset();
   });
 
-  if (!isEditing) {
-    return null;
+if (!isEditing) {
+      return null;
   } else if (isEditing) {
-    return (
-      <div className="modal">
-        <form onSubmit={updateBooking} ref={domNode}>
-          <div className="form-container">
-            <div className="edit-form-header">
-              <button
-                onClick={() => {
-                  setSlotID(id);
-                  reset();
-                }}
-                className="close"
-              >
-                &lt;Back
-              </button>
-              <h2>Edit Reservation</h2>
-              <button
-                onClick={() => {
-                  reset();
-                }}
-                className="close"
-              >
-                Close
-              </button>
-            </div>
-            <ErrorBooking
-              errorBooking={errorBooking}
-              setErrorBooking={handleErrorBooking}
-              message={
-                "Booking cannot be made, aircraft or instructor unavailable."
-              }
-            />
-            <div className="item">
-              <label htmlFor="location">Location</label>
-              <select
-                onClick={handleSelectLocation}
-                id="location"
-                name="location"
-                defaultValue={currentLocation}
-              >
-                <option value="DEFAULT" disabled>
-                  Select
-                </option>
-                <option value="Kitchener">Kitchener</option>
-                <option value="Waterloo">Waterloo</option>
-              </select>
-            </div>
-            <div className="item">
-              <label htmlFor="activity-type">Activity Type</label>
-              <select
-                onClick={handleSelectActivityType}
-                id="activity-type"
-                name="activityType"
-                defaultValue={currentActivityType}
-              >
-                <option value="DEFAULT" disabled>
-                  Select
-                </option>
-                <option value="Dual">Dual</option>
-                <option value="Solo">Solo</option>
-              </select>
-            </div>
-            <div className="item">
-              <label htmlFor="start-time">Start</label>
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                showTimeSelect
-                dateFormat="MMMM d, yyyy h:mm aa"
-                name="startDate"
-              />
-            </div>
-            <div className="item">
-              <label htmlFor="end-time">End</label>
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                showTimeSelect
-                dateFormat="MMMM d, yyyy h:mm aa"
-                name="endDate"
-                minDate={new Date(startDate)}
-              />
-            </div>
-            <div className="item">
-              <label htmlFor="customer">Customer</label>
-              <input
-                type="text"
-                id="customer"
-                name="customer"
-                placeholder="Search by name"
-                value={customer}
-                onChange={(e) => setCustomer(e.target.value)}
-              />
-            </div>
-            <div className="item">
-              <label htmlFor="display-name">Display Name</label>
-              <input
-                type="text"
-                id="display-name"
-                name="displayName"
-                placeholder="None"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-              />
-            </div>
-            <div className="item">
-              <label htmlFor="aircraft">Aircraft</label>
-              <select
-                onClick={handleSelectAircraft}
-                id="aircraft"
-                name="aircraft"
-                defaultValue={`${currentAircraft}`}
-              >
-                <option value="DEFAULT" disabled>
-                  Select
-                </option>
-                {planes &&
-                  planes.map((info) => {
-                    return (
-                      <option key={info._id} value={`${info.reg} ${info.type}`}>
-                        {info.reg} {info.type}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-            <div className="item">
-              <label htmlFor="instructor">Instructor</label>
-              <select
-                onClick={handleSelectInstructor}
-                id="instructor"
-                name="instructor"
-                defaultValue={currentInstructor}
-              >
-                <option value="DEFAULT" disabled>
-                  Select
-                </option>
-                <option value="Josh">Josh</option>
-                <option value="Jensen">Jensen</option>
-              </select>
-            </div>
-            <div className="item">
-              <label>Flight Type</label>
-              <div className="flight-type">
-                <input
-                  type="radio"
-                  id="local"
-                  onClick={() => setFlightType("Local")}
-                  value={flightType}
-                  name="flightType"
-                  checked={flightType === "Local" ? true : false}
-                />
-                <label htmlFor="local">Local</label>
-                <input
-                  type="radio"
-                  id="cross-country"
-                  onClick={() => setFlightType("Cross-country")}
-                  value={flightType}
-                  name="flightType"
-                  checked={flightType === "Cross-country" ? true : false}
-                />
-                <label htmlFor="cross-country">Cross Country</label>
-              </div>
-            </div>
-            <div className="item">
-              <label htmlFor="flight-route-legs">Flight Route/Legs</label>
-              <textarea
-                id="flight-route-legs"
-                name="flightRoute"
-                value={flightRoute}
-                onChange={(e) => setFlightRoute(e.target.value)}
-              />
-            </div>
-            <div className="item">
-              <label htmlFor="comments">Comments</label>
-              <textarea
-                id="comments"
-                name="comments"
-                value={comments}
-                onChange={(e) => setComments(e.target.value)}
-              />
-            </div>
-            <button type="submit" className="submit">
-              Edit Reservation
-            </button>
+      return (
+      <>
+          <div className="modal">
+              <form onSubmit={updateBooking}  ref={domNode}>
+                  <div className="form-container">
+                      <div className="edit-form-header">
+                          <button 
+                              onClick={() => {
+                                  setSlotID(id);
+                                  reset();
+                              }}
+                              className="close"
+                          >
+                              &lt;Back
+                          </button>
+                          <h2>Edit Reservation</h2>
+                          <button
+                              onClick={() => {
+                                  reset();
+                              }}
+                              className="close"
+                          >
+                              Close
+                          </button>
+                      </div>
+                      <ErrorBooking errorBooking={errorBooking} setErrorBooking={handleErrorBooking} />
+                      <p class="edit-reservation">All fields marked with * are required</p>
+                      <div className="item">
+                          <label htmlFor="location">Location *</label>
+                          <select onClick={handleSelectLocation} id="location" name="location" defaultValue={currentLocation}>
+                              <option value="DEFAULT" disabled hidden>Select</option>
+                              <option value="Kitchener">Kitchener</option>
+                              <option value="Waterloo">Waterloo</option>
+                          </select>
+                      </div>
+                      <div className="item">
+                          <label htmlFor="activity-type">Activity Type *</label>
+                          <select onChange={handleSelectActivityType} id="activity-type" name="activityType" defaultValue={currentActivityType}>
+                              <option value="DEFAULT" disabled hidden>Select</option>
+                              <option value="Dual">Dual</option>
+                              <option value="Solo">Solo</option>
+                          </select>
+                      </div>
+                      <div className="item">
+                          <label htmlFor="start-time">Start *</label>
+                          <DatePicker
+                              selected={startDate}
+                              onChange={(date) => setStartDate(date)}
+                              showTimeSelect
+                              dateFormat="MMMM d, yyyy h:mm aa"
+                              name="startDate"
+                          />
+                      </div>
+                      <div className="item">
+                          <label htmlFor="end-time">End *</label>
+                          <DatePicker
+                              selected={endDate}
+                              onChange={(date) => setEndDate(date)}
+                              showTimeSelect
+                              dateFormat="MMMM d, yyyy h:mm aa"
+                              name="endDate"
+                              minDate={(new Date(startDate))}
+                          />
+                      </div>
+                      <div className="item">
+                          <label htmlFor="customer">Customer *</label>
+                          <input
+                              type="text"
+                              id="customer"
+                              name="customer"
+                              placeholder="Search by name"
+                              value={customer}
+                              onChange={e => setCustomer(e.target.value)}
+                          />
+                      </div>
+                      <div className="item">
+                          <label htmlFor="display-name">Display Name</label>
+                          <input
+                              type="text"
+                              id="display-name"
+                              name="displayName"
+                              placeholder="None"
+                              value={displayName}
+                              onChange={e => setDisplayName(e.target.value)}
+                          />
+                      </div>
+                      <div className="item">
+                          <label htmlFor="aircraft">Aircraft *</label>
+                          <select onClick={handleSelectAircraft} id="aircraft" name="aircraft" defaultValue={`${currentAircraft}`}>
+                              <option value="DEFAULT" disabled hidden>Select</option>
+                              {planes && planes.map((info) => {
+                                  return (
+                                  <option
+                                      key={info._id}
+                                      value={`${info.reg} ${info.type}`}
+                                  >
+                                      {info.reg} {info.type}
+                                  </option>
+                                  );
+                              })}
+                          </select>
+                      </div>
+                      <div className="item">
+                          <label htmlFor="instructor">Instructor *</label>
+                          <select disabled={(activityType === "Solo") ? true : false} onClick={handleSelectInstructor} id="instructor" name="instructor" defaultValue={currentInstructor}>
+                              <option value="DEFAULT" disabled hidden>Select</option>
+                              <option value="None" disabled hidden>None</option>
+                              <option value="Josh">Josh</option>
+                              <option value="Jensen">Jensen</option>
+                          </select>
+                      </div>
+                      <div className="item">
+                          <label>Flight Type *</label>
+                          <div className="flight-type">
+                              <input
+                                  type="radio"
+                                  id="local"
+                                  onClick={() => setFlightType("Local")}
+                                  value={flightType}
+                                  name="flightType"
+                                  checked={flightType === "Local" ? true : false}
+                              />
+                              <label htmlFor="local">Local</label>
+                              <input
+                                  type="radio"
+                                  id="cross-country"
+                                  onClick={() => setFlightType("Cross-country")}
+                                  value={flightType}
+                                  name="flightType"
+                                  checked={flightType === "Cross-country" ? true : false}
+                              />
+                              <label htmlFor="cross-country">Cross Country</label>
+                          </div>
+                      </div>
+                      <div className="item">
+                          <label htmlFor="flight-route-legs">Flight Route/Legs *</label>
+                          <textarea
+                              id="flight-route-legs"
+                              name="flightRoute"
+                              value={flightRoute}
+                              onChange={e => setFlightRoute(e.target.value)}
+                          />
+                      </div>
+                      <div className="item">
+                          <label htmlFor="comments">Comments</label>
+                          <textarea
+                              id="comments"
+                              name="comments" 
+                              value={comments}
+                              onChange={e => setComments(e.target.value)}
+                          />
+                      </div>
+                      <button type="submit" className="submit">Edit Reservation</button>
+                  </div>
+              </form>
           </div>
-        </form>
-      </div>
-    );
-  }
+          <div className="item">
+            <label htmlFor="end-time">End</label>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              showTimeSelect
+              dateFormat="MMMM d, yyyy h:mm aa"
+              name="endDate"
+              minDate={new Date(startDate)}
+            />
+          </div>
+          <div className="item">
+            <label htmlFor="customer">Customer</label>
+            <input
+              type="text"
+              id="customer"
+              name="customer"
+              placeholder="Search by name"
+              value={customer}
+              onChange={(e) => setCustomer(e.target.value)}
+            />
+          </div>
+          <div className="item">
+            <label htmlFor="display-name">Display Name</label>
+            <input
+              type="text"
+              id="display-name"
+              name="displayName"
+              placeholder="None"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+            />
+          </div>
+          <div className="item">
+            <label htmlFor="aircraft">Aircraft</label>
+            <select
+              onClick={handleSelectAircraft}
+              id="aircraft"
+              name="aircraft"
+              defaultValue={`${currentAircraft}`}
+            >
+              <option value="DEFAULT" disabled>
+                Select
+              </option>
+              {planes &&
+                planes.map((info) => {
+                  return (
+                    <option key={info._id} value={`${info.reg} ${info.type}`}>
+                      {info.reg} {info.type}
+                    </option>
+                  );
+                })}
+            </select>
+          </div>
+          <div className="item">
+            <label htmlFor="instructor">Instructor</label>
+            <select
+              onClick={handleSelectInstructor}
+              id="instructor"
+              name="instructor"
+              defaultValue={currentInstructor}
+            >
+              <option value="DEFAULT" disabled>
+                Select
+              </option>
+              <option value="Josh">Josh</option>
+              <option value="Jensen">Jensen</option>
+            </select>
+          </div>
+          <div className="item">
+            <label>Flight Type</label>
+            <div className="flight-type">
+              <input
+                type="radio"
+                id="local"
+                onClick={() => setFlightType("Local")}
+                value={flightType}
+                name="flightType"
+                checked={flightType === "Local" ? true : false}
+              />
+              <label htmlFor="local">Local</label>
+              <input
+                type="radio"
+                id="cross-country"
+                onClick={() => setFlightType("Cross-country")}
+                value={flightType}
+                name="flightType"
+                checked={flightType === "Cross-country" ? true : false}
+              />
+              <label htmlFor="cross-country">Cross Country</label>
+            </div>
+          </div>
+          <div className="item">
+            <label htmlFor="flight-route-legs">Flight Route/Legs</label>
+            <textarea
+              id="flight-route-legs"
+              name="flightRoute"
+              value={flightRoute}
+              onChange={(e) => setFlightRoute(e.target.value)}
+            />
+          </div>
+          <div className="item">
+            <label htmlFor="comments">Comments</label>
+            <textarea
+              id="comments"
+              name="comments"
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}
+            />
+          </div>
+          <button type="submit" className="submit">
+            Edit Reservation
+          </button>
+        </div>
+      </form>
+    </div>
+    </>
+  );
 };
 
 export default EditModal;
