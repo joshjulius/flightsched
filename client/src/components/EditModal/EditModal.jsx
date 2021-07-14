@@ -65,6 +65,7 @@ const EditModal = ({
   const [flightRoute, setFlightRoute] = useState(currentFlightRoute);
   const [comments, setComments] = useState(currentComments);
 
+
   const [errorBooking, setErrorBooking] = useState(false);
 
   const handleErrorBooking = (boolean) => {
@@ -88,14 +89,34 @@ const EditModal = ({
       comments,
     };
 
-    try {
-      await axios.put(`http://localhost:5000/api/slots/${id}`, postData);
-      setIsEditing(false);
-      slotCall();
-    } catch {
-      setErrorBooking(true);
+
+    if (customer === "" || flightRoute ==="") {
+        if (customer === "") {
+            document.querySelector(".label-customer").classList.add("errortext");
+            document.getElementById("customer").classList.add("errorbox");
+        }
+        if (flightRoute === "") {
+            document.querySelector(".label-flight-route-legs").classList.add("errortext");
+            document.getElementById("flight-route-legs").classList.add("errorbox");
+        }
+    } else {
+        try {
+            await axios.put(`http://localhost:5000/api/slots/${id}`, postData);
+            setIsEditing(false);
+            slotCall();
+        } catch {
+            setErrorBooking(true)
+        }
     }
-  };
+
+    }
+  
+
+
+    const removeError = (e) => {
+        e.currentTarget.previousSibling.classList.remove("errortext");
+        e.currentTarget.classList.remove("errorbox");
+    }
 
     const handleSelectLocation = e => (
         setLocation(e.target.value)
@@ -121,6 +142,8 @@ const EditModal = ({
   const handleSelectInstructor = (e) => {
     setInstructor(e.target.value);
   };
+
+  const currentDate = new Date();
 
   const reset = () => {
     setIsEditing(false);
@@ -191,6 +214,10 @@ const EditModal = ({
                                 showTimeSelect
                                 dateFormat="MMMM d, yyyy h:mm aa"
                                 name="startDate"
+                                minDate={currentDate}
+                                minTime={(startDate.getDate() === currentDate.getDate()) ? setHours(setMinutes(currentDate, currentDate.getMinutes()), currentDate.getHours()) : setHours(setMinutes(currentDate, 0), 8)}
+                                maxTime={setHours(setMinutes(currentDate, 30), 21)}
+                                onKeyDown={e => e.preventDefault()}
                             />
                         </div>
                         <div className="item">
@@ -202,17 +229,22 @@ const EditModal = ({
                                 dateFormat="MMMM d, yyyy h:mm aa"
                                 name="endDate"
                                 minDate={(new Date(startDate))}
+                                onKeyDown={e => e.preventDefault()}
+                                minDate={startDate}
+                                maxDate={startDate}
+                                minTime={setHours(setMinutes(currentDate, `${startDate.getMinutes()}`), `${startDate.getHours()}`)}
+                                maxTime={setHours(setMinutes(currentDate, 0), 22)}
                             />
                         </div>
                         <div className="item">
-                            <label htmlFor="customer">Customer *</label>
+                            <label className="label-customer" htmlFor="customer">Customer *</label>
                             <input
                                 type="text"
                                 id="customer"
                                 name="customer"
                                 placeholder="Search by name"
                                 value={customer}
-                                onChange={e => setCustomer(e.target.value)}
+                                onChange={e => {setCustomer(e.target.value); removeError(e);}}
                             />
                         </div>
                         <div className="item">
@@ -275,12 +307,12 @@ const EditModal = ({
                             </div>
                         </div>
                         <div className="item">
-                            <label htmlFor="flight-route-legs">Flight Route/Legs *</label>
+                            <label className="label-flight-route-legs" htmlFor="flight-route-legs">Flight Route/Legs *</label>
                             <textarea
                                 id="flight-route-legs"
                                 name="flightRoute"
                                 value={flightRoute}
-                                onChange={e => setFlightRoute(e.target.value)}
+                                onChange={e => {setFlightRoute(e.target.value); removeError(e);}}
                             />
                         </div>
                         <div className="item">
