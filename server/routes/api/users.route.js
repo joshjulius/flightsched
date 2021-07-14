@@ -44,9 +44,10 @@ router.post("/login", async (req, res) => {
   if (!validPassword) return res.status(400).send("Invalid Password");
 
   //Create and assign a JWT Token
-  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
-    expiresIn: 300,
-  });
+  // const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
+  //   expiresIn: 300,
+  // });
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
   try {
     res
       .header("auth-token", token)
@@ -77,6 +78,13 @@ router.post("/register", async (req, res) => {
     phone: data.phone,
     email: data.email,
     password: hashedPassword,
+    filter: [
+      {
+        name: "",
+        aircraft: "",
+        instructor: "",
+      },
+    ],
   });
 
   newUser
@@ -133,15 +141,6 @@ router.put("/:id", verify, (req, res) => {
       console.log("Edit User failed");
       console.log(err);
     });
-
-  // User.find({})
-  //   .then((result) => {
-  //     res.send(result);
-  //   })
-  //   .catch((err) => {
-  //     res.status(404).send({ success: false });
-  //     console.log(err);
-  //   });
 });
 
 export default router;

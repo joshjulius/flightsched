@@ -42,6 +42,17 @@ export default function Userpage(props) {
     headers: { "auth-token": localStorage.getItem("token") },
   };
 
+  //function to check validation
+  // const formValidation = (name, phone, dateOfBirth, role) => {
+  //   if (!name || !phone || !dateOfBirth || !role) {
+  //     setValidation(false);
+  //     return false;
+  //   } else {
+  //     setValidation(true);
+  //     return true;
+  //   }
+  // };
+
   //Axios call URL
   const planeURL = "http://localhost:5000/api/planes";
   const userInfo__URL = "http://localhost:5000/api/users";
@@ -64,16 +75,6 @@ export default function Userpage(props) {
       let data = res.data;
       console.log(data);
       setUserRole(data);
-      // data.forEach((data) => {
-      //   console.log(data.name);
-      //   setUserRole([
-      //     ...userRole,
-      //     {
-      //       name: data.name,
-      //       role: data.role,
-      //     },
-      //   ]);
-      // });
     });
   };
 
@@ -88,9 +89,44 @@ export default function Userpage(props) {
       });
   };
 
+  const axiosSaveFilterCall = (filterValue) => {
+    let loggedInUser = { ...user };
+    loggedInUser.filter.push({
+      name: "Filter",
+      aircraft: filterValue.aircraft,
+      instructor: filterValue.instructor,
+    });
+    console.log(loggedInUser);
+    axios
+      .put(
+        `${userInfo__URL}/${userId}`,
+        {
+          $set: {
+            filter: [
+              ...loggedInUser.filter,
+              {
+                name: "filter",
+                aircraft: loggedInUser.aircraft,
+                instructor: loggedInUser.instructor,
+              },
+            ],
+          },
+        },
+        headerToken
+      )
+      .then((res) => {
+        console.log("Save Filter Success");
+      })
+      .catch((err) => {
+        console.log("Save filter failed");
+      });
+  };
+
   //User Edit Page Submit Function
-  const submitHandler = (state) => {
-    console.log("submit");
+  const submitHandler = (state, name, phone, dateOfBirth, role) => {
+    // const valid = formValidation(name, phone, dateOfBirth, role);
+    // if (valid) {
+    console.log("user edit");
     hideUserInfoModal();
     axios
       .put(
@@ -109,8 +145,12 @@ export default function Userpage(props) {
         axiosUserIdCall();
       })
       .catch((err) => {
-        console.log("err");
+        console.log("Token has Expired");
       });
+    // } else {
+    //   setValidation((validation) => false);
+    //   console.log("failed to edit");
+    // }
   };
 
   useEffect(() => {
@@ -150,9 +190,11 @@ export default function Userpage(props) {
         <Optionbar
           planes={planes}
           user={userRole}
+          userInfo={user}
           showBookingModal={showModal}
           visibility={visibility}
           hideModal={hideModal}
+          axiosSaveFilterCall={axiosSaveFilterCall}
         />
         {/* <Modal visibility={visibility} hideModal={hideModal} /> */}
         <UserInfoModal
