@@ -7,33 +7,15 @@ export default function Sidebar({ toggle, handleToggle }) {
     <div className="sidebar">
       <img src={logoPlaceholder} alt="Logo" className="sidebar__logo" />
       <ul className="sidebar__list">
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          Home
-        </li>
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          Students
-        </li>
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          Schedule
-        </li>
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          Reservations
-        </li>
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          Billing
-        </li>
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          Instructions
-        </li>
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          Aircraft
-        </li>
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          People
-        </li>
-        <li className="sidebar__item" onClick={() => handleToggle(toggle)}>
-          Reports
-        </li>
+        <li className="sidebar__item">Home</li>
+        <li className="sidebar__item">Students</li>
+        <li className="sidebar__item">Schedule</li>
+        <li className="sidebar__item">Reservations</li>
+        <li className="sidebar__item">Billing</li>
+        <li className="sidebar__item">Instructions</li>
+        <li className="sidebar__item">Aircraft</li>
+        <li className="sidebar__item">People</li>
+        <li className="sidebar__item">Reports</li>
       </ul>
     </div>
   );
