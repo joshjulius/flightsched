@@ -22,7 +22,13 @@ let useClickOutside = (handler) => {
   return domNode;
 };
 
-const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
+const UserInfoModal = ({
+  visibility,
+  user,
+  submitHandler,
+  hideModal,
+  axiosUserIdCall,
+}) => {
   let domNode = useClickOutside(() => {
     hideModal();
   });
@@ -73,7 +79,16 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
     }
   };
 
-  useEffect(() => {}, [state]);
+  useEffect(() => {
+    setState({
+      name: user && user.name,
+      email: user && user.email,
+      phone: user && user.phone,
+      dateOfBirth: user && user.dateOfBirth,
+      role: user && user.role,
+    });
+    console.log("use Effect in the user info");
+  }, [editToggle]);
 
   if (!visibility) {
     return null;

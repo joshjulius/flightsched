@@ -124,9 +124,6 @@ export default function Userpage(props) {
 
   //User Edit Page Submit Function
   const submitHandler = (state, name, phone, dateOfBirth, role) => {
-    // const valid = formValidation(name, phone, dateOfBirth, role);
-    // if (valid) {
-    console.log("user edit");
     hideUserInfoModal();
     axios
       .put(
@@ -147,10 +144,6 @@ export default function Userpage(props) {
       .catch((err) => {
         console.log("Token has Expired");
       });
-    // } else {
-    //   setValidation((validation) => false);
-    //   console.log("failed to edit");
-    // }
   };
 
   useEffect(() => {
@@ -202,6 +195,7 @@ export default function Userpage(props) {
           hideModal={hideUserInfoModal}
           user={user}
           submitHandler={submitHandler}
+          axiosUserIdCall={axiosUserIdCall}
         />
       </div>
     </div>
