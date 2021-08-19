@@ -130,6 +130,7 @@ export default function Schedule({
   };
 
   const insturctorBlock = () => {
+    let instructorsUser = user.filter((user) => user.role === "Instructor");
     if (
       !filterValue ||
       (filterValue && filterValue.instructor === "allInstructor") ||
@@ -137,7 +138,7 @@ export default function Schedule({
     ) {
       return (
         <>
-          {user.map((info) => {
+          {instructorsUser.map((info) => {
             return (
               <tr className="schedule__row">
                 <th
