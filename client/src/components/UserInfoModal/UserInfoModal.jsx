@@ -28,6 +28,8 @@ const UserInfoModal = ({
   submitHandler,
   hideModal,
   axiosUserIdCall,
+  editToggle,
+  setEditToggle,
 }) => {
   let domNode = useClickOutside(() => {
     hideModal();
@@ -43,7 +45,7 @@ const UserInfoModal = ({
   });
 
   //Edit value for switching from User info to Edit User Form
-  let [editToggle, setEditToggle] = useState(false);
+  // let [editToggle, setEditToggle] = useState(false);
   let [validation, setValidation] = useState(true);
 
   //Changing the value in the input box

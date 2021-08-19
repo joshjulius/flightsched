@@ -128,10 +128,6 @@ export default function Optionbar({
             <option value="vertical">Day Vertical</option>
           </select>
         </div>
-        {/* <div className="optionbar__extra-info">
-          <div>Key</div>
-          <div>Paint</div>
-        </div> */}
       </div>
       <div className="optionbar__bottom">
         <div className="optionbar__content-container">

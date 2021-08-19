@@ -15,6 +15,7 @@ export default function Userpage(props) {
   const [planes, setPlanes] = useState();
   const [user, setUser] = useState();
   const [userRole, setUserRole] = useState();
+  const [editToggle, setEditToggle] = useState(false);
 
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
@@ -73,7 +74,6 @@ export default function Userpage(props) {
   const axiosUserRoleCall = () => {
     axios.get(userInfo__URL).then((res) => {
       let data = res.data;
-      console.log(data);
       setUserRole(data);
     });
   };
@@ -151,7 +151,7 @@ export default function Userpage(props) {
     axiosPlaneCall();
     axiosUserRoleCall();
     console.log("User Page useEffect");
-  }, [setUser]);
+  }, [setUser, editToggle]);
 
   if (!localStorage.getItem("token")) {
     alert("Your token has expired");
@@ -196,6 +196,8 @@ export default function Userpage(props) {
           user={user}
           submitHandler={submitHandler}
           axiosUserIdCall={axiosUserIdCall}
+          editToggle={editToggle}
+          setEditToggle={setEditToggle}
         />
       </div>
     </div>
