@@ -89,11 +89,14 @@ const EditModal = ({
       comments,
     };
 
-
-    if (customer === "" || flightRoute ==="") {
+    if (customer === "" || instructor === "" || instructor === "DEFAULT" ||flightRoute ==="") {
         if (customer === "") {
             document.querySelector(".label-customer").classList.add("errortext");
             document.getElementById("customer").classList.add("errorbox");
+        }
+        if (instructor === "" || instructor === "DEFAULT") {
+            document.querySelector(".label-instructor").classList.add("errortext");
+            document.getElementById("instructor").classList.add("errorbox");
         }
         if (flightRoute === "") {
             document.querySelector(".label-flight-route-legs").classList.add("errortext");
@@ -110,8 +113,6 @@ const EditModal = ({
     }
 
     }
-  
-
 
     const removeError = (e) => {
         e.currentTarget.previousSibling.classList.remove("errortext");
@@ -132,9 +133,9 @@ const EditModal = ({
         } else {
             document.getElementById("instructor").value = "DEFAULT";
             document.getElementById("instructor").disabled = false;
+            setInstructor("DEFAULT");
         }
     }
-
 
   const handleSelectAircraft = (e) => {
     setAircraft(e.target.value);
@@ -149,10 +150,15 @@ const EditModal = ({
   const reset = () => {
     setIsEditing(false);
     setErrorBooking(false);
+    setLocation(currentLocation);
+    setActivityType(currentActivityType);
     setStartDate(new Date(currentStartTime));
     setEndDate(new Date(currentEndTime));
     setCustomer(currentCustomer);
     setDisplayName(currentDisplayName);
+    setAircraft(currentAircraft);
+    setInstructor(currentInstructor);
+    setFlightType(currentFlightType);
     setFlightRoute(currentFlightRoute);
     setComments(currentComments);
   };
@@ -276,8 +282,8 @@ const EditModal = ({
                             </select>
                         </div>
                         <div className="item">
-                            <label htmlFor="instructor">Instructor *</label>
-                            <select disabled={(activityType === "Solo") ? true : false} onClick={handleSelectInstructor} id="instructor" name="instructor" defaultValue={currentInstructor}>
+                            <label className="label-instructor" htmlFor="instructor">Instructor *</label>
+                            <select disabled={(activityType === "Solo") ? true : false} onChange={removeError} onClick={handleSelectInstructor} id="instructor" name="instructor" defaultValue={currentInstructor}>
                                 <option value="DEFAULT" disabled hidden>Select</option>
                                 <option value="None" disabled hidden>None</option>
                                 <option value="Josh">Josh</option>
