@@ -112,19 +112,37 @@ export default function Schedule({
       let plane = slots.filter(
         (slot) => slot.aircraft === `${filterValue.aircraft} C172S`
       );
+      console.log(plane);
+      console.log(filterValue.aircraft);
       return (
-        <tr className="schedule__row">
-          <th
-            key={plane && plane[0]._id}
-            className={`schedule__placeholder ${plane && plane[0].aircraft}`}
-          >
-            {`${plane && plane[0].aircraft}`}
-            {slots
-              .filter((slot) => slot.aircraft === plane[0].aircraft)
-              .map(timeBlock)}
-          </th>
-          {planeSlot}
-        </tr>
+        <>
+          {plane.length > 0 ? (
+            <tr className="schedule__row">
+              <th
+                key={plane && plane[0]._id}
+                className={`schedule__placeholder ${
+                  plane && plane[0].aircraft
+                }`}
+              >
+                {`${plane && plane[0].aircraft}`}
+                {slots
+                  .filter((slot) => slot.aircraft === plane[0].aircraft)
+                  .map(timeBlock)}
+              </th>
+              {planeSlot}
+            </tr>
+          ) : (
+            <tr className="schedule__row">
+              <th
+                key={filterValue.aircraft.substring(0, 2)}
+                className={`schedule__placeholder ${`${filterValue.aircraft} C172S`}`}
+              >
+                {`${filterValue.aircraft} C172S`}
+              </th>
+              {planeSlot}
+            </tr>
+          )}
+        </>
       );
     }
   };
