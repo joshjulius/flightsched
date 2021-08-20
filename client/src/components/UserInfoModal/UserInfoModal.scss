@@ -1,0 +1,18 @@
+.userInfoModal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #bbbbbb;
+  margin-bottom: 20px;
+  button {
+    cursor: pointer;
+  }
+  &__name {
+    margin-left: -15px;
+  }
+  &__error {
+    width: 100%;
+    margin-top: 5px;
+  }
+}
