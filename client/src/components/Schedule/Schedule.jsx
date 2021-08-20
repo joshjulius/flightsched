@@ -37,9 +37,15 @@ export default function Schedule({
 
   const timeSlot = (totalTime) => {
     for (let i = totalTime; i < totalTime + 15; i++) {
-      timeHead.push(
-        <th key={i} className="schedule__time-heading">{`${i}:00`}</th>
-      );
+      if (i < 10) {
+        timeHead.push(
+          <th key={i} className="schedule__time-heading">{`0${i}:00`}</th>
+        );
+      } else {
+        timeHead.push(
+          <th key={i} className="schedule__time-heading">{`${i}:00`}</th>
+        );
+      }
     }
   };
   timeSlot(8);
