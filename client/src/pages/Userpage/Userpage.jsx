@@ -122,6 +122,12 @@ export default function Userpage(props) {
       });
   };
 
+  //arr which only has Instructors
+  let instructorArr = [];
+  if (userRole) {
+    instructorArr = userRole.filter((user) => user.role === "Instructor");
+  }
+
   //User Edit Page Submit Function
   const submitHandler = (state, name, phone, dateOfBirth, role) => {
     hideUserInfoModal();
@@ -188,6 +194,7 @@ export default function Userpage(props) {
           visibility={visibility}
           hideModal={hideModal}
           axiosSaveFilterCall={axiosSaveFilterCall}
+          instructorArr={instructorArr}
         />
         {/* <Modal visibility={visibility} hideModal={hideModal} /> */}
         <UserInfoModal

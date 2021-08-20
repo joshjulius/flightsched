@@ -12,6 +12,7 @@ export default function Schedule({
   showBookingModal,
   visibility,
   hideModal,
+  instructorArr,
 }) {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -81,6 +82,7 @@ export default function Schedule({
         flightRoute={slot.flightRoute}
         flightType={slot.flightType}
         comments={slot.comments}
+        instructorArr={instructorArr}
       />
     );
   };
@@ -233,6 +235,7 @@ export default function Schedule({
         planes={planes}
         date={date}
         slotCall={axiosSlotsCall}
+        instructorArr={instructorArr}
       />
       <table className="schedule">
         <thead>

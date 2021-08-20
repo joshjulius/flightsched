@@ -12,6 +12,7 @@ export default function Optionbar({
   visibility,
   userInfo,
   hideModal,
+  instructorArr,
 }) {
   let dateOption = {
     weekday: "short",
@@ -159,7 +160,7 @@ export default function Optionbar({
           >
             <option value="allInstructor">All instructors</option>
             {user &&
-              user.map((user) => {
+              instructorArr.map((user) => {
                 return (
                   <option key={user._id} value={user.name}>
                     {user.name}
@@ -207,6 +208,7 @@ export default function Optionbar({
         visibility={visibility}
         hideModal={hideModal}
         filterValue={filterValue}
+        instructorArr={instructorArr}
       />
     </div>
   );
