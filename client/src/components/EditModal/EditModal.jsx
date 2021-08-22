@@ -144,10 +144,15 @@ const EditModal = ({
   const reset = () => {
     setIsEditing(false);
     setErrorBooking(false);
+    setLocation(currentLocation);
+    setActivityType(currentActivityType);
     setStartDate(new Date(currentStartTime));
     setEndDate(new Date(currentEndTime));
     setCustomer(currentCustomer);
     setDisplayName(currentDisplayName);
+    setAircraft(currentAircraft);
+    setInstructor(currentInstructor);
+    setFlightType(currentFlightType);
     setFlightRoute(currentFlightRoute);
     setComments(currentComments);
   };
