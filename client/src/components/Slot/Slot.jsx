@@ -39,18 +39,22 @@ const Slot = ({
   //237.5      =  09:45          105
   //250        =  10:00          120
 
+  //
+
   const startTimeZeroed =
     (parseInt(startHour) - 8) * 60 + parseInt(startMinute);
-  const leftPixels = (50 / 60) * startTimeZeroed + 150;
-
-  // 60 min = 50px
+  // const leftPixels = (50 / 60) * startTimeZeroed + 150;
+  const hour = parseInt(startHour) - 8;
 
   const endTimeZeroed = (parseInt(endHour) - 8) * 60 + parseInt(endMinute);
-  const width = ((endTimeZeroed - startTimeZeroed) * 50) / 60;
+  // 1 hour = 1
+  // 60 minutes = 1
+
+  const width = ((endTimeZeroed - startTimeZeroed) / 60);
 
   const style = {
-    left: leftPixels,
-    width: width,
+    left: `calc((100% - 150px)/15*${hour} + 150px)`,
+    width: `calc((100% - 150px)/15*${width}`,
   };
 
   if (!loading) {
