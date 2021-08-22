@@ -146,6 +146,7 @@ export default function Userpage(props) {
       .then((res) => {
         alert("User Info has been edited");
         axiosUserIdCall();
+        axiosUserRoleCall();
       })
       .catch((err) => {
         console.log("Token has Expired");
