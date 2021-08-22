@@ -144,7 +144,6 @@ function Loginpage() {
   if (isLoggedIn) {
     return <Redirect to={`/user/${user._id}`} />;
   }
-
   return (
     <div className="modal">
       {createToggle ? (

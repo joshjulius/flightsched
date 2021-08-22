@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../Modal/Modal.scss";
+import "./UserInfoModal.scss";
 import ErrorBooking from "../ErrorBooking/ErrorBooking";
 
 let useClickOutside = (handler) => {
@@ -22,7 +23,15 @@ let useClickOutside = (handler) => {
   return domNode;
 };
 
-const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
+const UserInfoModal = ({
+  visibility,
+  user,
+  submitHandler,
+  hideModal,
+  axiosUserIdCall,
+  editToggle,
+  setEditToggle,
+}) => {
   let domNode = useClickOutside(() => {
     hideModal();
   });
@@ -37,7 +46,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
   });
 
   //Edit value for switching from User info to Edit User Form
-  let [editToggle, setEditToggle] = useState(false);
+  // let [editToggle, setEditToggle] = useState(false);
   let [validation, setValidation] = useState(true);
 
   //Changing the value in the input box
@@ -73,7 +82,16 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
     }
   };
 
-  useEffect(() => {}, [state]);
+  useEffect(() => {
+    setState({
+      name: user && user.name,
+      email: user && user.email,
+      phone: user && user.phone,
+      dateOfBirth: user && user.dateOfBirth,
+      role: user && user.role,
+    });
+    console.log("use Effect in the user info");
+  }, [editToggle]);
 
   if (!visibility) {
     return null;
@@ -83,7 +101,16 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
       <div className="modal">
         <form ref={domNode}>
           <div className="form-container">
-            <div className="form-header">
+            <div className="userInfoModal">
+              <button
+                type="button"
+                onClick={() => {
+                  setEditToggle(!editToggle);
+                  return false;
+                }}
+              >
+                Edit
+              </button>
               <h2>{user.name ? user.name : "User"}</h2>
               <button
                 onClick={() => {
@@ -94,35 +121,26 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               >
                 Close
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditToggle(!editToggle);
-                  return false;
-                }}
-              >
-                Edit
-              </button>
             </div>
             <div className="userInfoForm__container">
               <div className="item">
-                <h4>Name</h4>
+                <h4>Name:</h4>
                 <h4>{user && user.name}</h4>
               </div>
               <div className="item">
-                <h4>Email</h4>
+                <h4>Email:</h4>
                 <h4>{user && user.email}</h4>
               </div>
               <div className="item">
-                <h4>Phone Number</h4>
+                <h4>Phone Number:</h4>
                 <h4>{user && user.phone}</h4>
               </div>
               <div className="item">
-                <h4>Date of Birth</h4>
+                <h4>Date of Birth:</h4>
                 <h4>{user.dateOfBirth ? user.dateOfBirth : "Not Available"}</h4>
               </div>
               <div className="item">
-                <h4>Role</h4>
+                <h4>Role:</h4>
                 <h4>{user.role ? user.role : "Not Available"}</h4>
               </div>
             </div>
@@ -162,25 +180,27 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
           ref={domNode}
         >
           <div className="form-container">
-            <div className="form-header">
-              <h2>{user && user.name}</h2>
+            <div className="userInfoModal">
+              <button type="button" onClick={() => setEditToggle(!editToggle)}>
+                Detail
+              </button>
+              <h2 className="userInfoModal__name">{user && user.name}</h2>
               <button onClick={hideModal} className="close" type="button">
                 Close
               </button>
-              <h5 type="button" onClick={() => setEditToggle(!editToggle)}>
-                Information Page
-              </h5>
               {validation ? (
                 ""
               ) : (
-                <ErrorBooking
-                  errorBooking={true}
-                  message={"Please Fill in all the boxes"}
-                />
+                <div className="userInfoModal__error">
+                  <ErrorBooking
+                    errorBooking={true}
+                    message={"Please Fill in all the boxes"}
+                  />
+                </div>
               )}
             </div>
             <div className="item">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Name:</label>
               <input
                 type="name"
                 id="name"
@@ -191,7 +211,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               />
             </div>
             <div className="item">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Email:</label>
               <input
                 type="email"
                 id="email"
@@ -202,7 +222,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               />
             </div>
             <div className="item">
-              <label htmlFor="phone">Phone Number</label>
+              <label htmlFor="phone">Phone Number:</label>
               <input
                 type="phone"
                 id="phone"
@@ -213,7 +233,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               />
             </div>
             <div className="item">
-              <label htmlFor="dateOfBirth">Date of Birth</label>
+              <label htmlFor="dateOfBirth">Date of Birth:</label>
               <input
                 type="dateOfBirth"
                 id="dateOfBirth"
@@ -224,7 +244,7 @@ const UserInfoModal = ({ visibility, user, submitHandler, hideModal }) => {
               />
             </div>
             <div className="item">
-              <label htmlFor="role">Role</label>
+              <label htmlFor="role">Role:</label>
               <input
                 type="role"
                 id="role"

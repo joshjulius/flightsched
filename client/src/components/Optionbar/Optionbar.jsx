@@ -12,6 +12,7 @@ export default function Optionbar({
   visibility,
   userInfo,
   hideModal,
+  instructorArr,
 }) {
   let dateOption = {
     weekday: "short",
@@ -128,10 +129,6 @@ export default function Optionbar({
             <option value="vertical">Day Vertical</option>
           </select>
         </div>
-        <div className="optionbar__extra-info">
-          <div>Key</div>
-          <div>Paint</div>
-        </div>
       </div>
       <div className="optionbar__bottom">
         <div className="optionbar__content-container">
@@ -163,7 +160,7 @@ export default function Optionbar({
           >
             <option value="allInstructor">All instructors</option>
             {user &&
-              user.map((user) => {
+              instructorArr.map((user) => {
                 return (
                   <option key={user._id} value={user.name}>
                     {user.name}
@@ -211,6 +208,7 @@ export default function Optionbar({
         visibility={visibility}
         hideModal={hideModal}
         filterValue={filterValue}
+        instructorArr={instructorArr}
       />
     </div>
   );

@@ -12,6 +12,7 @@ export default function Schedule({
   showBookingModal,
   visibility,
   hideModal,
+  instructorArr,
 }) {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -37,9 +38,15 @@ export default function Schedule({
 
   const timeSlot = (totalTime) => {
     for (let i = totalTime; i < totalTime + 15; i++) {
-      timeHead.push(
-        <th key={i} className="schedule__time-heading">{`${i}:00`}</th>
-      );
+      if (i < 10) {
+        timeHead.push(
+          <th key={i} className="schedule__time-heading">{`0${i}:00`}</th>
+        );
+      } else {
+        timeHead.push(
+          <th key={i} className="schedule__time-heading">{`${i}:00`}</th>
+        );
+      }
     }
   };
   timeSlot(8);
@@ -75,6 +82,7 @@ export default function Schedule({
         flightRoute={slot.flightRoute}
         flightType={slot.flightType}
         comments={slot.comments}
+        instructorArr={instructorArr}
       />
     );
   };
@@ -112,24 +120,43 @@ export default function Schedule({
       let plane = slots.filter(
         (slot) => slot.aircraft === `${filterValue.aircraft} C172S`
       );
+      console.log(plane);
+      console.log(filterValue.aircraft);
       return (
-        <tr className="schedule__row">
-          <th
-            key={plane && plane[0]._id}
-            className={`schedule__placeholder ${plane && plane[0].aircraft}`}
-          >
-            {`${plane && plane[0].aircraft}`}
-            {slots
-              .filter((slot) => slot.aircraft === plane[0].aircraft)
-              .map(timeBlock)}
-          </th>
-          {planeSlot}
-        </tr>
+        <>
+          {plane.length > 0 ? (
+            <tr className="schedule__row">
+              <th
+                key={plane && plane[0]._id}
+                className={`schedule__placeholder ${
+                  plane && plane[0].aircraft
+                }`}
+              >
+                {`${plane && plane[0].aircraft}`}
+                {slots
+                  .filter((slot) => slot.aircraft === plane[0].aircraft)
+                  .map(timeBlock)}
+              </th>
+              {planeSlot}
+            </tr>
+          ) : (
+            <tr className="schedule__row">
+              <th
+                key={filterValue.aircraft.substring(0, 2)}
+                className={`schedule__placeholder ${`${filterValue.aircraft} C172S`}`}
+              >
+                {`${filterValue.aircraft} C172S`}
+              </th>
+              {planeSlot}
+            </tr>
+          )}
+        </>
       );
     }
   };
 
   const insturctorBlock = () => {
+    let instructorsUser = user.filter((user) => user.role === "Instructor");
     if (
       !filterValue ||
       (filterValue && filterValue.instructor === "allInstructor") ||
@@ -137,7 +164,7 @@ export default function Schedule({
     ) {
       return (
         <>
-          {user.map((info) => {
+          {instructorsUser.map((info) => {
             return (
               <tr className="schedule__row">
                 <th
@@ -208,6 +235,7 @@ export default function Schedule({
         planes={planes}
         date={date}
         slotCall={axiosSlotsCall}
+        instructorArr={instructorArr}
       />
       <table className="schedule">
         <thead>

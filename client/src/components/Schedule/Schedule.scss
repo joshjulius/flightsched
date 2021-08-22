@@ -1,11 +1,11 @@
 .schedule {
-  width: 900px;
+  width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.5);
   // border-spacing: 0;
   border-collapse: collapse;
   &__row {
     display: grid;
-    grid-template-columns: 150px repeat(15, 50px);
+    grid-template-columns: 150px repeat(15, auto);
   }
   &__time-heading {
     border: 1px solid rgba(0, 0, 0, 0.5);

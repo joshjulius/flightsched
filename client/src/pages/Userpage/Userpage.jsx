@@ -15,6 +15,7 @@ export default function Userpage(props) {
   const [planes, setPlanes] = useState();
   const [user, setUser] = useState();
   const [userRole, setUserRole] = useState();
+  const [editToggle, setEditToggle] = useState(false);
 
   const handleToggle = (toggleValue) => {
     setToggle(!toggleValue);
@@ -73,7 +74,6 @@ export default function Userpage(props) {
   const axiosUserRoleCall = () => {
     axios.get(userInfo__URL).then((res) => {
       let data = res.data;
-      console.log(data);
       setUserRole(data);
     });
   };
@@ -122,11 +122,14 @@ export default function Userpage(props) {
       });
   };
 
+  //arr which only has Instructors
+  let instructorArr = [];
+  if (userRole) {
+    instructorArr = userRole.filter((user) => user.role === "Instructor");
+  }
+
   //User Edit Page Submit Function
   const submitHandler = (state, name, phone, dateOfBirth, role) => {
-    // const valid = formValidation(name, phone, dateOfBirth, role);
-    // if (valid) {
-    console.log("user edit");
     hideUserInfoModal();
     axios
       .put(
@@ -147,10 +150,6 @@ export default function Userpage(props) {
       .catch((err) => {
         console.log("Token has Expired");
       });
-    // } else {
-    //   setValidation((validation) => false);
-    //   console.log("failed to edit");
-    // }
   };
 
   useEffect(() => {
@@ -158,7 +157,7 @@ export default function Userpage(props) {
     axiosPlaneCall();
     axiosUserRoleCall();
     console.log("User Page useEffect");
-  }, [setUser]);
+  }, [setUser, editToggle]);
 
   if (!localStorage.getItem("token")) {
     alert("Your token has expired");
@@ -195,6 +194,7 @@ export default function Userpage(props) {
           visibility={visibility}
           hideModal={hideModal}
           axiosSaveFilterCall={axiosSaveFilterCall}
+          instructorArr={instructorArr}
         />
         {/* <Modal visibility={visibility} hideModal={hideModal} /> */}
         <UserInfoModal
@@ -202,6 +202,9 @@ export default function Userpage(props) {
           hideModal={hideUserInfoModal}
           user={user}
           submitHandler={submitHandler}
+          axiosUserIdCall={axiosUserIdCall}
+          editToggle={editToggle}
+          setEditToggle={setEditToggle}
         />
       </div>
     </div>
